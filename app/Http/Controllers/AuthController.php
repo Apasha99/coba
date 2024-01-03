@@ -14,25 +14,37 @@ class AuthController extends Controller
     public function authenticate(LoginRequest $request)
     {
         $credentials = $request->validate([
-            'email' => 'required',
+            'username_or_email' => 'required',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // Coba otentikasi dengan email
+        if (filter_var($credentials['username_or_email'], FILTER_VALIDATE_EMAIL)) {
+            $fieldType = 'email';
+        } else {
+            $fieldType = 'username';
+        }
+
+        $loginAttempt = [
+            $fieldType => $credentials['username_or_email'],
+            'password' => $credentials['password'],
+        ];
+
+        if (Auth::attempt($loginAttempt)) {
             $request->session()->regenerate();
 
             $user = $request->user(); 
-        
+            
             if ($user->role_id === 1){
                 return redirect()->intended('/dashboardAdmin')->with('success', 'Login successful');
             } else if ($user->role_id === 2) {
                 return redirect()->intended('/dashboardPeserta')->with('success', 'Login successful');
             }
-            
-        };
+        }
 
         return back()->with('error', 'Login Gagal');
     }
+
 
     public function logout(Request $request) {
         Auth::logout();
