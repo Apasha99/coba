@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Peserta extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     protected $table = 'peserta';
     protected $primaryKey = 'id';
     protected $fillable = [

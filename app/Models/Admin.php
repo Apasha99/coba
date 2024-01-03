@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Admin extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     protected $table = 'admin';
     protected $primaryKey = 'id';
     protected $fillable = [

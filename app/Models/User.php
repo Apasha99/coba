@@ -33,6 +33,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getImageURL(){
+        if($this->foto){
+            return url("storage/" . $this->foto);
+        }
+        return "https://api.dicebear.com/6.x/fun-emoji/svg?seed=($this=>name)";
+    }
+
     /**
      * The attributes that should be cast.
      *
@@ -42,4 +49,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id', 'id');
+    }
 }
