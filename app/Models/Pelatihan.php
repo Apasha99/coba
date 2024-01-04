@@ -18,11 +18,19 @@ class Pelatihan extends Model
         'start_date',
         'end_date',
         'tempat',
-        'deskripsi'
+        'deskripsi',
+        'poster'
     ];
 
     public function peserta_pelatihan()
     {
         return $this->hasMany(Peserta_Pelatihan::class, 'plt_kode', 'kode');
+    }
+
+    public function getPosterURL(){
+        if($this->poster){
+            return url("storage/" . $this->poster);
+        }
+        return "https://api.dicebear.com/6.x/fun-emoji/svg?seed=($this=>name)";
     }
 }

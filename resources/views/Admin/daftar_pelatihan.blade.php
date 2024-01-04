@@ -53,6 +53,11 @@
     <div class="flex flex-wrap">
     @foreach ($pelatihan as $plt)
         <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-4 w-48 h-48 p-4 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div>
+                <div class="relative w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                    <img src="{{ $plt->getPosterURL() }}" alt="user photo" class="w-20 h-20 object-cover" />
+                </div>
+            </div>
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <div>
                     <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
@@ -230,7 +235,18 @@
                                     </div>
                                 @enderror
                             </div>
-
+                            <div class="col-span-full">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster:</label>
+                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    aria-describedby="file_input_help" id="poster" name="poster" type="file" accept="image/*">
+                                @error('poster')
+                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        <div>
+                                            {{ $message }}
+                                        </div>
+                                    </div>
+                                @enderror
+                            </div>
                             <!-- Tombol untuk menyimpan data -->
                             <div class="col-span-full">
                                 <button type="submit"
