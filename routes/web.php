@@ -40,4 +40,6 @@ Route::controller(PelatihanController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::get('admin/pelatihan/{plt_kode}', 'viewDetailPelatihanAdmin')->middleware('only_admin')->name('admin.viewDetailPelatihan');
     Route::get('admin/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.viewDaftarPelatihan');
+    Route::get('admin/daftar-pelatihan/add', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.addPelatihan');
+    Route::post('admin/daftar-pelatihan/store', 'store')->middleware('only_admin')->name('admin.storePelatihan');
 });

@@ -17,27 +17,33 @@ class PelatihanController extends Controller
     }
 
     public function viewDaftarPelatihan() {
-        $pelatihan = Pelatihan::all();
-        //dd($pelatihan[0]);
-        return view('admin.daftar_pelatihan',['pelatihan'=>$pelatihan]);
-    }
-
-    public function create(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         if($admin){
             $pelatihan = Pelatihan::all();
-            return view('admin.pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
+            return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
         }
     }
 
+    // public function create(){
+    //     $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+    //             ->where('admin.user_id', Auth::user()->id)
+    //             ->select('admin.nama', 'admin.id', 'users.username')
+    //             ->first();
+    //     if($admin){
+    //         $pelatihan = Pelatihan::all();
+    //         return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
+    //     }
+    // }
+
     public function store(Request $request): RedirectResponse {
+        //dd($request);
         $validated = $request->validate([
             'kode' => ['required', 'regex:/^[A-Z0-9]{6}$/',Rule::unique('pelatihan')],
             'nama' => ['required', 'alpha_num', 'between:1,24'],
-            'start_date' => ['nullable', 'date', 'after_or_equal:today'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'status' => ['required', 'in:Not started yet,On going,Completed'],
             'penyelenggara' => ['required'],
@@ -48,12 +54,14 @@ class PelatihanController extends Controller
             Ruang Rapat Lantai 6 Siber Pungli'],
             'deskripsi' => ['required', 'max:255'],
         ]);
+
+        //dd($request);
     
         // Proses penyimpanan data jika validasi berhasil
         Pelatihan::create($validated);
     
         // Redirect atau proses lainnya setelah penyimpanan data berhasil
-        return redirect()->route('admin.create_pelatihan')->with('success', 'Data pelatihan berhasil disimpan');
+        return redirect()->route('admin.addPelatihan')->with('success', 'Data pelatihan berhasil disimpan');
     }
     
 
