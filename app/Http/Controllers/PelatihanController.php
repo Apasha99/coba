@@ -11,9 +11,14 @@ use Illuminate\Validation\Rule;
 
 class PelatihanController extends Controller
 {
-    public function viewPelatihan(String $plt_kode) {
+    public function viewDetailPelatihan(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        return view('peserta.pelatihan', ['pelatihan' => $pelatihan]);
+        return view('peserta.detail_pelatihan',['pelatihan'=>$pelatihan]);
+    }
+
+    public function viewDaftarPelatihan() {
+        $pelatihan = Pelatihan::get();
+        return view('admin.daftar_pelatihan',['pelatihan'=>$pelatihan]);
     }
 
     public function create(){

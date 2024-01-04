@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materis', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('materi', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('judul');
+            $table->string('status')->default('uncompleted');
+            $table->string('plt_kode');
+            $table->string('file', 100);
+            $table->foreign('plt_kode')->references('kode')->on('pelatihan');
         });
     }
 

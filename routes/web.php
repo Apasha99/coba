@@ -36,6 +36,7 @@ Route::controller(PesertaController::class)->middleware('only_peserta')->group(f
     Route::get('dashboardPeserta', 'peserta')->name('peserta.dashboard');
 });
 
-Route::controller(PelatihanController::class)->middleware('only_peserta')->group(function(){
-    Route::get('pelatihan/{plt_kode}', 'viewPelatihan')->name('peserta.viewPelatihan');
+Route::controller(PelatihanController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
+    Route::get('admin/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.viewDaftarPelatihan');
 });

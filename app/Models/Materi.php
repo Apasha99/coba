@@ -14,9 +14,5 @@ class Materi extends Model
         'judul',
         'file',
         'status',
-        'start_date',
-        'end_date',
-        'tempat',
-        'deskripsi'
     ];
 }
