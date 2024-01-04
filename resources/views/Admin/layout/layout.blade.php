@@ -357,9 +357,10 @@
                     @yield('content')
                 </div>
 
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4 dark:bg-gray-900">
+                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4 dark:bg-gray-900" style="min-height: 100vh;">
                     @yield('content5')
                 </div>
+
 
                 <div class="px-4 pb-6">
                     @yield('content3')

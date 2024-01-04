@@ -54,14 +54,17 @@ class PelatihanController extends Controller
             Ruang Rapat Lantai 6 Siber Pungli'],
             'deskripsi' => ['required', 'max:255'],
             'poster' => ['required', 'max:10240']
-        ]);
+        ],[
+            'kode.regex' => 'Format kode tidak valid. Kode harus terdiri dari 6 karakter huruf kapital dan angka.',
+            'end_date.after_or_equal' => 'Tanggal Selesai Pelatihan harus setelah atau sama dengan Tanggal Mulai Pelatihan.',
+            'deskripsi.max'=>'Maksimal panjang huruf untuk deskripsi adalah 255 huruf']);
         
         if ($request->has('poster')) {
             $posterPath = $request->file('poster')->store('poster', 'public');
             $validated['poster'] = $posterPath;
         }
        
-    
+       
         // Proses penyimpanan data jika validasi berhasil
         Pelatihan::create($validated);
     
