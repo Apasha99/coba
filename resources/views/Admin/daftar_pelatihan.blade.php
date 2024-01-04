@@ -21,13 +21,11 @@
     </div>
     <div class="flex flex-wrap">
     @foreach ($pelatihan as $plt)
-        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-4 w-48 h-48 p-4 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div>
-                <div class="relative w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                    <img src="{{ $plt->getPosterURL() }}" alt="user photo" class="w-20 h-20 object-cover" />
-                </div>
-            </div>
-            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700  dark:bg-gray-800">
+
+                <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
+           
+            <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <div>
                     <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -38,6 +36,7 @@
         </a>
     @endforeach
 </div>
+
 
 
 
