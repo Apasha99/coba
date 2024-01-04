@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class, 'user_id', 'id');
     }
+
+    public function peserta()
+    {
+        return $this->hasOne(Peserta::class, 'user_id', 'id');
+    }
 }

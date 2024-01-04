@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PesertaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PelatihanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,8 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('dashboardPeserta', 'peserta')->name('peserta.dashboard');
+});
+
+Route::controller(PelatihanController::class)->middleware('only_peserta')->group(function(){
+    Route::get('pelatihan/{plt_kode}', 'viewPelatihan')->name('peserta.viewPelatihan');
 });
