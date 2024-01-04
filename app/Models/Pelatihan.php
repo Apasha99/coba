@@ -31,6 +31,6 @@ class Pelatihan extends Model
         if($this->poster){
             return url("storage/" . $this->poster);
         }
-        return "https://api.dicebear.com/6.x/fun-emoji/svg?seed=($this=>name)";
+        return "https://upload.wikimedia.org/wikipedia/commons/f/f2/Lambang_Kota_Semarang.png";
     }
 }
