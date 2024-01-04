@@ -39,10 +39,10 @@ class PelatihanController extends Controller
     // }
 
     public function store(Request $request): RedirectResponse {
-        //dd($request);
+        //dd($request->poster);
         $validated = $request->validate([
             'kode' => ['required', 'regex:/^[A-Z0-9]{6}$/',Rule::unique('pelatihan')],
-            'nama' => ['required', 'alpha_num', 'between:1,24'],
+            'nama' => ['required'],
             'start_date' => ['required', 'date', 'after_or_equal:today'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'status' => ['required', 'in:Not started yet,On going,Completed'],
@@ -53,9 +53,14 @@ class PelatihanController extends Controller
             Ruang Rapat Lantai 4,Hall Balaikota Semarang,Halaman Balaikota Semarang,
             Ruang Rapat Lantai 6 Siber Pungli'],
             'deskripsi' => ['required', 'max:255'],
+            'poster' => ['required', 'max:10240']
         ]);
-
-        //dd($request);
+        
+        if ($request->has('poster')) {
+            $posterPath = $request->file('poster')->store('poster', 'public');
+            $validated['poster'] = $posterPath;
+        }
+       
     
         // Proses penyimpanan data jika validasi berhasil
         Pelatihan::create($validated);
