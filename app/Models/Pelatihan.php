@@ -11,6 +11,7 @@ class Pelatihan extends Model
     protected $table = 'pelatihan';
     protected $primaryKey = 'kode';
     protected $fillable = [
+        'kode',
         'nama',
         'penyelenggara',
         'status',

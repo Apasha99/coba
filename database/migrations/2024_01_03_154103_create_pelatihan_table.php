@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pelatihan', function (Blueprint $table)  {
-            $table->string('kode')->primary();
+            $table->increments('id');
+            $table->string('kode')->unique();
             $table->string('nama');
             $table->date('start_date');
             $table->date('end_date');
