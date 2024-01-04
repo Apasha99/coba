@@ -7,20 +7,22 @@
             + Tambah Pelatihan
         </a>
     </div>
+    <div class="flex flex-wrap">
     @foreach ($pelatihan as $plt)
-    <a href="" class="block">
-        <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-4 w-48 h-48 p-4 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <div>
-                    <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
+                    <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                        <p>{{ $plt->kode }}</p> 
+                        <p>{{ $plt->status }}</p> 
                     </div>
                 </div>
             </div>
-        </div>
-    </a>
-@endforeach
+        </a>
+    @endforeach
+</div>
+
+
 
         <!-- <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">

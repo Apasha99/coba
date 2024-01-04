@@ -1,8 +1,13 @@
 @extends('admin.layout.layout')
 
 @section('content')
-    <div class="mb-4 col-span-full xl:mb-2">
+    <div class="mb-2 col-span-full xl:mb-2">
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
+    </div>
+    <div class="mb-2 col-span-full xl:mb-2">
+    <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+            {{ $pelatihan->start_date }} - {{ $pelatihan->end_date }} 
+        </p>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
         <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Description</h3>
