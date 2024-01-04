@@ -16,4 +16,10 @@ class Peserta extends Model
         'noHP',
         'alamat'
     ];
+
+    public function peserta_pelatihan()
+    {
+        return $this->hasMany(Peserta_Pelatihan::class, 'peserta_id', 'id');
+    }
+
 }

@@ -19,4 +19,9 @@ class Pelatihan extends Model
         'tempat',
         'deskripsi'
     ];
+
+    public function peserta_pelatihan()
+    {
+        return $this->hasMany(Peserta_Pelatihan::class, 'plt_kode', 'kode');
+    }
 }
