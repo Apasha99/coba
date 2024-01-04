@@ -174,11 +174,11 @@
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{$admin->nama}}
+                                    {{auth()->user()->username}}
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                                     role="none">
-                                    {{$admin->id}}
+                                    {{auth()->user()->id}}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -261,7 +261,7 @@
                             </li>
                             
                             <li>
-                                <a href="/"
+                                <a href="{{ route('admin.viewDaftarPelatihan') }}"
                                     class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
                                     <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
