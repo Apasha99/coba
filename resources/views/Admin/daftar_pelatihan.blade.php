@@ -95,9 +95,9 @@
         </div>
     </div>
 
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-50"
         id="add-pelatihan-modal">
-        <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
+        <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
                 <!-- Modal header -->
@@ -116,7 +116,7 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div class="p-6 space-y-6">
+                <div class="p-6 space-y-6 overflow-y-auto">
                     <form action="{{ route('admin.storePelatihan') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="grid grid-cols-6 gap-6">
