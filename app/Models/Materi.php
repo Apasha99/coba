@@ -9,10 +9,11 @@ class Materi extends Model
 {
     use HasFactory;
     protected $table = 'materi';
+    public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
         'judul',
-        'file',
-        'status',
+        'file_materi',
+        'plt_kode',
     ];
 }

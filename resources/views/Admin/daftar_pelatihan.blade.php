@@ -29,7 +29,7 @@
                 </li>
             </ol>
         </nav>
-        <div class="text-center"> <!-- Menambahkan class text-center untuk membuat judul berada di tengah -->
+        <div class="text-center">
             <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Pelatihan</h1>
         </div>
     </div>
@@ -38,7 +38,6 @@
 
 @section('content5')
     <div class="col-span-full xl:col-auto">
-   
         <div class="m-auto ml-auto mb-2">
             <button type="button" data-modal-toggle="add-pelatihan-modal"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -52,17 +51,15 @@
         </div>
     <div class="flex flex-wrap">
     @foreach ($pelatihan as $plt)
-        <div class="block mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700  dark:bg-gray-800">
-            <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
+        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700  dark:bg-gray-800">
 
-                    <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
-            
-                <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                    <div>
-                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
-                        <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <p>{{ $plt->status }}</p> 
-                        </div>
+                <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
+           
+            <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                <div>
+                    <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
+                    <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                        <p>{{ $plt->status }}</p> 
                     </div>
                 </div>
                 
