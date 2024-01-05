@@ -49,9 +49,10 @@
                 Tambah Pelatihan
             </button>
         </div>
-    <div class="flex flex-wrap">
+    <div class="flex flex-wrap ">
     @foreach ($pelatihan as $plt)
-        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" class="block mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700  dark:bg-gray-800">
+    <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
 
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
            
