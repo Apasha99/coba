@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PesertaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PelatihanController;
 
 /*
@@ -42,4 +43,9 @@ Route::controller(PelatihanController::class)->group(function(){
     Route::get('admin/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.viewDaftarPelatihan');
     Route::get('admin/daftar-pelatihan/add', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.addPelatihan');
     Route::post('admin/daftar-pelatihan/store', 'store')->middleware('only_admin')->name('admin.storePelatihan');
+});
+
+Route::controller(MateriController::class)->group(function(){
+    Route::post('admin/pelatihan/{plt_kode}/materi', 'store')->middleware('only_admin')->name('admin.storeMateri');
+
 });
