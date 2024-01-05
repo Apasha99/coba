@@ -31,6 +31,6 @@ class Pelatihan extends Model
         if($this->poster){
             return url("storage/" . $this->poster);
         }
-        return "https://upload.wikimedia.org/wikipedia/commons/f/f2/Lambang_Kota_Semarang.png";
+        return "https://kominfo.cilacapkab.go.id/wp-content/uploads/2018/04/384441_09392402042015_logo-kominfo-.png.jpg";
     }
 }

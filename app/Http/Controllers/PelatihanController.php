@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelatihan;
 use App\Models\Admin;
+use App\Models\Jawaban_Test;
+use App\Models\Materi;
+use App\Models\Nilai_Test;
+use App\Models\Peserta_Pelatihan;
+use App\Models\Soal_Test;
+use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class PelatihanController extends Controller
 {
@@ -27,16 +34,16 @@ class PelatihanController extends Controller
         }
     }
 
-    // public function create(){
-    //     $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
-    //             ->where('admin.user_id', Auth::user()->id)
-    //             ->select('admin.nama', 'admin.id', 'users.username')
-    //             ->first();
-    //     if($admin){
-    //         $pelatihan = Pelatihan::all();
-    //         return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
-    //     }
-    // }
+    public function create(){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+        if($admin){
+            $pelatihan = Pelatihan::all();
+            return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
+        }
+    }
 
     public function store(Request $request): RedirectResponse {
         //dd($request->poster);
@@ -44,7 +51,7 @@ class PelatihanController extends Controller
             'kode' => ['required', 'regex:/^[A-Z0-9]{6}$/',Rule::unique('pelatihan')],
             'nama' => ['required'],
             'start_date' => ['required', 'date', 'after_or_equal:today'],
-            'end_date' => ['required', 'date', 'after:start_date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'status' => ['required', 'in:Not started yet,On going,Completed'],
             'penyelenggara' => ['required'],
             'tempat' => ['required', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
@@ -54,22 +61,21 @@ class PelatihanController extends Controller
             Ruang Rapat Lantai 6 Siber Pungli'],
             'deskripsi' => ['required', 'max:255'],
             'poster' => ['required', 'max:10240']
-        ],[
-            'kode.regex' => 'Format kode tidak valid. Kode harus terdiri dari 6 karakter huruf kapital dan angka.',
-            'end_date.after_or_equal' => 'Tanggal Selesai Pelatihan harus setelah atau sama dengan Tanggal Mulai Pelatihan.',
-            'deskripsi.max'=>'Maksimal panjang huruf untuk deskripsi adalah 255 huruf']);
+        ]);
         
         if ($request->has('poster')) {
             $posterPath = $request->file('poster')->store('poster', 'public');
             $validated['poster'] = $posterPath;
         }
+
+        //dd($validated);
        
        
         // Proses penyimpanan data jika validasi berhasil
         Pelatihan::create($validated);
     
         // Redirect atau proses lainnya setelah penyimpanan data berhasil
-        return redirect()->route('admin.addPelatihan')->with('success', 'Data pelatihan berhasil disimpan');
+        return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Data pelatihan berhasil disimpan');
     }
     
 
@@ -77,4 +83,46 @@ class PelatihanController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         return view('admin.detail_pelatihan',['pelatihan'=>$pelatihan]);
     }
+
+    public function delete(Request $request, String $plt_kode)
+    {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+
+        if ($pelatihan) {
+            if ($pelatihan->status !== 'On going') {
+                // Use DB transaction to ensure data consistency
+                DB::beginTransaction();
+
+                try {
+                    // Delete related data using model relationships or direct queries
+                    $pelatihan->nilaiTests()->delete();
+                    $pelatihan->jawabanTests()->delete();
+                    $pelatihan->soalTests()->delete();
+                    $pelatihan->tests()->delete();
+                    $pelatihan->materis()->delete();
+                    $pelatihan->pesertaPelatihans()->delete();
+
+                    // After deleting related data, delete the pelatihan itself
+                    $pelatihan->delete();
+
+                    // Commit the transaction
+                    DB::commit();
+
+                    return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
+                } catch (\Exception $e) {
+                    // Rollback the transaction in case of any error
+                    DB::rollback();
+
+                    return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
+                }
+            } else {
+                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan yang sedang berlangsung.');
+            }
+        } else {
+            return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin dihapus.');
+        }
+    }
+
+
+
 }
