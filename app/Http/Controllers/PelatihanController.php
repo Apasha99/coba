@@ -88,38 +88,53 @@ class PelatihanController extends Controller
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
 
-        if ($pelatihan) {
-            if ($pelatihan->status !== 'On going') {
-                // Use DB transaction to ensure data consistency
-                DB::beginTransaction();
-
-                try {
-                    // Delete related data using model relationships or direct queries
-                    $pelatihan->nilaiTests()->delete();
-                    $pelatihan->jawabanTests()->delete();
-                    $pelatihan->soalTests()->delete();
-                    $pelatihan->tests()->delete();
-                    $pelatihan->materis()->delete();
-                    $pelatihan->pesertaPelatihans()->delete();
-
-                    // After deleting related data, delete the pelatihan itself
-                    $pelatihan->delete();
-
-                    // Commit the transaction
-                    DB::commit();
-
-                    return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
-                } catch (\Exception $e) {
-                    // Rollback the transaction in case of any error
-                    DB::rollback();
-
-                    return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
-                }
-            } else {
-                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan yang sedang berlangsung.');
-            }
-        } else {
+        if (!$pelatihan) {
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin dihapus.');
+        }
+
+        $test = Test::where('plt_kode', $plt_kode)->first();
+
+        // Use DB transaction to ensure data consistency
+        DB::beginTransaction();
+
+        try {
+            if ($test && $test->status == 1) {
+                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan dengan test yang masih aktif.');
+            }
+
+            if (!$test) {
+                // Jika kode pelatihan tidak ditemukan di tabel Test, hapus pelatihan saja
+                $pelatihan->delete();
+
+                // Commit the transaction
+                DB::commit();
+
+                return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada test terkait.');
+            }
+
+            if ($pelatihan->status !== 'On going') {
+                // Delete related data if status is not 'On going'
+                Nilai_Test::where('test_id', $test)->delete();
+                Jawaban_Test::where('test_id', $test)->delete();
+                Soal_Test::where('test_id', $test)->delete();
+                Test::where('plt_kode', $plt_kode)->delete();
+                Materi::where('plt_kode', $plt_kode)->delete();
+                Peserta_Pelatihan::where('plt_kode', $plt_kode)->delete();
+            }
+
+            // Finally, delete the pelatihan itself
+            $pelatihan->delete();
+
+            // Commit the transaction
+            DB::commit();
+
+            return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            // Rollback the transaction in case of any error
+            DB::rollback();
+
+            return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
         }
     }
 
