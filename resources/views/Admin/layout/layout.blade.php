@@ -58,6 +58,8 @@
         }
     </script>
 
+    
+
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-800">
@@ -355,6 +357,10 @@
                 
                 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('content')
+                </div>
+
+                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+                    @yield('head')
                 </div>
 
                 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4 dark:bg-gray-900" style="min-height: 100vh;">

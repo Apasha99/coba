@@ -50,46 +50,27 @@
             </button>
         </div>
     <div class="flex flex-wrap ">
-    @foreach ($pelatihan as $plt)
-    <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
-
+        @foreach ($pelatihan as $plt)
+        <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
-           
-            <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <div>
-                    <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
-                    <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                        <p>{{ $plt->status }}</p> 
+                <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                    <div>
+                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
+                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                            <p>{{ $plt->status }}</p> 
+                        </div>
                     </div>
                 </div>
-                
             </a>
-            <div class="flex flex-row justify-end items-end ">
-                <button type="button" data-modal-toggle="edit-pelatihan-modal"
-                    class="open-modal-button inline-flex items-center px-2 py-2 mb-3 ml-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                    data-nim="">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z">
-                        </path>
-                        <path fill-rule="evenodd"
-                            d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    
-                </button>
-
-                <!-- <button type="button" data-modal="delete-pelatihan-modal" data-plt-kode="{{ $plt->kode }}"
-                    data-nama="{{ $plt->nama }}"
-                    class="inline-flex items-center px-2 py-2 mb-3 mr-3 ml-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+            <div class="absolute bottom-0 right-0 mb-4 mr-4">
+                <a href="{{ route('admin.editPelatihan', $plt->id) }}" class="inline-flex items-center px-2 py-2 mb-3 ml-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
                     </svg>
-                </button> -->
-                
-                <form method="POST" action="{{ route('admin.deletePelatihan', $plt->kode) }}" class="inline-flex items-center px-2 py-2 mb-3 mr-3 ml-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                </a>
+                <form id="deleteForm" method="POST" action="{{ route('admin.deletePelatihan', $plt->kode) }}" class="inline-flex items-center px-2 py-2 mb-3 mr-3 ml-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="delete-button">
@@ -98,12 +79,11 @@
                         </svg>
                     </button>
                 </form>
-
             </div>
-
+        </div>
+        @endforeach
     </div>
-    @endforeach
-</div>
+
 
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-8 md:inset-0 h-100 sm:h-50"
         id="add-pelatihan-modal">
@@ -271,15 +251,18 @@
         </div>
     </div>
 
-    <!-- MODAL DELETE -->
+    
 
+    <script>
+        document.getElementById("deleteForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            if (confirm("Apakah Anda yakin ingin menghapus?")) {
+                this.submit();
+            }
+        });
+    </script>
 
-<!-- JavaScript to handle modal opening and closing -->
-
-
-
-
-
+    
 @endsection
 
 

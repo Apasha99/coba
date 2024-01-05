@@ -130,11 +130,79 @@ class PelatihanController extends Controller
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            //dd($e->getMessage());
             // Rollback the transaction in case of any error
             DB::rollback();
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
+        }
+    }
+
+    public function edit($plt_id){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+        if($admin){
+            $plt = Pelatihan::find($plt_id);
+            return view('admin.edit_pelatihan', ['admin' => $admin, 'plt' => $plt]);
+        }
+    }
+
+    public function update(Request $request, $plt_id)
+    {
+        //dd($request);
+        $plt = Pelatihan::find($plt_id);
+        if (!$plt) {
+            return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin diedit.');
+        }
+        $validated = $request->validate([
+            'nama' => ['required'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'status' => ['required', 'in:Not started yet,On going,Completed'],
+            'penyelenggara' => ['required'],
+            'tempat' => ['required', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
+            Gedung Balaikota,Ruang Komisi A-B Gedung Moch.Ichsan Lantai 8,
+            Gedung Juang 45,Ruang Komisi C-D Gedung Moch.Ichsan Lantai 8,
+            Ruang Rapat Lantai 4,Hall Balaikota Semarang,Halaman Balaikota Semarang,
+            Ruang Rapat Lantai 6 Siber Pungli'],
+            'deskripsi' => ['required', 'max:255'],
+            'poster' => ['max:10240']
+        ]);
+
+        //dd($validated);
+
+        try {
+            DB::beginTransaction();
+    
+            $updateData = [
+                'nama' => $validated['nama'] ?? null,
+                'start_date' => $validated['start_date'] ?? null,
+                'end_date' => $validated['end_date'] ?? null,
+                'status' => $validated['status'] ?? null,
+                'penyelenggara' => $validated['penyelenggara'] ?? null,
+                'tempat' => $validated['tempat'] ?? null,
+                'deskripsi' => $validated['deskripsi'] ?? null,
+            ];
+    
+            if ($request->hasFile('poster')) {
+                $posterPath = $request->file('poster')->store('poster', 'public');
+                $updateData['poster'] = $posterPath;
+            }
+    
+            $plt->update(array_filter($updateData));
+    
+            DB::commit();
+
+            return redirect()
+                ->route('admin.viewDaftarPelatihan')
+                ->with('success', 'Data pelatihan berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()
+                ->route('admin.editPelatihan')
+                ->with('error', 'Gagal memperbarui data pelatihan.');
         }
     }
 
