@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelatihan;
+use App\Models\Peserta_Pelatihan;
 use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +13,9 @@ class PesertaController extends Controller
     public function peserta() {
         if (Auth::user()->role_id === 2) {
             $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
                 ->where('peserta.user_id', Auth::user()->id)
-                ->select('peserta.nama', 'peserta.id', 'users.username')
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
                 ->first();
 
             $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')

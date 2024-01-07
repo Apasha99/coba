@@ -158,11 +158,11 @@ class PelatihanController extends Controller
         }
         $validated = $request->validate([
             'nama' => ['required'],
-            'start_date' => ['required', 'date', 'after_or_equal:today'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
-            'status' => ['required', 'in:Not started yet,On going,Completed'],
+            'status' => [ 'nullable','in:Not started yet,On going,Completed'],
+            'start_date' => ['required'],
+            'end_date' => ['required', 'after_or_equal:start_date'],
             'penyelenggara' => ['required'],
-            'tempat' => ['required', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
+            'tempat' => ['nullable', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
             Gedung Balaikota,Ruang Komisi A-B Gedung Moch.Ichsan Lantai 8,
             Gedung Juang 45,Ruang Komisi C-D Gedung Moch.Ichsan Lantai 8,
             Ruang Rapat Lantai 4,Hall Balaikota Semarang,Halaman Balaikota Semarang,
@@ -229,8 +229,5 @@ class PelatihanController extends Controller
         // Redirect ke halaman atau tindakan yang sesuai setelah bergabung dengan pelatihan
         return redirect()->route('peserta.dashboard')->with('success', 'Berhasil bergabung dengan pelatihan!');
     }
-    
-
-
 
 }
