@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="/daftar-pelatihan"
+                    <a href="{{route('admin.viewDaftarPelatihan')}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +128,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-span-6 sm:col-full">
+                            <div class="col-span-6 sm:col-full mt-4">
                                 <button
                                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                     type="submit">Save all</button>

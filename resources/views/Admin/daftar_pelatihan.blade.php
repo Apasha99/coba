@@ -85,11 +85,11 @@
     </div>
 
 
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-8 md:inset-0 h-100 sm:h-50"
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="add-pelatihan-modal">
         <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
                 <!-- Modal header -->
                 <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
                     <h3 class="text-xl font-semibold dark:text-white">
@@ -107,7 +107,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6 overflow-y-auto">
-                    <form action="{{ route('admin.storePelatihan') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.storePelatihan') }}" method="POST" enctype="multipart/form-data" >
                     @csrf
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
