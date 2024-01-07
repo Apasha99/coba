@@ -22,10 +22,10 @@
     </div>
 
     
-    <div class="flex flex-wrap ">
+    <div class="flex flex-wrap">
+        @foreach($pelatihan as $plt)
         <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            @foreach($pelatihan as $plt)
-            <a href="{{route('peserta.viewDetailPelatihan', $plt->plt_kode)}}" >
+            <a href="{{route('peserta.viewDetailPelatihan', $plt->plt_kode)}}">
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
                 <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                     <div>
@@ -36,9 +36,10 @@
                     </div>
                 </div>
             </a>
-            @endforeach
         </div>
+        @endforeach
     </div>
+
 
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="join-pelatihan-modal">
