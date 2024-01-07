@@ -207,12 +207,13 @@ class PelatihanController extends Controller
     }
 
     public function joinPelatihan(Request $request) {
+        //dd($request);
         $validated = $request->validate([
-            'kode_pelatihan' => ['required', 'exists:pelatihan,kode'],
+            'kode' => ['required', 'exists:pelatihan,kode'],
         ]);
-    
+        //dd($validated);
         // Cek apakah kode pelatihan valid dan masih terbuka untuk pendaftaran
-        $pelatihan = Pelatihan::where('kode', $validated['kode_pelatihan'])
+        $pelatihan = Pelatihan::where('kode', $validated['kode'])
             ->where('status', 'On going')
             ->first();
     
@@ -222,8 +223,8 @@ class PelatihanController extends Controller
     
         // Tambahkan peserta ke tabel Peserta_Pelatihan
         $pesertaPelatihan = new Peserta_Pelatihan();
-        $pesertaPelatihan->peserta_id = Auth::user()->id; // Ganti dengan cara Anda untuk mendapatkan ID peserta saat ini
-        $pesertaPelatihan->plt_kode = $validated['kode_pelatihan'];
+        $pesertaPelatihan->peserta_id = Auth::user()->peserta->id; // Ganti dengan cara Anda untuk mendapatkan ID peserta saat ini
+        $pesertaPelatihan->plt_kode = $validated['kode'];
         $pesertaPelatihan->save();
     
         // Redirect ke halaman atau tindakan yang sesuai setelah bergabung dengan pelatihan
