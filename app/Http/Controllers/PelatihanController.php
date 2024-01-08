@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelatihan;
 use App\Models\Admin;
+use App\Models\Materi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,12 @@ class PelatihanController extends Controller
     public function viewDetailPelatihanPeserta(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         return view('peserta.detail_pelatihan',['pelatihan'=>$pelatihan]);
+    }
+
+    public function viewDetailPelatihanAdmin(String $plt_kode) {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $materi = Materi::where('plt_kode', $plt_kode)->get();
+        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi]);
     }
 
     public function viewDaftarPelatihan() {
@@ -73,8 +80,5 @@ class PelatihanController extends Controller
     }
     
 
-    public function viewDetailPelatihanAdmin(String $plt_kode) {
-        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        return view('admin.detail_pelatihan',['pelatihan'=>$pelatihan]);
-    }
+    
 }

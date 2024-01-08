@@ -339,6 +339,12 @@
                                 {{ session('success') }}!
                             </div>
                         </div>
+
+                        <script>
+                            setTimeout(function() {
+                                document.getElementById('alert-1').style.display = 'none';
+                            }, 3000);
+                        </script>
                     @endif
 
                     @if (session('error'))
@@ -350,6 +356,12 @@
                                 {{ session('error') }}
                             </div>
                         </div>
+
+                        <script>
+                            setTimeout(function() {
+                                document.getElementById('alert-1').style.display = 'none';
+                            }, 3000);
+                        </script>
                     @endif
                 </div>
                 
