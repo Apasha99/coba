@@ -24,7 +24,7 @@
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        Pelatihan
+                        Daftar Pelatihan
                     </a>
                 </li>
                 <li>
@@ -40,7 +40,7 @@
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit PKL</h1>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit peserta_pelatihan</h1>
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">

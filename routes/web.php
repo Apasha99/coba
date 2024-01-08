@@ -51,5 +51,8 @@ Route::controller(PelatihanController::class)->group(function(){
 
 Route::controller(MateriController::class)->group(function(){
     Route::post('admin/pelatihan/{plt_kode}/materi', 'store')->middleware('only_admin')->name('admin.storeMateri');
+    Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditMateri');
+    Route::post('admin/pelatihan/{plt_kode}/materi/{id}', 'update')->middleware('only_admin')->name('admin.updateMateri');
+    Route::post('admin/pelatihan/{plt_kode}/materi/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteMateri');
     //Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'view')->middleware('only_admin')->name('admin.storeMateri');
 });

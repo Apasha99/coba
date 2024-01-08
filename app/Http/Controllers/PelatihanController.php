@@ -10,7 +10,6 @@ use App\Models\Nilai_Test;
 use App\Models\Peserta_Pelatihan;
 use App\Models\Soal_Test;
 use App\Models\Test;
-use App\Models\Materi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -84,10 +83,7 @@ class PelatihanController extends Controller
         // Redirect atau proses lainnya setelah penyimpanan data berhasil
         return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Data pelatihan berhasil disimpan');
     }
-    
-
-    
-
+ 
     public function delete(Request $request, String $plt_kode)
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
