@@ -58,24 +58,44 @@
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode</label>
                                     <input type="text" name="kode" placeholder="kode" id="kode" value="{{ $plt->kode }}" disabled
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('kode')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nama"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
                                     <input type="text" name="nama" placeholder="nama" id="nama" value="{{ $plt->nama }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('nama')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="start_date"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai Pelatihan</label>
                                     <input type="date" name="start_date" placeholder="start_date" id="start_date" value="{{ $plt->start_date }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('start_date')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="end_date"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai Pelatihan</label>
                                     <input type="date" name="end_date" placeholder="end_date" id="end_date" value="{{ $plt->end_date }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('end_date')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="status"
@@ -87,12 +107,22 @@
                                         <option value="On going" {{ $plt->status == 'On going' ? 'selected' : '' }}>On going</option>
                                         <option value="Completed" {{ $plt->status == 'Completed' ? 'selected' : '' }}>Completed</option>
                                     </select>
+                                    @error('status')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="penyelenggara"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Penyelenggara</label>
                                     <input type="text" name="penyelenggara" placeholder="penyelenggara" id="penyelenggara" value="{{$plt->penyelenggara}}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('penyelenggara')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="tempat"
@@ -110,19 +140,29 @@
                                         <option value="Halaman Balaikota Semarang" {{ $plt->tempat == 'Halaman Balaikota Semarang' ? 'selected' : '' }}>Halaman Balaikota Semarang</option>
                                         <option value="Ruang Rapat Lantai 6 Siber Pungli" {{ $plt->tempat == 'Ruang Rapat Lantai 6 Siber Pungli' ? 'selected' : '' }}>Ruang Rapat Lantai 6 Siber Pungli</option>
                                     </select>
+                                    @error('tempat')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="deskripsi"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
                                     <input type="text" name="deskripsi" placeholder="deskripsi" id="deskripsi" value="{{$plt->deskripsi}}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    @error('deskripsi')
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="col-span-full">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster:</label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         aria-describedby="file_input_help" id="poster" name="poster" type="file" accept="image/*">
                                     @error('poster')
-                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                             {{ $message }}
                                         </div>
                                     @enderror

@@ -122,6 +122,7 @@ class PelatihanController extends Controller
                 Soal_Test::where('test_id', $test)->delete();
                 Test::where('plt_kode', $plt_kode)->delete();
                 Materi::where('plt_kode', $plt_kode)->delete();
+                Tugas::where('plt_kode', $plt_kode)->delete();
                 Peserta_Pelatihan::where('plt_kode', $plt_kode)->delete();
             }
 
