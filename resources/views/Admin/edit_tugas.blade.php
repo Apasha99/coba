@@ -35,35 +35,71 @@
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Edit Materi</span>
+                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Edit Tugas</span>
                     </div>
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit Materi</h1>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit Tugas</h1>
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('admin.updateMateri', ['plt_kode' => $pelatihan->kode, 'id' => $materi->id]) }}" method="post"  enctype="multipart/form-data">
+        <form action="{{ route('admin.updateTugas', ['plt_kode' => $pelatihan->kode, 'id' => $tugas->id]) }}" method="post" enctype="multipart/form-data">
             @csrf
         </div>
         <div class="col-span-4">
                 <div
                     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Materi</h3>
+                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Tugas</h3>
                     
                         <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="judul"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
-                                    <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $materi->judul }}"
+                                    <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $tugas->judul }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 </div>
                                 <div class="col-span-full">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_materi">Upload File Materi</label>
+                                <label for="deskripsi"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                <textarea name="deskripsi" rows="5" cols="50" placeholder="Deskripsi (max:255 kata)" id="deskripsi"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>{{ $tugas->deskripsi }}</textarea>
+                                @error('deskripsi')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="start_date"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
+                                <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date" value="{{ $tugas->start_date }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                                @error('start_date')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="end_date"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+                                <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date" value="{{ $tugas->end_date }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                                @error('end_date')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                                <div class="col-span-full">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_tugas">Upload File tugas</label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                        aria-describedby="file_input_help" id="file_materi" name="file_materi" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
-                                    @error('file_materi')
+                                        aria-describedby="file_input_help" id="file_tugas" name="file_tugas" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
+                                    @error('file_tugas')
                                     <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                             {{ $message }}
                                         </div>

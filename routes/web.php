@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PelatihanController;
+use App\Http\Controllers\TugasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +55,13 @@ Route::controller(MateriController::class)->group(function(){
     Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditMateri');
     Route::post('admin/pelatihan/{plt_kode}/materi/{id}', 'update')->middleware('only_admin')->name('admin.updateMateri');
     Route::post('admin/pelatihan/{plt_kode}/materi/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteMateri');
+    //Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'view')->middleware('only_admin')->name('admin.storeMateri');
+});
+
+Route::controller(TugasController::class)->group(function(){
+    Route::post('admin/pelatihan/{plt_kode}/tugas', 'store')->middleware('only_admin')->name('admin.storeTugas');
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->middleware('only_admin')->name('admin.updateTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteTugas');
     //Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'view')->middleware('only_admin')->name('admin.storeMateri');
 });
