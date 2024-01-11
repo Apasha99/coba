@@ -49,12 +49,12 @@
                 Tambah Pelatihan
             </button>
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <form class="lg:pr-6" action="{{route('admin.searchPelatihan')}}" method="GET">
+            <form class="lg:pr-3" action="{{route('admin.searchPelatihan')}}" method="GET">
                 <label for="search" class="sr-only">Search</label>
-                <div class="relative mt-1 lg:w-64 xl:w-96">
+                <div class="relative mt-1 lg:w-96 xl:w-128">
                     <input type="text" name="search" id="search"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full lg:w-auto xl:w-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Cari Pelatihan">
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full lg:w-96 xl:w-128 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Cari Pelatihan nama/status/kode">
 
                     <button type="submit" class="absolute inset-y-0 right-0 px-3 py-1 bg-gray-200 rounded-r-lg">
                         Search
