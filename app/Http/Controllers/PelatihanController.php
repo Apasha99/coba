@@ -28,7 +28,8 @@ class PelatihanController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas]);
+        $test = Test::where('plt_kode', $plt_kode)->get();
+        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
     public function viewDaftarPelatihan() {
