@@ -38,9 +38,9 @@
 
 @section('content5')
     <div class="col-span-full xl:col-auto">
-        <div class="m-auto ml-2 mb-2">
+        <div class="m-auto ml-2 mb-2 flex justify-between">
             <button type="button" data-modal-toggle="add-pelatihan-modal"
-                class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                         d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
@@ -48,7 +48,22 @@
                 </svg>
                 Tambah Pelatihan
             </button>
+        <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
+            <form class="lg:pr-6" action="{{route('admin.searchPelatihan')}}" method="GET">
+                <label for="search" class="sr-only">Search</label>
+                <div class="relative mt-1 lg:w-64 xl:w-96">
+                    <input type="text" name="search" id="search"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full lg:w-auto xl:w-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="Cari Pelatihan">
+
+                    <button type="submit" class="absolute inset-y-0 right-0 px-3 py-1 bg-gray-200 rounded-r-lg">
+                        Search
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
+
         <div class="flex flex-wrap">
         @foreach ($pelatihan as $plt)
         <div class="relative lock mt-2 sm:min-w-60 md:min-w-80 min-h-0 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -60,12 +75,14 @@
                         <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
                             <p>{{ $plt->status }}</p>
                             <div class="relative justify-between mt-2">
+                            @if($plt && $plt->id)
                                 <a href="{{ route('admin.editPelatihan', $plt->id) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
                                         <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
                                     </svg>
                                 </a>
+                                @endif
                                 <button type="button" data-modal-toggle="delete-pelatihan-modal"
                                     class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

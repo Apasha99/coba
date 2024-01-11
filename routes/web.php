@@ -48,6 +48,7 @@ Route::controller(PelatihanController::class)->group(function(){
     Route::get('admin/daftar-pelatihan/edit/{plt_id}', 'edit')->middleware('only_admin')->name('admin.editPelatihan');
     Route::post('admin/daftar-pelatihan/edit/{plt_id}', 'update')->middleware('only_admin')->name('admin.updatePelatihan');
     Route::delete('/admin/daftar-pelatihan/delete/{plt_kode}', 'delete')->middleware('only_admin')->name('admin.deletePelatihan');
+    Route::get('/admin/search-pelatihan', 'searchPelatihan')->middleware('only_admin')->name('admin.searchPelatihan');
 });
 
 Route::controller(MateriController::class)->group(function(){

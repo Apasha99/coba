@@ -174,8 +174,6 @@ class PelatihanController extends Controller
             'poster' => ['max:10240']
         ]);
 
-        //dd($validated);
-
         try {
             DB::beginTransaction();
     
@@ -187,6 +185,7 @@ class PelatihanController extends Controller
                 'penyelenggara' => $validated['penyelenggara'] ?? null,
                 'tempat' => $validated['tempat'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
+                'poster' => $validated['poster'] ?? null,
             ];
     
             if ($request->hasFile('poster')) {
@@ -203,9 +202,7 @@ class PelatihanController extends Controller
                 ->with('success', 'Data pelatihan berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()
-                ->route('admin.editPelatihan')
-                ->with('error', 'Gagal memperbarui data pelatihan.');
+            return redirect()->back()->with('error', 'Gagal memperbarui data pelatihan.');
         }
     }
 
@@ -232,6 +229,27 @@ class PelatihanController extends Controller
     
         // Redirect ke halaman atau tindakan yang sesuai setelah bergabung dengan pelatihan
         return redirect()->route('peserta.dashboard')->with('success', 'Berhasil bergabung dengan pelatihan!');
+    }
+
+    public function searchPelatihan(Request $request)
+    {
+        //dd($request);
+        $search = $request->input('search');
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+
+        $pelatihan = Pelatihan::select('nama', 'status', 'kode','id')
+            ->where(function ($query) use ($search) {
+                $query
+                    ->where('nama', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%')
+                    ->orWhere('kode', 'like', '%' . $search . '%');
+            })
+            ->get();
+
+        return view('admin.daftar_pelatihan', ['pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
     }
 
 }
