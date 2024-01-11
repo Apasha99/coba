@@ -10,6 +10,7 @@ use App\Models\Nilai_Test;
 use App\Models\Peserta_Pelatihan;
 use App\Models\Soal_Test;
 use App\Models\Test;
+use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,8 @@ class PelatihanController extends Controller
     public function viewDetailPelatihanAdmin(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
-        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi]);
+        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
+        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas]);
     }
 
     public function viewDaftarPelatihan() {
