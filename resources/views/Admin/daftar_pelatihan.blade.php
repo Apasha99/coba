@@ -73,7 +73,7 @@
                     <div>
                         <h3 class=" mb-1 text-l font-bold text-gray-900 dark:text-white sm:w-60 md:w-60">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
                         <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <p>{{ $plt->status }}</p>
+                            <p>{{ $plt->kode }} - {{ $plt->status }}</p>
                             <div class="relative justify-between mt-2">
                             @if($plt && $plt->id)
                                 <a href="{{ route('admin.editPelatihan', $plt->id) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
