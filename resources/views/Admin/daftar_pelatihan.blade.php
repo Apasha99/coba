@@ -38,7 +38,7 @@
 
 @section('content5')
     <div class="col-span-full xl:col-auto">
-        <div class="m-auto ml-auto mb-2">
+        <div class="m-auto ml-2 mb-2">
             <button type="button" data-modal-toggle="add-pelatihan-modal"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -51,12 +51,12 @@
         </div>
         <div class="flex flex-wrap">
         @foreach ($pelatihan as $plt)
-        <div class="relative lock mt-2 w-60 h-0 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}">
-                <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
-                <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+        <div class="relative lock mt-2 sm:min-w-60 md:min-w-80 min-h-0 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
+                <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
+                <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                     <div>
-                        <h3 class=" mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
+                        <h3 class=" mb-1 text-l font-bold text-gray-900 dark:text-white sm:w-60 md:w-60">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
                         <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
                             <p>{{ $plt->status }}</p>
                             <div class="relative justify-between mt-2">
