@@ -249,7 +249,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/"
+                                <a href="/admin/daftar-peserta"
                                     class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
                                     <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -348,6 +348,10 @@
 
                 <div class="flex justify-between border-gray-200 border-b dark:border-gray-700 pb-3">
                     @yield('content4')
+                </div>
+
+                <div class="px-4 pt-2 pb-6" style="min-height: 100vh;">
+                    @yield('content2')
                 </div>
 
             </main>

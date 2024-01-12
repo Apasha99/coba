@@ -189,7 +189,7 @@ class PelatihanController extends Controller
                 'poster' => $validated['poster'] ?? null,
             ];
     
-            if ($request->hasFile('poster')) {
+            if ($request->has('poster')) {
                 $posterPath = $request->file('poster')->store('poster', 'public');
                 $updateData['poster'] = $posterPath;
             }

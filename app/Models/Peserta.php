@@ -22,4 +22,21 @@ class Peserta extends Model
         return $this->hasMany(Peserta_Pelatihan::class, 'peserta_id', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Define the method to get the image URL
+    public function getImageURL()
+    {
+        // Assuming 'foto' is the field in the users table that stores the image URL
+        if ($this->user && $this->user->foto) {
+            return $this->user->foto;
+        } else {
+            // If 'foto' is null or user is not found, return a default URL
+            return "https://api.dicebear.com/6.x/fun-emoji/svg?seed={$this->name}";
+        }
+    }
+
 }

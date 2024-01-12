@@ -38,6 +38,14 @@ Route::controller(PesertaController::class)->middleware('only_peserta')->group(f
     Route::get('dashboardPeserta', 'peserta')->name('peserta.dashboard');
 });
 
+Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
+    Route::get('admin/daftar-peserta', 'daftar_peserta')->name('admin.viewDaftarPeserta');
+    Route::post('admin/daftar-peserta/store', 'store')->name('admin.storePeserta');
+    Route::get('admin/daftar-peserta/search', 'searchPeserta')->name('admin.searchPeserta');
+    Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editPeserta');
+    Route::post('admin/daftar-peserta/edit/{id}', 'update')->name('admin.updatePeserta');
+});
+
 Route::controller(PelatihanController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::post('joinPelatihan', 'joinPelatihan')->middleware('only_peserta')->name('peserta.joinPelatihan');
