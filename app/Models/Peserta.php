@@ -14,7 +14,8 @@ class Peserta extends Model
         'nama',
         'email',
         'noHP',
-        'alamat'
+        'alamat',
+        'user_id'
     ];
 
     public function peserta_pelatihan()

@@ -7,6 +7,7 @@ use App\Models\Peserta_Pelatihan;
 use App\Models\Peserta;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Nilai_Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -148,7 +149,7 @@ class PesertaController extends Controller
             'alamat' => ['required'],
             'new_password' => ['nullable', 'min:8', 'string'],
             'conf_password' => ['nullable', 'same:new_password'],
-            'foto' => ['nullable', 'max:10240'],
+            'foto' => [ 'max:10240'],
         ]);
 
         try {
@@ -171,10 +172,10 @@ class PesertaController extends Controller
                 $updateData2['password_awal'] = $validated['new_password'];
             }
 
-            // if ($request->has('foto')) {
-            //     $fotoPath = $request->file('foto')->store('foto', 'public');
-            //     $updateData2['foto'] = $fotoPath;
-            // }
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
 
             $peserta->update(array_filter($updateData));
             $peserta->user->update(array_filter($updateData2));
@@ -189,5 +190,52 @@ class PesertaController extends Controller
             return redirect()->back()->with('error', 'Gagal memperbarui data peserta');
         }
     }
+
+    public function delete(Request $request, String $peserta_id)
+{
+    try {
+        $peserta = Peserta::leftJoin('users', 'users.id', '=', 'peserta.user_id')
+            ->where('peserta.user_id', $peserta_id)
+            ->select('peserta.user_id','users.id')
+            ->first();
+
+        $peserta_pelatihan = Peserta_Pelatihan::leftJoin('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+            ->leftJoin('users', 'users.id', '=', 'peserta.user_id')
+            ->leftJoin('pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+            ->where('peserta.user_id', $peserta_id)
+            ->select('peserta.user_id', 'users.id','peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode')
+            ->first();
+        //dd($peserta_pelatihan);
+
+        DB::beginTransaction();
+
+        try {
+            if ($peserta_pelatihan && $peserta_pelatihan->status == 'On going') {
+                return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menghapus peserta dengan pelatihan yang masih berlangsung.');
+            }
+
+            if ($peserta_pelatihan != null) {
+                Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                           ->where('peserta.user_id', $peserta_id)->delete();
+                $peserta_pelatihan->delete();
+            }
+            Peserta::where('user_id', $peserta_id)->delete();
+            User::where('id', $peserta_id)->delete();
+
+            DB::commit();
+
+            return redirect()->route('admin.viewDaftarPeserta')->with('success', 'Peserta dan semua data terkait berhasil dihapus.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+
+            return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Terjadi kesalahan saat menghapus peserta dan data terkait.');
+        }
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menemukan peserta yang ingin dihapus.');
+    }
+}
+
+
 
 }

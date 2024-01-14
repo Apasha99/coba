@@ -44,6 +44,7 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
     Route::get('admin/daftar-peserta/search', 'searchPeserta')->name('admin.searchPeserta');
     Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editPeserta');
     Route::post('admin/daftar-peserta/edit/{id}', 'update')->name('admin.updatePeserta');
+    Route::delete('/admin/daftar-peserta/delete/{peserta_id}', 'delete')->name('admin.deletePeserta');
 });
 
 Route::controller(PelatihanController::class)->group(function(){
