@@ -12,9 +12,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Different;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PesertaImport;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class PesertaController extends Controller
 {
@@ -192,50 +195,159 @@ class PesertaController extends Controller
     }
 
     public function delete(Request $request, String $peserta_id)
-{
-    try {
-        $peserta = Peserta::leftJoin('users', 'users.id', '=', 'peserta.user_id')
-            ->where('peserta.user_id', $peserta_id)
-            ->select('peserta.user_id','users.id')
-            ->first();
-
-        $peserta_pelatihan = Peserta_Pelatihan::leftJoin('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
-            ->leftJoin('users', 'users.id', '=', 'peserta.user_id')
-            ->leftJoin('pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
-            ->where('peserta.user_id', $peserta_id)
-            ->select('peserta.user_id', 'users.id','peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode')
-            ->first();
-        //dd($peserta_pelatihan);
-
-        DB::beginTransaction();
-
+    {
         try {
-            if ($peserta_pelatihan && $peserta_pelatihan->status == 'On going') {
-                return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menghapus peserta dengan pelatihan yang masih berlangsung.');
+            $peserta = Peserta::leftJoin('users', 'users.id', '=', 'peserta.user_id')
+                ->where('peserta.user_id', $peserta_id)
+                ->select('peserta.user_id','users.id')
+                ->first();
+
+            $peserta_pelatihan = Peserta_Pelatihan::leftJoin('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+                ->leftJoin('users', 'users.id', '=', 'peserta.user_id')
+                ->leftJoin('pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+                ->where('peserta.user_id', $peserta_id)
+                ->select('peserta.user_id', 'users.id','peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode')
+                ->first();
+            //dd($peserta_pelatihan);
+
+            DB::beginTransaction();
+
+            try {
+                if ($peserta_pelatihan && $peserta_pelatihan->status == 'On going') {
+                    return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menghapus peserta dengan pelatihan yang masih berlangsung.');
+                }
+
+                if ($peserta_pelatihan != null) {
+                    Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                            ->where('peserta.user_id', $peserta_id)->delete();
+                    $peserta_pelatihan->delete();
+                }
+                Peserta::where('user_id', $peserta_id)->delete();
+                User::where('id', $peserta_id)->delete();
+
+                DB::commit();
+
+                return redirect()->route('admin.viewDaftarPeserta')->with('success', 'Peserta dan semua data terkait berhasil dihapus.');
+            } catch (\Exception $e) {
+                DB::rollback();
+                dd($e);
+
+                return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Terjadi kesalahan saat menghapus peserta dan data terkait.');
             }
-
-            if ($peserta_pelatihan != null) {
-                Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                           ->where('peserta.user_id', $peserta_id)->delete();
-                $peserta_pelatihan->delete();
-            }
-            Peserta::where('user_id', $peserta_id)->delete();
-            User::where('id', $peserta_id)->delete();
-
-            DB::commit();
-
-            return redirect()->route('admin.viewDaftarPeserta')->with('success', 'Peserta dan semua data terkait berhasil dihapus.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            dd($e);
-
-            return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Terjadi kesalahan saat menghapus peserta dan data terkait.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menemukan peserta yang ingin dihapus.');
         }
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menemukan peserta yang ingin dihapus.');
     }
-}
+
+    public function tambah()
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+
+        $peserta = Peserta::select('user_id', 'nama', 'noHP', 'alamat')
+            ->whereNull('user_id')
+            ->get();
+
+        return view('admin.import_peserta', compact('admin', 'peserta'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        $data = Excel::toArray(new PesertaImport(), $request->file('file'));
+        //dd($data);
+        foreach ($data[0] as $row) {
+            $validator = Validator::make($row, [
+                'nama' => 'required|regex:/^[a-zA-Z\s]*$/',
+                'nohp' => 'required',
+                'alamat' => 'required',
+                'email' => 'required|email|unique:users,email', // Check uniqueness in the users table for the email field
+            ]);
+            //dd($data);
+
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
+       
+        // Flash the data for a single request
+        session()->flash('peserta_data', $data[0]);
+
+        return redirect()->route('admin.previewPeserta');
+    }
+
+    public function preview()
+    {
+        $data = session('peserta_data');
+        //dd($data);
+        // If there is no data, you might want to handle it accordingly (e.g., redirect back with an error message)
+        if (!$data) {
+            return redirect()->route('admin.tambahPeserta')->with('error', 'No data available for preview.');
+        }
+
+        return view('admin.import_peserta', ['data' => $data]);
+    }
+
+    public function generateAkun()
+    {
+        $data = session('peserta_data');
+
+        foreach ($data as $row) {
+            if (Peserta::where('user_id', $row['user_id'])->exists()) {
+                return redirect()
+                    ->route('admin.preview')
+                    ->with('error', 'Peserta sudah terdaftar');
+            }
+
+            $email = $row['email'];
+            $noHP = $row['nohp'];
+            $alamat = $row['alamat'];
+            $nama = $row['Nama'];
+            $originalUsername = strtolower(str_replace(' ', '', $row['nama']));
+            $username = strlen($originalUsername) > 10 ? substr($originalUsername, 0, 10) : $originalUsername;
+
+            // Check for uniqueness and append a unique identifier if needed
+            while (User::where('username', $username)->exists()) {
+                $username .= '_' . uniqid();
+            }
 
 
+            $password = Str::random(8);
 
+            $user = User::create([
+                'email' => $email,
+                'username' => $username,
+                'password' => Hash::make($password), // Hash the password
+                'password_awal' => $password, 
+                'role_id' => 2,
+            ]);
+
+            $row['user_id'] = $user->id;
+            $row['nohp'] = $noHP;
+            $row['alamat'] = $alamat;
+            $row['nama'] = $nama;
+            Peserta::create($row);
+        }
+        return redirect()
+            ->route('admin.daftarPeserta')
+            ->with('success', 'Data peserta berhasil ditambahkan');
+    }
+
+    public function export()
+    {
+        $peserta = Peserta::join('users', 'peserta.user_id', '=', 'users.id')
+            ->select('nama', 'user_id', 'noHP', 'alamat', 'username', 'password_awal', 'email')
+            ->get();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.downloadPeserta', ['peserta' => $peserta]);
+        return $pdf->stream('daftar-list-peserta.pdf');
+    }
 }
