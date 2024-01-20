@@ -56,8 +56,7 @@ class PesertaController extends Controller
         $validated = $request->validate([
             'nama' => ['required'],
             'username' => ['required', 'unique:users,username'],
-            'email' => ['required', 'unique:users,email','email',
-            Rule::unique('users')],
+            'email' => ['required', 'unique:users,email','email'],
             'noHP' => ['required', 'numeric'],
             'alamat' => ['required'],
             'foto' => ['required', 'max:10240','mimes:jpeg,png,jpg']
