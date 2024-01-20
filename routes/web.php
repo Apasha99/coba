@@ -50,6 +50,8 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
     Route::get('/admin/daftar-peserta/import/preview', 'preview')->name('admin.previewPeserta');
     Route::post('/admin/daftar-peserta/generate-akun','generateAkun')->name('admin.generatePeserta');
     Route::get('/admin/daftar-peserta/export','export')->name('admin.exportPeserta');
+    Route::get('/admin/daftar-peserta/send-email', 'daftar_peserta')->name('admin.tulisEmail');
+    Route::post('/admin/daftar-peserta/send-email', 'sendEmail')->name('admin.sendEmail');
 });
 
 Route::controller(PelatihanController::class)->group(function(){

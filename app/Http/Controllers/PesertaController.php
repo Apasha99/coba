@@ -18,6 +18,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PesertaImport;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PesertaRegistered;
 
 class PesertaController extends Controller
 {
@@ -47,8 +49,9 @@ class PesertaController extends Controller
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
             ->select('peserta.user_id as peserta_id','peserta.nama as peserta_nama', 'peserta.noHP', 'peserta.alamat', 'users.foto', 'users.password_awal', 'peserta.id', 'users.username', 'users.email')
             ->get();
-
-        return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta]);
+        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $pelatihan = Pelatihan::select('kode','nama')->get();
+        return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
 
     public function store(Request $request): RedirectResponse {
@@ -167,7 +170,7 @@ class PesertaController extends Controller
             ];
 
             if ($request->has('new_password')) {
-                $updateData2['password'] = bcrypt($validated['new_password']);
+                $updateData2['password'] = ($validated['new_password']);
                 $updateData2['password_awal'] = $validated['new_password'];
             }
 
@@ -256,7 +259,6 @@ class PesertaController extends Controller
         ]);
 
         $data = Excel::toArray(new PesertaImport(), $request->file('file'));
-        //dd($data);
         foreach ($data[0] as $row) {
             $validator = Validator::make($row, [
                 'nama' => 'required|regex:/^[a-zA-Z\s]*$/',
@@ -275,18 +277,18 @@ class PesertaController extends Controller
         }
        
         // Flash the data for a single request
-        session()->flash('peserta_data', $data[0]);
+        session()->put('peserta_data', $data[0]);
 
         return redirect()->route('admin.previewPeserta');
     }
 
     public function preview()
     {
-        $data = session('peserta_data');
-        //dd($data);
+        $data = session()->get('peserta_data');
+        
         // If there is no data, you might want to handle it accordingly (e.g., redirect back with an error message)
         if (!$data) {
-            return redirect()->route('admin.tambahPeserta')->with('error', 'No data available for preview.');
+            return redirect()->route('admin.tambahPeserta')->with('error', 'Tidak ada data yang ingin di generate.');
         }
 
         return view('admin.import_peserta', ['data' => $data]);
@@ -294,56 +296,149 @@ class PesertaController extends Controller
 
     public function generateAkun()
     {
-        $data = session('peserta_data');
-
+        $data = session()->get('peserta_data');
+        //dd($data);
+        // If there is no data, you might want to handle it accordingly (e.g., redirect back with an error message)
+        if (!$data) {
+            return redirect()->route('admin.tambahPeserta')->with('error', 'Tidak ada data yang ingin di generate');
+        }
+        
         foreach ($data as $row) {
-            if (Peserta::where('user_id', $row['user_id'])->exists()) {
+            if (array_key_exists('user_id', $row) && Peserta::where('user_id', $row['user_id'])->exists()) {
                 return redirect()
                     ->route('admin.preview')
                     ->with('error', 'Peserta sudah terdaftar');
+            } else {
+                $email = $row['email'];
+                $noHP = $row['nohp'];
+                $alamat = $row['alamat'];
+                $nama = $row['nama'];
+                $originalUsername = strtolower(str_replace(' ', '', $row['nama']));
+                $username = strlen($originalUsername) > 10 ? substr($originalUsername, 0, 10) : $originalUsername;
+        
+                // Check for uniqueness and append a unique identifier if needed
+                while (User::where('username', $username)->exists()) {
+                    $username .= '_' . uniqid();
+                }
+        
+                $password = Str::random(8);
+        
+                $user = User::create([
+                    'email' => $email,
+                    'username' => $username,
+                    'password' => $password,
+                    'password_awal' => $password, 
+                    'role_id' => 2,
+                ]);
+        
+                // Check if 'user_id' key exists before attempting to use it
+                if (array_key_exists('user_id', $row)) {
+                    $row['user_id'] = $user->id;
+                }
+        
+                $row['noHP'] = $noHP;
+                $row['alamat'] = $alamat;
+                $row['nama'] = $nama;
+                Peserta::create([
+                    'noHP' => $noHP,
+                    'alamat' => $alamat,
+                    'nama' => $nama,
+                    'user_id' => $user->id
+                ]);
             }
-
-            $email = $row['email'];
-            $noHP = $row['nohp'];
-            $alamat = $row['alamat'];
-            $nama = $row['Nama'];
-            $originalUsername = strtolower(str_replace(' ', '', $row['nama']));
-            $username = strlen($originalUsername) > 10 ? substr($originalUsername, 0, 10) : $originalUsername;
-
-            // Check for uniqueness and append a unique identifier if needed
-            while (User::where('username', $username)->exists()) {
-                $username .= '_' . uniqid();
-            }
-
-
-            $password = Str::random(8);
-
-            $user = User::create([
-                'email' => $email,
-                'username' => $username,
-                'password' => Hash::make($password), // Hash the password
-                'password_awal' => $password, 
-                'role_id' => 2,
-            ]);
-
-            $row['user_id'] = $user->id;
-            $row['nohp'] = $noHP;
-            $row['alamat'] = $alamat;
-            $row['nama'] = $nama;
-            Peserta::create($row);
-        }
+        }        
         return redirect()
-            ->route('admin.daftarPeserta')
+            ->route('admin.viewDaftarPeserta')
             ->with('success', 'Data peserta berhasil ditambahkan');
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        $peserta = Peserta::join('users', 'peserta.user_id', '=', 'users.id')
-            ->select('nama', 'user_id', 'noHP', 'alamat', 'username', 'password_awal', 'email')
-            ->get();
+        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $user_id = $request->input('user_id');
+        $exportOption = $request->input('export_option');
+        $startUserId = $request->input('start_user_id');
+        $endUserId = $request->input('end_user_id');
+
+        $query = Peserta::join('users', 'peserta.user_id', '=', 'users.id')
+            ->select('nama', 'user_id', 'noHP', 'alamat', 'username', 'password_awal', 'email');
+
+        // Filter berdasarkan opsi yang dipilih
+        if ($exportOption === 'all') {
+            // Tidak ada filter tambahan
+        } elseif ($exportOption === 'range' && $startUserId && $endUserId) {
+            // Filter berdasarkan rentang user_id
+            $query->whereBetween('user_id', [$startUserId, $endUserId]);
+        } else {
+            // Opsi tidak valid, mungkin tambahkan penanganan kesalahan di sini
+        }
+
+        $peserta = $query->get();
+
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.downloadPeserta', ['peserta' => $peserta]);
-        return $pdf->stream('daftar-list-peserta.pdf');
+        $pdf->loadView('admin.download_peserta', ['peserta' => $peserta, 'pst' => $pst]);
+
+        // Nama file PDF disesuaikan dengan opsi yang dipilih
+        $filename = $exportOption === 'range' ? 'daftar-list-peserta-range.pdf' : 'daftar-list-peserta.pdf';
+
+        return $pdf->stream($filename);
+    }
+
+    public function sendEmail(Request $request)
+    {
+        // Validasi input
+        //dd($request);
+        $request->validate([
+            'subjek' => 'required|string',
+            'dari' => 'required|email',
+            'deliver_option' => 'required|in:all,range',
+            'start_user_id' => 'required_if:deliver_option,range|exists:users,id',
+            'end_user_id' => 'required_if:deliver_option,range|exists:users,id',
+            'kode' => 'required|exists:pelatihan,kode',
+            'pesan' => 'required|string',
+        ]);
+        //dd($request);
+        $fromAddress = $request->input('dari'); // Ambil alamat pengirim dari inputan formulir
+        $fromName = 'Dinas Kominfo Kota Semarang'; // Gantilah dengan logika Anda untuk mendapatkan nama pengirim
+
+        $subjek = $request->input('subjek');
+        $pesan = $request->input('pesan');
+        $kode = $request->input('kode');
+
+        $exportOption = $request->input('deliver_option');
+        $startUserId = $request->input('start_user_id');
+        $endUserId = $request->input('end_user_id');
+
+        $users = null;
+        $toAddresses = [];
+
+        if ($exportOption === 'all') {
+            // Ambil semua user dengan role_id = 2
+            $users = User::where('role_id', '=', 2)->get();
+        } elseif ($exportOption === 'range' && $startUserId && $endUserId) {
+            // Ambil user dalam rentang tertentu
+            $users = User::where('role_id', '=', 2)
+                ->whereBetween('id', [$startUserId, $endUserId])
+                ->get();
+        } else {
+            return redirect()->back()->with('error', 'Opsi pengiriman tidak valid.');
+        }
+        
+        // Ambil alamat email dari hasil query
+        if ($users) {
+            foreach ($users as $user) {
+                $toAddresses[] = $user->email;
+                $username = $user->username;
+                $password = $user->password_awal;
+            }
+        }
+        //dd($toAddresses);
+        // Loop melalui alamat email dan kirim email
+        foreach ($toAddresses as $toAddress) {
+            Mail::to($toAddress)
+                ->queue(new PesertaRegistered($username, $password, $kode, $fromAddress, $fromName,$subjek,$pesan));
+        }
+
+        return redirect()->back()->with('success', 'Berhasil mengirim email.');
     }
 }
