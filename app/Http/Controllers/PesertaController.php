@@ -57,10 +57,7 @@ class PesertaController extends Controller
             'nama' => ['required'],
             'username' => ['required', 'unique:users,username'],
             'email' => ['required', 'unique:users,email','email',
-            Rule::unique('users')->where(function ($query) {
-                // Contoh: Memastikan domain email adalah contoh.com
-                $query->where('email_domain', 'contoh.com');
-            })],
+            Rule::unique('users')],
             'noHP' => ['required', 'numeric'],
             'alamat' => ['required'],
             'foto' => ['required', 'max:10240','mimes:jpeg,png,jpg']
