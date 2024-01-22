@@ -22,10 +22,9 @@ class MateriController extends Controller
         }
 
         $validated['plt_kode'] = $kode;
-        // Proses penyimpanan data jika validasi berhasil
+
         Materi::create($validated);
     
-        // Redirect atau proses lainnya setelah penyimpanan data berhasil
         return redirect()->back()->with('success', 'Data materi berhasil disimpan');
     }
 
@@ -37,7 +36,6 @@ class MateriController extends Controller
 
     public function update(Request $request, $plt_kode, $id)
     {
-        //dd($request);
         $materi = Materi::find($id);
         $pelatihan = Pelatihan::find($plt_kode);
        
@@ -45,8 +43,6 @@ class MateriController extends Controller
             'judul' => ['required'],
             'file_materi' => ['max:10240']
         ]);
-
-        //dd($validated);
 
         try {
             DB::beginTransaction();
