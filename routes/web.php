@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PelatihanController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TugasController;
 
 /*
@@ -31,11 +32,11 @@ Route::controller(AuthController::class)->middleware('auth')->group(function(){
 });
 
 Route::controller(AdminController::class)->middleware('only_admin')->group(function(){
-    Route::get('dashboardAdmin', 'admin')->name('admin.dashboard');
+    Route::get('admin/dashboard', 'admin')->name('admin.dashboard');
 });
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
-    Route::get('dashboardPeserta', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
@@ -80,5 +81,10 @@ Route::controller(TugasController::class)->group(function(){
     Route::get('admin/pelatihan/{plt_kode}/tugas/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->middleware('only_admin')->name('admin.updateTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteTugas');
-    //Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'view')->middleware('only_admin')->name('admin.storeMateri');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}', 'viewDetailTugas')->middleware('only_peserta')->name('peserta.viewDetailTugas');
+});
+
+Route::controller(SubmissionController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.submitFiles');
 });

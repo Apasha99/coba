@@ -21,7 +21,10 @@ class PelatihanController extends Controller
 {
     public function viewDetailPelatihanPeserta(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        return view('peserta.detail_pelatihan',['pelatihan'=>$pelatihan]);
+        $materi = Materi::where('plt_kode', $plt_kode)->get();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->get();
+        return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
     public function viewDetailPelatihanAdmin(String $plt_kode) {
