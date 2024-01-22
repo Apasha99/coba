@@ -486,6 +486,18 @@
                                 @enderror
                             </div>
                             <div class="col-span-full">
+                                <label for="deskripsi"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi" 
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required></textarea>
+                                @error('deskripsi')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
                                 <label for="totalnilai"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Nilai</label>
                                 <input type="number" name="totalnilai" placeholder="Masukkan Total Nilai" id="totalnilai"
@@ -497,7 +509,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-span-full">
+                            <div class="col-span-6 sm:col-span-3">
                                 <label for="isActive"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
                                 <select name="isActive" id="isActive" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
@@ -534,8 +546,47 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="acak_soal"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Acak Soal</label>
+                                <select name="acak_soal" id="acak_soal" class="block w-full mt-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="Ya" >Ya</option>
+                                    <option value="Tidak" >Tidak</option>
+                                </select>
+                                @error('acak_soal')
+                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="acak_jawaban"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Acak Jawaban</label>
+                                <select name="acak_jawaban" id="acak_jawaban" class="block w-full mt-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="Ya" >Ya</option>
+                                    <option value="Tidak" >Tidak</option>
+                                </select>
+                                @error('acak_jawaban')
+                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="tampil_hasil"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Hasil</label>
+                                <select name="tampil_hasil" id="tampil_hasil" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="Ya" >Ya</option>
+                                    <option value="Tidak" >Tidak</option>
+                                </select>
+                                @error('tampil_hasil')
+                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <!-- Tombol untuk menyimpan data -->
-                            <div class="col-span-full">
+                            <div class="col-span-6 sm:col-span-3 mt-6">
                                 <button type="submit"
                                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                                     data-modal-toggle="add-test-modal">

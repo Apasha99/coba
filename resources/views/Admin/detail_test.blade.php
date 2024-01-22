@@ -11,7 +11,7 @@
                 {{ \Carbon\Carbon::parse($test->start_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
-        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             End date: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{ \Carbon\Carbon::parse($test->end_date)->format('l, j F Y, h:i A') }}

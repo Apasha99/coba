@@ -14,7 +14,13 @@ class Test extends Model
         'nama',
         'totalnilai',
         'isActive',
-        'plt_kode'
+        'plt_kode',
+        'deskripsi',
+        'acak_soal',
+        'acak_jawaban',
+        'tampil_hasil',
+        'start_date',
+        'end_date'
     ];
 
     public function soal_test()
