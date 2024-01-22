@@ -29,7 +29,7 @@ class PesertaController extends Controller
             $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->where('peserta_pelatihan.peserta_id', $peserta->id)
                 ->get();
-            //dd($pelatihan);
+      
             return view('peserta.dashboard',['peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
         }
     }

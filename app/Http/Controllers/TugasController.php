@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class TugasController extends Controller
 {
+    public function viewDetailTugas(String $plt_kode, String $tugas_id) {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
+        return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas]);
+    }
+
     public function store(Request $request, String $kode): RedirectResponse {
         $validated = $request->validate([
             'judul' => ['required'],
