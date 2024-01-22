@@ -354,6 +354,12 @@ class PesertaController extends Controller
 
     public function export(Request $request)
     {
+
+        $request->validate([
+            'export_option' => 'required',
+            'start_user_id' => 'required_if:export_option,range|exists:users,id',
+            'end_user_id' => 'required_if:export_option,range|exists:users,id', 'after_or_equal:start_user_id',
+        ]);
         $pst = User::where('role_id', '=', 2)->select('id')->get();
         $user_id = $request->input('user_id');
         $exportOption = $request->input('export_option');
@@ -389,18 +395,14 @@ class PesertaController extends Controller
         // Validasi input
         $request->validate([
             'subjek' => 'required|string',
-            'dari' => 'required|email',
             'deliver_option' => 'required|in:all,range',
             'start_user_id' => 'required_if:deliver_option,range|exists:users,id',
-            'end_user_id' => 'required_if:deliver_option,range|exists:users,id',
+            'end_user_id' => 'required_if:deliver_option,range|exists:users,id', 'after_or_equal:start_user_id',
             'kode' => 'required|exists:pelatihan,kode',
-            'pesan' => 'required|string',
         ]);
-
-        $fromAddress = $request->input('dari');
+        //dd($request);
         $fromName = 'Dinas Kominfo Kota Semarang';
         $subjek = $request->input('subjek');
-        $pesan = $request->input('pesan');
         $kode = $request->input('kode');
 
         $exportOption = $request->input('deliver_option');
@@ -432,10 +434,10 @@ class PesertaController extends Controller
             $toAddress = $user->email;
             
             Mail::to($toAddress)
-                ->queue(new PesertaRegistered($username, $password, $kode, $fromAddress, $fromName, $subjek, $pesan));
+                ->send(new PesertaRegistered($username, $password, $kode,$fromName, $subjek));
         }
 
-        return redirect()->back()->with('success', 'Berhasil mengirim email.');
+        return redirect()->back()->with('success', 'Berhasil mengirim email');
     }
 
 }

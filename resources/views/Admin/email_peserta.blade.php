@@ -1,5 +1,5 @@
 @component('mail::message')
-    # {{$subject}}
+    # {{$subjek}}
 
     Terima kasih telah mendaftar. Berikut adalah informasi login Anda:
 
