@@ -6,7 +6,7 @@
         <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                 <li class="inline-flex items-center">
-                    <a href="/dashboardAdmin"
+                    <a href="/admin/dashboard"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -66,13 +66,13 @@
 
         <div class="flex flex-wrap">
         @foreach ($pelatihan as $plt)
-        <div class="relative lock mt-2 sm:min-w-60 md:min-w-80 min-h-0 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
-                <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                     <div>
-                        <h3 class=" mb-1 text-l font-bold text-gray-900 dark:text-white sm:w-60 md:w-60">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
-                        <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
+                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
                             <p>{{ $plt->kode }} - {{ $plt->status }}</p>
                             <div class="relative justify-between mt-2">
                             @if($plt && $plt->id)
