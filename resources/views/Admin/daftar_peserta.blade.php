@@ -56,12 +56,17 @@
                 </svg>
                 Tambah Peserta
             </button>
-            <a href=""
+            <a data-modal-toggle="email-peserta-modal"
+                class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                <i class="fa-solid fas fa-envelope fa-lg mr-3"></i>
+                Send Mail
+            </a>
+            <a href="{{route('admin.tambahPeserta')}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 <i class="fa-solid fa-file-arrow-down fa-lg mr-3"></i>
                 Import
             </a>
-            <a href=""
+            <a data-modal-toggle="export-peserta-modal"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 <i class="fa-solid fa-file-arrow-up fa-lg mr-3"></i>
                 Download List
@@ -168,6 +173,215 @@
             </div>
         </div>
     </div>
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-full"
+        id="email-peserta-modal">
+        <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white">
+                        Kirim Email Peserta
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
+                        data-modal-toggle="email-peserta-modal">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6 overflow-y-auto">
+                    <form id="emailForm" method="POST" action="{{route('admin.sendEmail')}}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="col-span-6 sm:col-span-6">
+                            <label for="subjek"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subjek</label>
+                            <input type="text" name="subjek" placeholder="Tulis Subjek" id="subjek"
+                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
+                            @error('subjek')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="col-span-6 sm:col-span-6">
+                            <label for="dari"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dari</label>
+                            <input type="text" name="dari" placeholder="Tulis Email" id="dari"
+                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required>
+                            @error('dari')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="col-span-6 justify-between items-center">
+                        <div class="items-center">
+                            <label for="deliver-option" class="text-sm font-medium text-gray-900 dark:text-white">Kepada</label>
+                            <select name="deliver_option" id="deliver-option" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                <option value="all">Semua</option>
+                                <option value="range">Rentang</option>
+                            </select>
+
+                            <!-- Rentang id -->
+                            <div id="deliver-range" class="hidden">
+                                <div class="flex-col items-center mt-2">
+                                    <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
+                                    <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                        @foreach ($pst as $data)
+                                            <option value="{{ $data->id }}" >{{ $data->id }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="flex-col items-center mt-2 mb-4">
+                                    <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
+                                    <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                        @foreach ($pst as $data)
+                                            <option value="{{ $data->id }}">{{ $data->id }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-6 sm:col-span-6">
+                            <label for="kode"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pelatihan</label>
+                            <select name="kode" id="kode" class="mb-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option value="" class="text-sm font-medium" selected disabled>Pilih Pelatihan</option>
+                                    @foreach ($pelatihan as $data)
+                                        <option value="{{ $data->kode }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            @error('kode')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="col-span-6 sm:col-span-6">
+                            <label for="pesan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pesan</label>
+                            <input type="text" name="pesan" placeholder="Tulis Pesan" id="pesan"
+                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required></input>
+                            @error('pesan')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class=" mt-2 justify-between items-center space-x-4">
+                            <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                Send
+                            </button>
+                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-toggle="email-peserta-modal">
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('deliver-option').addEventListener('change', function() {
+                var exportOption = this.value;
+                if (exportOption === 'range') {
+                    document.getElementById('deliver-range').classList.remove('hidden');
+                } else {
+                    document.getElementById('deliver-range').classList.add('hidden');
+                }
+            });
+        </script>
+        <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
+            id="export-peserta-modal">
+            <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
+                    <!-- Modal header -->
+                    <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                        <h3 class="text-xl font-semibold dark:text-white">
+                            Export Peserta
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
+                            data-modal-toggle="export-peserta-modal">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-6 space-y-6 overflow-y-auto">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white mt-2" for="export-id">Pilih ID yang ingin di download</label>
+                        <form id="exportForm" method="GET" action="{{ route('admin.exportPeserta') }}">
+                            @csrf
+                            <div class="col-span-full justify-between items-center">
+                            <div class="items-center">
+                                <label for="export-option" class=" text-sm font-medium text-gray-900 dark:text-white">Export Option:</label>
+                                <select name="export_option" id="export-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="all">Semua</option>
+                                    <option value="range">Rentang</option>
+                                </select>
+
+                                <!-- Rentang user_id -->
+                                <div id="export-range" class="hidden">
+                                    <div class="flex-col items-center mt-2">
+                                        <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
+                                        <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                            @foreach ($pst as $data)
+                                                <option value="{{ $data->id }}">{{ $data->id }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="flex-col items-center mt-2 mb-4">
+                                        <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
+                                        <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                            @foreach ($pst as $data)
+                                                <option value="{{ $data->id }}">{{ $data->id }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=" mt-2 justify-between items-center space-x-4">
+                                <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                    Download
+                                </button>
+                                <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-toggle="export-peserta-modal">
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+        </div>
+        <script>
+            document.getElementById('export-option').addEventListener('change', function() {
+                var exportOption = this.value;
+                if (exportOption === 'range') {
+                    document.getElementById('export-range').classList.remove('hidden');
+                } else {
+                    document.getElementById('export-range').classList.add('hidden');
+                }
+            });
+        </script>
+
     @foreach ($peserta as $plt)
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="delete-peserta-modal-{{ $plt->peserta_id }}">

@@ -191,12 +191,10 @@ class PelatihanController extends Controller
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'poster' => $validated['poster'] ?? null,
             ];
-    
-            if ($request->has('poster')) {
+            if ($request->hasFile('poster')) {
                 $posterPath = $request->file('poster')->store('poster', 'public');
-                $updateData['poster'] = $posterPath;
+                $updateData['poster'] = $fileTugasPath;
             }
-    
             $plt->update(array_filter($updateData));
     
             DB::commit();

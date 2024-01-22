@@ -159,14 +159,21 @@
                                 </div>
                                 <div class="col-span-full">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster:</label>
+                                    @if(isset($updateData['poster']))
+                                        <div>
+                                            <img src="{{ asset('storage/' . $updateData['poster']) }}" alt="Current Poster" class="mb-2 max-w-full h-auto">
+                                        </div>
+                                    @endif
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         aria-describedby="file_input_help" id="poster" name="poster" type="file" accept="image/*">
                                     @error('poster')
-                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
+
+
                             </div>
                             <div class="col-span-6 sm:col-full mt-4">
                                 <button
