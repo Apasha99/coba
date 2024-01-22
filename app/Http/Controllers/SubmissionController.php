@@ -11,6 +11,7 @@ use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SubmissionController extends Controller
 {
@@ -23,13 +24,12 @@ class SubmissionController extends Controller
 
     public function store(Request $request, String $plt_kode, String $tugas_id)
     {
-       // dd($request);
         // $request->validate([
         //     'submission_files[]' => 'required|mimetypes:*/*|max:5120',
         // ]);
         
         $peserta_id = Peserta::where('id', Auth::user()->id)->value('id');
-        //dd($request);
+    
         $submission = Submission::create([
             'peserta_id' => $peserta_id,
             'tugas_id' => $tugas_id,
@@ -50,5 +50,25 @@ class SubmissionController extends Controller
         }
 
         return redirect()->route('peserta.viewDetailTugas', [$plt_kode, $tugas_id])->with('success', 'Tugas berhasil disubmit');
+    }
+
+    public function delete($plt_kode, $tugas_id, $submission_id)
+    {
+        $submission = Submission::where('id', $submission_id)->first();
+        
+        DB::beginTransaction();
+
+        try {
+            $submission->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Submission tugas berhasil dihapus');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus submission tugas');
+        }
     }
 }
