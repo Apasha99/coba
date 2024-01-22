@@ -25,47 +25,28 @@
         </p>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <button type="button" data-modal-toggle="add-materi-modal"
-            class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"></path>
-            </svg>
-            Add Submission
-        </button>
+        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Add Submission</h3>
     </div>
-    
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Submission status
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Grading status
-                </th>
-                <td class="px-6 py-4">
-                    White
-                </td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Time remaining
-                </th>
-                <td class="px-6 py-4">
-                    Black
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
+    <div class="mb-4 col-span-full xl:mb-2">
+        <form action="{{ route('peserta.storeSubmission', [$pelatihan->kode, $tugas->id]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="col-span-full">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload File</label>
+                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="file_input_help" id="submission_files" name="submission_files[]" type="file" accept=".pdf, .doc, .docx, .xls, .xlsx, image/*" multiple>
+                @error('submission_files')
+                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <div>
+                            {{ $message }}
+                        </div>
+                    </div>
+                @enderror
+            </div>
+            <div class="col-span-6 sm:col-full mt-4">
+                <button
+                    class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 @endsection

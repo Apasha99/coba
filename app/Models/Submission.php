@@ -19,4 +19,9 @@ class Submission extends Model
     {
         return $this->belongsTo(Tugas::class);
     }
+
+    public function submission_file()
+    {
+        return $this->hasMany(SubmissionFile::class, 'submission_id', 'id');
+    }
 }
