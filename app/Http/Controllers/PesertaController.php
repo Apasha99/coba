@@ -387,7 +387,6 @@ class PesertaController extends Controller
     public function sendEmail(Request $request)
     {
         // Validasi input
-        //dd($request);
         $request->validate([
             'subjek' => 'required|string',
             'dari' => 'required|email',
@@ -397,10 +396,9 @@ class PesertaController extends Controller
             'kode' => 'required|exists:pelatihan,kode',
             'pesan' => 'required|string',
         ]);
-        //dd($request);
-        $fromAddress = $request->input('dari'); // Ambil alamat pengirim dari inputan formulir
-        $fromName = 'Dinas Kominfo Kota Semarang'; // Gantilah dengan logika Anda untuk mendapatkan nama pengirim
 
+        $fromAddress = $request->input('dari');
+        $fromName = 'Dinas Kominfo Kota Semarang';
         $subjek = $request->input('subjek');
         $pesan = $request->input('pesan');
         $kode = $request->input('kode');
@@ -410,7 +408,6 @@ class PesertaController extends Controller
         $endUserId = $request->input('end_user_id');
 
         $users = null;
-        $toAddresses = [];
 
         if ($exportOption === 'all') {
             // Ambil semua user dengan role_id = 2
@@ -423,22 +420,22 @@ class PesertaController extends Controller
         } else {
             return redirect()->back()->with('error', 'Opsi pengiriman tidak valid.');
         }
-        
-        // Ambil alamat email dari hasil query
-        if ($users) {
-            foreach ($users as $user) {
-                $toAddresses[] = $user->email;
-                $username = $user->username;
-                $password = $user->password_awal;
-            }
+
+        if ($users->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada pengguna yang dipilih.');
         }
-        //dd($toAddresses);
-        // Loop melalui alamat email dan kirim email
-        foreach ($toAddresses as $toAddress) {
+
+        // Loop melalui pengguna dan kirim email
+        foreach ($users as $user) {
+            $username = $user->username;
+            $password = $user->password_awal;
+            $toAddress = $user->email;
+            
             Mail::to($toAddress)
-                ->queue(new PesertaRegistered($username, $password, $kode, $fromAddress, $fromName,$subjek,$pesan));
+                ->queue(new PesertaRegistered($username, $password, $kode, $fromAddress, $fromName, $subjek, $pesan));
         }
 
         return redirect()->back()->with('success', 'Berhasil mengirim email.');
     }
+
 }
