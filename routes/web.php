@@ -86,6 +86,7 @@ Route::controller(TugasController::class)->group(function(){
 
 Route::controller(TestController::class)->group(function(){
     Route::post('admin/pelatihan/{plt_kode}/test', 'store')->middleware('only_admin')->name('admin.storeTest');
+    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->middleware('only_admin')->name('admin.detailTest');
 });
 
 Route::controller(SubmissionController::class)->group(function(){

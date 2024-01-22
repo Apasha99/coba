@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Pelatihan;
 use App\Models\Test;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -40,6 +42,16 @@ class TestController extends Controller
             dd($e);
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data');
         }
+    }
+
+    public function DetailTest(String $plt_kode, String $test_id) {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+        return view('admin.detail_test', ['pelatihan' => $pelatihan, 'test' => $test]);
     }
     
 }
