@@ -57,7 +57,7 @@
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="#' class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    <a href="#" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
                 </div>
             @endforeach
         </div>

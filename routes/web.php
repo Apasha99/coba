@@ -91,5 +91,5 @@ Route::controller(TestController::class)->group(function(){
 
 Route::controller(SubmissionController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
-    Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.submitFiles');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
 });

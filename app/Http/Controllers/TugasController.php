@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Materi;
 use App\Models\Pelatihan;
+use App\Models\Peserta;
+use App\Models\Submission;
+use App\Models\SubmissionFile;
 use App\Models\Tugas;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TugasController extends Controller
@@ -15,7 +19,14 @@ class TugasController extends Controller
     public function viewDetailTugas(String $plt_kode, String $tugas_id) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
-        return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas]);
+        $peserta_id = Peserta::where('id', Auth::user()->id)->value('id');
+        $submission = Submission::where('tugas_id', $tugas_id)->where('peserta_id', $peserta_id)->first();
+        //dd($submission);
+        //$submission_files = SubmissionFile::where('submission_id', $submission->id)->get();
+        //dd($submission);
+        // // Misalnya, untuk mengecek apakah submission sudah ada
+        // $submissionExists = $peserta->submissions()->where('tugas_id', $tugasId)->exists();
+        return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
 
     public function store(Request $request, String $kode): RedirectResponse {

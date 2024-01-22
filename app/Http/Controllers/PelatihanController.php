@@ -185,7 +185,7 @@ class PelatihanController extends Controller
             ];
             if ($request->hasFile('poster')) {
                 $posterPath = $request->file('poster')->store('poster', 'public');
-                $updateData['poster'] = $fileTugasPath;
+                $updateData['poster'] = $posterPath;
             }
             $plt->update(array_filter($updateData));
     

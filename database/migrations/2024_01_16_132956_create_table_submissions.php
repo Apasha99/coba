@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('nilai', 5, 2)->nullable();
             $table->enum('grading_status', ['graded', 'not graded'])->default('not graded');
             $table->enum('status', ['submitted', 'not submitted'])->default('not submitted');
-            $table->integer('position')->default(0);
             $table->timestamps();
         
             $table->foreign('peserta_id')->references('id')->on('peserta')->onDelete('cascade');

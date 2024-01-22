@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tugas', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('judul');
             $table->string('deskripsi');
             $table->date('start_date');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tugas');
+        //
     }
 };
