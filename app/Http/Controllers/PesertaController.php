@@ -354,6 +354,12 @@ class PesertaController extends Controller
 
     public function export(Request $request)
     {
+
+        $request->validate([
+            'export_option' => 'required',
+            'start_user_id' => 'required_if:export_option,range|exists:users,id',
+            'end_user_id' => 'required_if:export_option,range|exists:users,id', 'after_or_equal:start_user_id',
+        ]);
         $pst = User::where('role_id', '=', 2)->select('id')->get();
         $user_id = $request->input('user_id');
         $exportOption = $request->input('export_option');
@@ -387,22 +393,16 @@ class PesertaController extends Controller
     public function sendEmail(Request $request)
     {
         // Validasi input
-        //dd($request);
         $request->validate([
             'subjek' => 'required|string',
-            'dari' => 'required|email',
             'deliver_option' => 'required|in:all,range',
             'start_user_id' => 'required_if:deliver_option,range|exists:users,id',
-            'end_user_id' => 'required_if:deliver_option,range|exists:users,id',
+            'end_user_id' => 'required_if:deliver_option,range|exists:users,id', 'after_or_equal:start_user_id',
             'kode' => 'required|exists:pelatihan,kode',
-            'pesan' => 'required|string',
         ]);
         //dd($request);
-        $fromAddress = $request->input('dari'); // Ambil alamat pengirim dari inputan formulir
-        $fromName = 'Dinas Kominfo Kota Semarang'; // Gantilah dengan logika Anda untuk mendapatkan nama pengirim
-
+        $fromName = 'Dinas Kominfo Kota Semarang';
         $subjek = $request->input('subjek');
-        $pesan = $request->input('pesan');
         $kode = $request->input('kode');
 
         $exportOption = $request->input('deliver_option');
@@ -410,7 +410,6 @@ class PesertaController extends Controller
         $endUserId = $request->input('end_user_id');
 
         $users = null;
-        $toAddresses = [];
 
         if ($exportOption === 'all') {
             // Ambil semua user dengan role_id = 2
@@ -423,22 +422,22 @@ class PesertaController extends Controller
         } else {
             return redirect()->back()->with('error', 'Opsi pengiriman tidak valid.');
         }
-        
-        // Ambil alamat email dari hasil query
-        if ($users) {
-            foreach ($users as $user) {
-                $toAddresses[] = $user->email;
-                $username = $user->username;
-                $password = $user->password_awal;
-            }
-        }
-        //dd($toAddresses);
-        // Loop melalui alamat email dan kirim email
-        foreach ($toAddresses as $toAddress) {
-            Mail::to($toAddress)
-                ->queue(new PesertaRegistered($username, $password, $kode, $fromAddress, $fromName,$subjek,$pesan));
+
+        if ($users->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada pengguna yang dipilih.');
         }
 
-        return redirect()->back()->with('success', 'Berhasil mengirim email.');
+        // Loop melalui pengguna dan kirim email
+        foreach ($users as $user) {
+            $username = $user->username;
+            $password = $user->password_awal;
+            $toAddress = $user->email;
+            
+            Mail::to($toAddress)
+                ->send(new PesertaRegistered($username, $password, $kode,$fromName, $subjek));
+        }
+
+        return redirect()->back()->with('success', 'Berhasil mengirim email');
     }
+
 }

@@ -31,7 +31,7 @@
                     <div>
                         <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
                         <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                            <p>{{ $plt->status }}</p> 
+                            <p>{{ $plt->kode }} - {{ $plt->status }}</p> 
                         </div>
                     </div>
                 </div>

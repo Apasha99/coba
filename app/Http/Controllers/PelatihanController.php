@@ -63,14 +63,10 @@ class PelatihanController extends Controller
             'kode' => ['required', 'regex:/^[A-Z0-9]{6}$/',Rule::unique('pelatihan')],
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'end_date' => ['required', 'date', 'after:start_date'],
             'status' => ['required', 'in:Not started yet,On going,Completed'],
             'penyelenggara' => ['required'],
-            'tempat' => ['required', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
-            Gedung Balaikota,Ruang Komisi A-B Gedung Moch.Ichsan Lantai 8,
-            Gedung Juang 45,Ruang Komisi C-D Gedung Moch.Ichsan Lantai 8,
-            Ruang Rapat Lantai 4,Hall Balaikota Semarang,Halaman Balaikota Semarang,
-            Ruang Rapat Lantai 6 Siber Pungli'],
+            'tempat' => ['required'],
             'deskripsi' => ['required', 'max:255'],
             'poster' => ['required', 'max:10240']
         ]);
@@ -167,13 +163,9 @@ class PelatihanController extends Controller
             'nama' => ['required'],
             'status' => [ 'nullable','in:Not started yet,On going,Completed'],
             'start_date' => ['required'],
-            'end_date' => ['required', 'after_or_equal:start_date'],
+            'end_date' => ['required', 'after:start_date'],
             'penyelenggara' => ['required'],
-            'tempat' => ['nullable', 'in:Ruang Lakakrida Lt.B - Gedung Moch Ichsan Lantai 8,
-            Gedung Balaikota,Ruang Komisi A-B Gedung Moch.Ichsan Lantai 8,
-            Gedung Juang 45,Ruang Komisi C-D Gedung Moch.Ichsan Lantai 8,
-            Ruang Rapat Lantai 4,Hall Balaikota Semarang,Halaman Balaikota Semarang,
-            Ruang Rapat Lantai 6 Siber Pungli'],
+            'tempat' => ['nullable'],
             'deskripsi' => ['required', 'max:255'],
             'poster' => ['max:10240']
         ]);

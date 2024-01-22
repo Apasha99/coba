@@ -1,4 +1,4 @@
-@extends('admin.layout.layout')
+d@extends('admin.layout.layout')
 
 @section('content')
     <div class="mb-2 col-span-full xl:mb-2">

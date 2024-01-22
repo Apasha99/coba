@@ -8,7 +8,7 @@ use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TugasController;
-
+use App\Http\Controllers\TestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -82,6 +82,10 @@ Route::controller(TugasController::class)->group(function(){
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->middleware('only_admin')->name('admin.updateTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteTugas');
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}', 'viewDetailTugas')->middleware('only_peserta')->name('peserta.viewDetailTugas');
+});
+
+Route::controller(TestController::class)->group(function(){
+    Route::post('admin/pelatihan/{plt_kode}/test', 'store')->middleware('only_admin')->name('admin.storeTest');
 });
 
 Route::controller(SubmissionController::class)->group(function(){

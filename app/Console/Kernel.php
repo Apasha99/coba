@@ -13,10 +13,18 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            DB::table('pelatihan')->whereDate('start_date', '<=', now())
-                                  ->where('status', 'not started yet')
-                                  ->update(['status' => 'on going']);
-        })->daily();
+            // Update status to 'On going' for pelatihan that has started
+            DB::table('pelatihan')
+                ->whereDate('start_date', '<=', now())
+                ->where('status', 'not started yet')
+                ->update(['status' => 'On going']);
+    
+            // Update status to 'Completed' for pelatihan that has ended
+            DB::table('pelatihan')
+                ->whereDate('end_date', '=', now())
+                ->where('status', 'On going')
+                ->update(['status' => 'Completed']);
+        })->everyMinute();
     }
 
 
