@@ -40,11 +40,25 @@ class PelatihanController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+    
         if($admin){
             $pelatihan = Pelatihan::all();
+    
+            // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
+            foreach ($pelatihan as $p) {
+                $kodePelatihan = $p->kode;
+    
+                // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
+                $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
+    
+                // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
+                $p->pesertaPelatihan = $pesertaPelatihan;
+            }
+    
             return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
         }
     }
+    
 
     public function create(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
