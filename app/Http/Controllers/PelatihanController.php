@@ -11,6 +11,8 @@ use App\Models\Peserta_Pelatihan;
 use App\Models\Soal_Test;
 use App\Models\Test;
 use App\Models\Tugas;
+use App\Models\Submission;
+use App\Models\SubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -109,6 +111,7 @@ class PelatihanController extends Controller
         }
 
         $test = Test::where('plt_kode', $plt_kode)->first();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->first();
 
         // Use DB transaction to ensure data consistency
         DB::beginTransaction();
@@ -117,6 +120,17 @@ class PelatihanController extends Controller
             if ($test && $test->status == 1) {
                 return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan dengan test yang masih aktif.');
             }
+
+            if (!$tugas) {
+                // Jika kode pelatihan tidak ditemukan di tabel tugas, hapus pelatihan saja
+                $pelatihan->delete();
+
+                // Commit the transaction
+                DB::commit();
+
+                return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada tugas terkait.');
+            }
+
 
             if (!$test) {
                 // Jika kode pelatihan tidak ditemukan di tabel Test, hapus pelatihan saja
@@ -133,6 +147,8 @@ class PelatihanController extends Controller
                 Nilai_Test::where('test_id', $test)->delete();
                 Jawaban_Test::where('test_id', $test)->delete();
                 Soal_Test::where('test_id', $test)->delete();
+                Submission::where('tugas_id', $tugas)->delete();
+                SubmissionFile::where('tugas_id', $tugas)->delete();
                 Test::where('plt_kode', $plt_kode)->delete();
                 Materi::where('plt_kode', $plt_kode)->delete();
                 Tugas::where('plt_kode', $plt_kode)->delete();
