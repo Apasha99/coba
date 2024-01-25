@@ -20,7 +20,8 @@ class Test extends Model
         'acak_jawaban',
         'tampil_hasil',
         'start_date',
-        'end_date'
+        'end_date',
+        'durasi'
     ];
 
     public function soal_test()

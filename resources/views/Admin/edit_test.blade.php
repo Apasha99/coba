@@ -39,18 +39,6 @@
                         Detail Pelatihan
                     </a>
                 </li>
-                <li class="flex items-center">
-                    <a href="{{route('admin.detailTest', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])}}"
-                        class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Detail Test
-                    </a>
-                </li>
                 <li>
                     <div class="flex items-center">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
@@ -89,16 +77,16 @@
                                 @enderror
                             </div>
                             <div class="col-span-full">
-                                <label for="deskripsi"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                                <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi" value="{{$test->deskripsi}}"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
+                                <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ $test->deskripsi }}</textarea>
                                 @error('deskripsi')
-                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
+
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="totalnilai"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Nilai</label>
@@ -119,6 +107,18 @@
                                 </select>
                                 @error('isActive')
                                     <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="durasi"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi</label>
+                                <input type="timezone" name="durasi" placeholder="Durasi" id="durasi" value="{{$test->durasi}}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                                @error('durasi')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
                                     </div>
                                 @enderror

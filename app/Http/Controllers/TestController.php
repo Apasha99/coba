@@ -35,6 +35,7 @@ class TestController extends Controller
             'acak_soal' => ['required'],
             'acak_jawaban' => ['required'],
             'tampil_hasil' => ['required'],
+            'durasi' => ['required','date_format:H:i:s'],
             'totalnilai' => ['required', 'numeric', 'max:100', 'min:0'],
         ]);
         //dd($validated);
@@ -51,6 +52,7 @@ class TestController extends Controller
                 'end_date' => $validated['end_date'],
                 'acak_soal' => $validated['acak_soal'],
                 'deskripsi' => $validated['deskripsi'],
+                'durasi' => $validated['durasi'],
                 'acak_jawaban' => $validated['acak_jawaban'],
                 'tampil_hasil' => $validated['tampil_hasil'],
             ]);
@@ -74,8 +76,8 @@ class TestController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
-                                //dd($soal_test);
-        return view('admin.detail_test', ['pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+        $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
+        return view('admin.detail_test', ['pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
     }
 
     public function storeSoal(Request $request, $plt_kode, $test_id)
@@ -211,6 +213,7 @@ class TestController extends Controller
             'isActive' => ['required', 'boolean'],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'acak_soal' => ['required'],
+            'durasi' => ['required','date_format:H:i:s'],
             'acak_jawaban' => ['required'],
             'tampil_hasil' => ['required'],
             'totalnilai' => ['required', 'numeric', 'max:100', 'min:0'],
@@ -226,6 +229,7 @@ class TestController extends Controller
                 'isActive' => $validated['isActive'],  // Use the validated value directly
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'acak_soal' => $validated['acak_soal'],
+                'durasi' => $validated['durasi'] ?? null,
                 'acak_jawaban' => $validated['acak_jawaban'],
                 'tampil_hasil' => $validated['tampil_hasil'],
                 'totalnilai' => $validated['totalnilai'] ?? null,

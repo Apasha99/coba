@@ -448,7 +448,7 @@
         </div>
     </div>
     </div>
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-2 md:inset-0 h-modal sm:h-full"
         id="add-test-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
             <!-- Modal content -->
@@ -469,11 +469,11 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div class="p-6 space-y-6">
+                <div class="p-2 space-y-2">
                     <form action="{{ route('admin.storeTest', $pelatihan->kode) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-full">
+                            <div class="col-span-6 sm:col-span-3">
                                 <label for="nama"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
                                 <input type="text" name="nama" placeholder="Masukkan judul" id="nama"
@@ -485,12 +485,25 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="isActive"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                <select name="isActive" id="isActive" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="1" >Aktif</option>
+                                    <option value="0" >Tidak Aktif</option>
+                                </select>
+                                @error('isActive')
+                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <div class="col-span-full">
                                 <label for="deskripsi"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
                                 <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi" 
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required></textarea>
+                                    ></textarea>
                                 @error('deskripsi')
                                 <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
@@ -510,14 +523,13 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="isActive"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                                <select name="isActive" id="isActive" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                    <option value="1" >Aktif</option>
-                                    <option value="0" >Tidak Aktif</option>
-                                </select>
-                                @error('isActive')
-                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
+                                <label for="durasi"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi</label>
+                                <input type="timezone" name="durasi" placeholder="Durasi" id="durasi"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required>
+                                @error('durasi')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
                                     </div>
                                 @enderror

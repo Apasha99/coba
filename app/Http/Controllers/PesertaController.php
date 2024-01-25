@@ -138,14 +138,17 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::leftJoin('users', 'users.id', '=', 'peserta.user_id')
                             ->where('peserta.user_id', $id)
+                            ->select('peserta.id as id', 'user_id','nama','username', 'email',
+                            'noHP','alamat','password','password_awal','foto')
                             ->first();
+        //dd($peserta);
         if (!$peserta) {
             return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menemukan peserta yang ingin diedit.');
         }
 
         $validated = $request->validate([
-            'nama' => ['required', 'alpha'],
-            'username' => ['required', ],
+            'nama' => ['required'],
+            'username' => ['required'],
             'email' => ['required', 'email'],
             'noHP' => ['required', 'numeric'],
             'alamat' => ['required'],
@@ -153,16 +156,18 @@ class PesertaController extends Controller
             'conf_password' => ['nullable', 'same:new_password'],
             'foto' => [ 'max:10240'],
         ]);
-
+        //dd($validated);
         try {
             DB::beginTransaction();
 
             $updateData = [
-                'nama' => $validated['nama'] ?? null,
+                'id' =>$peserta->id,
+                'nama' => $validated['nama'],
                 'noHP' => $validated['noHP'] ?? null,
                 'alamat' => $validated['alamat'] ?? null,
             ];
-
+            //dd($updateData);
+            $peserta->update(array_filter($updateData));
             $updateData2 = [
                 'username' => $validated['username'] ?? null,
                 'email' => $validated['email'] ?? null,
@@ -179,7 +184,6 @@ class PesertaController extends Controller
                 $updateData2['foto'] = $fotoPath;
             }
 
-            $peserta->update(array_filter($updateData));
             $peserta->user->update(array_filter($updateData2));
 
             DB::commit();
@@ -188,6 +192,7 @@ class PesertaController extends Controller
                 ->route('admin.viewDaftarPeserta')
                 ->with('success', 'Data peserta berhasil diperbarui');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data peserta');
         }
