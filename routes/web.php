@@ -90,7 +90,12 @@ Route::controller(TestController::class)->group(function(){
 });
 
 Route::controller(SubmissionController::class)->group(function(){
-    Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
-    Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
-    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/edit', 'viewEditSubmission')->middleware('only_peserta')->name('peserta.viewEditSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'update')->middleware('only_peserta')->name('peserta.updateSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
+
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->middleware('only_admin')->name('admin.inputNilai');
 });

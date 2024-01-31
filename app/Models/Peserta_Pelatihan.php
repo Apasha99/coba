@@ -14,4 +14,9 @@ class Peserta_Pelatihan extends Model
         'peserta_id',
         'plt_kode',
     ];
+
+    public function peserta()
+    {
+        return $this->belongsTo(Peserta::class);
+    }
 }

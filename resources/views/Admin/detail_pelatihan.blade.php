@@ -149,7 +149,7 @@
         <div id="accordion-open-body-tugas" class="hidden" aria-labelledby="accordion-open-heading-tugas">
             @foreach ($tugas as $tgs)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{ asset('storage/' . $tgs->file_tugas) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    <a href="{{ route('admin.viewDaftarSubmissionTugas', [$pelatihan->kode, $tgs->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
                     <div>
                     <a data-popover-target="popover-edit-{{ $tgs->id }}" href="{{ route('admin.viewEditTugas', [$pelatihan->kode, $tgs->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
                             <i class="material-icons-outlined text-base">edit</i>

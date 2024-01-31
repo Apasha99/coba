@@ -17,6 +17,7 @@ class Tugas extends Model
         'end_date',
         'plt_kode',
         'deskripsi',
-        'file_tugas'
+        'file_tugas',
+        'nama_file'
     ];
 }
