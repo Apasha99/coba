@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PHPZip\Zip\File\Zip;
+use Illuminate\Support\Facades\File;
+use PhpZip\ZipFile;
 
 class SubmissionController extends Controller
 {
@@ -158,4 +161,32 @@ class SubmissionController extends Controller
             return redirect()->back()->with('error', 'Gagal menginput nilai');
         }
     }
+
+    public function download(Request $request, String $plt_kode, String $tugas_id, $submission_id)
+{
+    $submission = Submission::findOrFail($submission_id);
+    $zipFileName = $submission->peserta->nama . '.zip';
+    $zipFilePath = public_path($zipFileName);
+
+    $zip = new \ZipArchive();
+    if ($zip->open($zipFilePath, \ZipArchive::CREATE) === true) {
+        foreach ($submission->submission_file as $file) {
+            $filePath = public_path(str_replace(url('/'), '', Storage::url($file->path_file)));
+            $relativeName = basename($file->nama_file);
+            
+            if (file_exists($filePath)) {
+                $zip->addFile($filePath, $relativeName);
+            } else {
+                dd('File not found: ' . $filePath);
+            }
+        }
+        $zip->close();
+    } else {
+        dd('Failed to open or create zip archive');
+    }
+    
+    return response()->download($zipFilePath)->deleteFileAfterSend();
+}
+ 
+
 }

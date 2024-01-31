@@ -107,6 +107,7 @@ Route::controller(SubmissionController::class)->group(function(){
 
     Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->middleware('only_admin')->name('admin.inputNilai');
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->middleware('only_admin')->name('admin.downloadSubmissionTugas');
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){
