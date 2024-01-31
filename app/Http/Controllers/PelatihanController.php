@@ -25,7 +25,8 @@ class PelatihanController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        $test = Test::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->where('isActive', 1)->get();
+        //dd($test);
         return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
@@ -84,7 +85,6 @@ class PelatihanController extends Controller
             'penyelenggara' => ['required'],
             'tempat' => ['required'],
             'deskripsi' => ['required', 'max:255'],
-            'poster' => ['required', 'max:10240']
         ]);
         
         if ($request->has('poster')) {
@@ -163,7 +163,7 @@ class PelatihanController extends Controller
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            dd($e->getMessage());
             // Rollback the transaction in case of any error
             DB::rollback();
 
@@ -189,6 +189,7 @@ class PelatihanController extends Controller
         if (!$plt) {
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin diedit.');
         }
+        //dd($plt);
         $validated = $request->validate([
             'nama' => ['required'],
             'status' => [ 'nullable','in:Not started yet,On going,Completed'],
@@ -197,7 +198,7 @@ class PelatihanController extends Controller
             'penyelenggara' => ['required'],
             'tempat' => ['nullable'],
             'deskripsi' => ['required', 'max:255'],
-            'poster' => ['max:10240']
+            'poster' => [ 'max:10240'],
         ]);
 
         try {
@@ -213,10 +214,12 @@ class PelatihanController extends Controller
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'poster' => $validated['poster'] ?? null,
             ];
-            if ($request->hasFile('poster')) {
+            //dd($updateData);
+            if ($request->has('poster')) {
                 $posterPath = $request->file('poster')->store('poster', 'public');
                 $updateData['poster'] = $posterPath;
-            }
+            } 
+            //dd($posterPath);
             $plt->update(array_filter($updateData));
     
             DB::commit();
@@ -225,6 +228,7 @@ class PelatihanController extends Controller
                 ->route('admin.viewDaftarPelatihan')
                 ->with('success', 'Data pelatihan berhasil diperbarui');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data pelatihan.');
         }

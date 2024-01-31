@@ -9,6 +9,7 @@ use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TugasController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\SubmissionTestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -101,4 +102,10 @@ Route::controller(SubmissionController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
+});
+
+Route::controller(SubmissionTestController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/{question_number?}', 'test')->middleware('only_peserta')->name('peserta.test');
+    Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/start', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
 });

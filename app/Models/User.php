@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'foto',
-        'password_awal'
+        'password_awal',
+        'role_id'
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
         return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
+    
     public function peserta()
     {
         return $this->hasOne(Peserta::class, 'user_id', 'id');
