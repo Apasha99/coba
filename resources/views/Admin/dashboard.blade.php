@@ -33,10 +33,10 @@
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                        Fakultas
+                        Role
                     </p>
                     <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                        Sains dan Matematika
+                        {{$role->name}}
                     </p>
                 </div>
             </div>

@@ -14,8 +14,15 @@ class Soal_Test extends Model
         'test_id',
         'title',
         'urutan',
-        'nilai'
+        'nilai',
+        'tipe',
+        'file_soal'
     ];
+
+    public function test()
+    {
+        return $this->belongsTo(Test::class);
+    }
 
     public function jawaban_test()
     {

@@ -12,7 +12,6 @@ class Peserta extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'nama',
-        'email',
         'noHP',
         'alamat',
         'user_id'

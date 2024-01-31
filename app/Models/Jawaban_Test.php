@@ -22,4 +22,9 @@ class Jawaban_Test extends Model
     {
         return $this->hasOne(Nilai_Test::class, 'jawaban_id', 'id');
     }
+
+    public function soal_test()
+    {
+        return $this->belongsTo(Soal_Test::class);
+    }
 }

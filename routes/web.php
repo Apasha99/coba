@@ -9,6 +9,7 @@ use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TugasController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\SubmissionTestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -86,7 +87,15 @@ Route::controller(TugasController::class)->group(function(){
 
 Route::controller(TestController::class)->group(function(){
     Route::post('admin/pelatihan/{plt_kode}/test', 'store')->middleware('only_admin')->name('admin.storeTest');
+    Route::post('admin/pelatihan/{plt_kode}/delete/{test_id}', 'delete')->middleware('only_admin')->name('admin.deleteTest');
+    Route::get('admin/pelatihan/{plt_kode}/edit/{test_id}', 'edit')->middleware('only_admin')->name('admin.editTest');
+    Route::post('admin/pelatihan/{plt_kode}/edit/{test_id}/update', 'update')->middleware('only_admin')->name('admin.updateTest');
     Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->middleware('only_admin')->name('admin.detailTest');
+    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/storeSoal', 'storeSoal')->middleware('only_admin')->name('admin.storeSoal');
+    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit', 'editSoal')->middleware('only_admin')->name('admin.editSoal');
+    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/update', 'updateSoal')->middleware('only_admin')->name('admin.updateSoal');
+    Route::delete('admin/pelatihan/{plt_kode}/test/{test_id}/delete/{soal_id}', 'deleteSoal')->middleware('only_admin')->name('admin.deleteSoal');
+    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit/{jawaban_id}/delete', 'deleteJawaban')->middleware('only_admin')->name('admin.deleteJawaban');
 });
 
 Route::controller(SubmissionController::class)->group(function(){
@@ -98,4 +107,10 @@ Route::controller(SubmissionController::class)->group(function(){
 
     Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->middleware('only_admin')->name('admin.inputNilai');
+});
+
+Route::controller(SubmissionTestController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/{question_number?}', 'test')->middleware('only_peserta')->name('peserta.test');
+    Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/start', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
 });

@@ -11,6 +11,8 @@ use App\Models\Peserta_Pelatihan;
 use App\Models\Soal_Test;
 use App\Models\Test;
 use App\Models\Tugas;
+use App\Models\Submission;
+use App\Models\SubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +25,8 @@ class PelatihanController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        $test = Test::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->where('isActive', 1)->get();
+        //dd($test);
         return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
@@ -40,11 +43,25 @@ class PelatihanController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+    
         if($admin){
             $pelatihan = Pelatihan::all();
+    
+            // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
+            foreach ($pelatihan as $p) {
+                $kodePelatihan = $p->kode;
+    
+                // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
+                $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
+    
+                // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
+                $p->pesertaPelatihan = $pesertaPelatihan;
+            }
+    
             return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
         }
     }
+    
 
     public function create(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
@@ -68,7 +85,6 @@ class PelatihanController extends Controller
             'penyelenggara' => ['required'],
             'tempat' => ['required'],
             'deskripsi' => ['required', 'max:255'],
-            'poster' => ['required', 'max:10240']
         ]);
         
         if ($request->has('poster')) {
@@ -95,6 +111,7 @@ class PelatihanController extends Controller
         }
 
         $test = Test::where('plt_kode', $plt_kode)->first();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->first();
 
         // Use DB transaction to ensure data consistency
         DB::beginTransaction();
@@ -103,6 +120,17 @@ class PelatihanController extends Controller
             if ($test && $test->status == 1) {
                 return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan dengan test yang masih aktif.');
             }
+
+            if (!$tugas) {
+                // Jika kode pelatihan tidak ditemukan di tabel tugas, hapus pelatihan saja
+                $pelatihan->delete();
+
+                // Commit the transaction
+                DB::commit();
+
+                return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada tugas terkait.');
+            }
+
 
             if (!$test) {
                 // Jika kode pelatihan tidak ditemukan di tabel Test, hapus pelatihan saja
@@ -119,6 +147,8 @@ class PelatihanController extends Controller
                 Nilai_Test::where('test_id', $test)->delete();
                 Jawaban_Test::where('test_id', $test)->delete();
                 Soal_Test::where('test_id', $test)->delete();
+                Submission::where('tugas_id', $tugas)->delete();
+                SubmissionFile::where('tugas_id', $tugas)->delete();
                 Test::where('plt_kode', $plt_kode)->delete();
                 Materi::where('plt_kode', $plt_kode)->delete();
                 Tugas::where('plt_kode', $plt_kode)->delete();
@@ -133,7 +163,7 @@ class PelatihanController extends Controller
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            dd($e->getMessage());
             // Rollback the transaction in case of any error
             DB::rollback();
 
@@ -159,6 +189,7 @@ class PelatihanController extends Controller
         if (!$plt) {
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin diedit.');
         }
+        //dd($plt);
         $validated = $request->validate([
             'nama' => ['required'],
             'status' => [ 'nullable','in:Not started yet,On going,Completed'],
@@ -167,7 +198,7 @@ class PelatihanController extends Controller
             'penyelenggara' => ['required'],
             'tempat' => ['nullable'],
             'deskripsi' => ['required', 'max:255'],
-            'poster' => ['max:10240']
+            'poster' => [ 'max:10240'],
         ]);
 
         try {
@@ -183,10 +214,12 @@ class PelatihanController extends Controller
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'poster' => $validated['poster'] ?? null,
             ];
-            if ($request->hasFile('poster')) {
+            //dd($updateData);
+            if ($request->has('poster')) {
                 $posterPath = $request->file('poster')->store('poster', 'public');
                 $updateData['poster'] = $posterPath;
-            }
+            } 
+            //dd($posterPath);
             $plt->update(array_filter($updateData));
     
             DB::commit();
@@ -195,6 +228,7 @@ class PelatihanController extends Controller
                 ->route('admin.viewDaftarPelatihan')
                 ->with('success', 'Data pelatihan berhasil diperbarui');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data pelatihan.');
         }

@@ -58,8 +58,6 @@
         }
     </script>
 
-    
-
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-800">
@@ -106,10 +104,6 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </button>
-
-                    
-
-
                     <div class="z-20 z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg dark:bg-gray-700 dark:divide-gray-600"
                         id="apps-dropdown"
                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1139.33px, 64.6667px, 0px);"
@@ -176,11 +170,7 @@
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->username}}
-                                </p>
-                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                                    role="none">
-                                    {{auth()->user()->id}}
+                                    {{ Auth::user()->username }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -209,84 +199,9 @@
     </nav>
     <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
 
-        <aside id="sidebar"
-            class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width"
-            aria-label="Sidebar">
-            <div
-                class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
-                    <div
-                        class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                        <ul class="pb-2 space-y-2">
-                            <li>
-                                <form action="{{route('admin.dashboard')}}" method="GET" class="lg:hidden">
-                                    <label for="mobile-search" class="sr-only">Search</label>
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <svg class="w-5 h-5 text-gray-500" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                                    clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <input type="text" name="email" id="mobile-search"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            placeholder="Search">
-                                    </div>
-                                </form>
-                            </li>
-                            <li>
-                                <a href="/admin/dashboard"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin/daftar-peserta"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Peserta</span>
-                                </a>
-                            </li>
-                            
-                            <li>
-                                <a href="{{ route('admin.viewDaftarPelatihan') }}"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Pelatihan</span>
-                                </a>
-                            </li>
-                            
-                        </ul>
-
-                    </div>
-                </div>
-
-            </div>
-        </aside>
-
         <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
 
-        <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
+        <div id="main-content" class="p-4 relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-70 dark:bg-gray-900">
             <main>
                 <div class="absolute w-full flex justify-center top-0 mt-5">
                     @if (session('success'))
@@ -303,7 +218,6 @@
                                 {{ session('success') }}!
                             </div>
                         </div>
-
                         <script>
                             setTimeout(function() {
                                 document.getElementById('alert-1').style.display = 'none';
@@ -320,7 +234,6 @@
                                 {{ session('error') }}
                             </div>
                         </div>
-
                         <script>
                             setTimeout(function() {
                                 document.getElementById('alert-1').style.display = 'none';
@@ -329,18 +242,13 @@
                     @endif
                 </div>
                 
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+                <div class="grid grid-cols-1 px-0 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('content')
                 </div>
 
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
-                    @yield('head')
-                </div>
-
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-2 dark:bg-gray-900" style="min-height: 100vh;">
+                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4 dark:bg-gray-900">
                     @yield('content5')
                 </div>
-
 
                 <div class="px-4 pb-6">
                     @yield('content3')
@@ -348,10 +256,6 @@
 
                 <div class="flex justify-between border-gray-200 border-b dark:border-gray-700 pb-3">
                     @yield('content4')
-                </div>
-
-                <div class="px-4 pt-2 pb-6" style="min-height: 100vh;">
-                    @yield('content2')
                 </div>
 
             </main>
