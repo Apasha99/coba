@@ -38,6 +38,8 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
+    Route::get('peserta/cetak-sertifikat', 'cetakSertifikat')->name('peserta.cetakSertifikat');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){

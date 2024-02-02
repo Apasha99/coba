@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PesertaRegistered;
+use Barryvdh\DomPDF\PDF;
 
 class PesertaController extends Controller
 {
@@ -445,4 +446,17 @@ class PesertaController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengirim email');
     }
 
+    public function generateSertifikat(Request $request) {
+        return view('peserta.sertifikat');
+    }
+
+    public function cetakSertifikat()
+    {
+        $pdf = app('dompdf.wrapper');
+        
+
+        $pdf->loadView('peserta.sertifikat');
+        
+        return $pdf->stream('sertifikat.pdf');
+    }
 }
