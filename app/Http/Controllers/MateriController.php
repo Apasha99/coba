@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class MateriController extends Controller
 {
+    public function viewTambahMateri($plt_kode){
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('admin.tambah_materi', ['pelatihan' => $pelatihan]);
+    }
+
     public function store(Request $request, String $kode): RedirectResponse {
         $validated = $request->validate([
             'judul' => ['required'],
@@ -23,9 +28,13 @@ class MateriController extends Controller
 
         $validated['plt_kode'] = $kode;
 
-        Materi::create($validated);
+        try {
+            Materi::create($validated);
     
-        return redirect()->back()->with('success', 'Data materi berhasil disimpan');
+            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data materi berhasil disimpan');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('error', 'Data materi berhasil disimpan');
+        }
     }
 
     public function viewEdit($plt_kode, $id){

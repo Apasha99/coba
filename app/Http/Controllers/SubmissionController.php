@@ -65,8 +65,8 @@ class SubmissionController extends Controller
         //     'submission_files[]' => 'required|mimetypes:*/*|max:5120',
         // ]);
         
-        $peserta_id = Peserta::where('id', Auth::user()->id)->value('id');
-    
+        $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
+       
         $submission = Submission::create([
             'peserta_id' => $peserta_id,
             'tugas_id' => $tugas_id,

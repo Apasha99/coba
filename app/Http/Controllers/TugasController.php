@@ -20,13 +20,14 @@ class TugasController extends Controller
     public function viewDetailTugas(String $plt_kode, String $tugas_id) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
-        $peserta_id = Peserta::where('id', Auth::user()->id)->value('id');
+        $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
         $submission = Submission::where('tugas_id', $tugas_id)->where('peserta_id', $peserta_id)->first();
         //dd($submission);
         //$submission_files = SubmissionFile::where('submission_id', $submission->id)->get();
         //dd($submission);
         // // Misalnya, untuk mengecek apakah submission sudah ada
         // $submissionExists = $peserta->submissions()->where('tugas_id', $tugasId)->exists();
+        
         return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
 

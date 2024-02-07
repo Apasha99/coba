@@ -20,4 +20,9 @@ class Tugas extends Model
         'file_tugas',
         'nama_file'
     ];
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'tugas_id', 'id');
+    }
 }
