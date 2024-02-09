@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Jawaban_Test;
 use App\Models\Materi;
 use App\Models\Nilai_Test;
+use App\Models\Peserta;
 use App\Models\Peserta_Pelatihan;
 use App\Models\Soal_Test;
 use App\Models\Test;
@@ -26,8 +27,23 @@ class PelatihanController extends Controller
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->where('isActive', 1)->get();
-        //dd($test);
-        return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
+        $peserta = Peserta::where('user_id', Auth::user()->id)->first();
+
+        $done = 0;
+        foreach ($tugas as $tgs) {
+            if ($tgs->submissions()->where('peserta_id', $peserta->id)->first()) {
+                $done++;
+            }
+        }
+
+        $completed = false;
+        if ($done == count($tugas)) {
+            $completed = true;
+        }
+
+        return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 
+                                                'tugas' => $tugas, 'test' => $test, 'peserta' => $peserta,
+                                                'completed' => $completed]);
     }
 
     public function viewDetailPelatihanAdmin(String $plt_kode) {

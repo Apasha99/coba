@@ -17,6 +17,12 @@ class Tugas extends Model
         'end_date',
         'plt_kode',
         'deskripsi',
-        'file_tugas'
+        'file_tugas',
+        'nama_file'
     ];
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'tugas_id', 'id');
+    }
 }

@@ -29,6 +29,9 @@
                 </ol>
             </nav>
     </div>
+    @php
+        $doneCount = 0; 
+    @endphp
     <div class="mb-4 col-span-full xl:mb-2">
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
     </div>
@@ -38,6 +41,14 @@
             {{ $pelatihan->deskripsi }}
         </p>
     </div>
+    @if ($completed == 'true')
+    <div class="mb-4 col-span-full xl:mb-2">
+        <a type="button" href="{{ route('peserta.cetakSertifikat') }}"
+            class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+            Unduh Sertifikat
+        </a>
+    </div>
+    @endif
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-materi">
             <button type="button" class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-open-body-materi" aria-expanded="true" aria-controls="accordion-open-body-materi">
@@ -49,10 +60,10 @@
         </h2>
         <div id="accordion-open-body-materi" class="hidden" aria-labelledby="accordion-open-heading-materi">
         @foreach ($materi as $mtr)
-            <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                <h3 class="flex items-center text-m font-semibold leading-tight tracking-tight text-gray-900 md:text-m dark:text-white">{{ $mtr->judul }}</h3>
-                <a href="#" class="flex items-center text-m font-semibold leading-tight tracking-tight text-gray-900 md:text-m dark:text-white">View Details</a>
-            </div>
+        <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
+        <a href="{{ asset('storage/' . $mtr->file_materi) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $mtr->judul }}</a>
+            <!-- <a href="{{ asset('storage/' . $mtr->file_materi) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-gray-900 md:text-m dark:text-white">View Details</a> -->
+        </div>
         @endforeach
         </div>
     </div>
@@ -69,6 +80,25 @@
             @foreach ($tugas as $tgs)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{ route('peserta.viewDetailTugas', [$pelatihan->kode, $tgs->id]) }} }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    @php
+                        $submission = $tgs->submissions()->where('peserta_id', $peserta->id)->first();
+                    @endphp
+                    @if ($submission)
+                    <div class="flex items-center">
+                        <div class="flex items-center p-2 mb-4 text-white rounded-lg bg-green-400 dark:bg-green-500 dark:text-white">
+                        <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 4.7 4.5 9.3-9"/>
+                        </svg>
+                        <span class="sr-only">Info</span>
+                            <div class="ms-2 text-sm font-medium">
+                                Done
+                            </div>
+                        </div>
+                        @php
+                            $doneCount++; 
+                        @endphp
+                    </div>
+                    @endif
                 </div>
             @endforeach
         </div>
@@ -91,9 +121,3 @@
         </div>
     </div>
 @endsection
-
-
-
-
-
-

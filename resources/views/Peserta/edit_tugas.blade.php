@@ -28,7 +28,7 @@
         <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Add Submission</h3>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <form action="{{ route('peserta.storeSubmission', [$pelatihan->kode, $tugas->id]) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('peserta.updateSubmission', [$pelatihan->kode, $tugas->id, $submission->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="col-span-full">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload File</label>

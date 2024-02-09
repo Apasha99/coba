@@ -13,19 +13,21 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TugasController extends Controller
 {
     public function viewDetailTugas(String $plt_kode, String $tugas_id) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
-        $peserta_id = Peserta::where('id', Auth::user()->id)->value('id');
+        $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
         $submission = Submission::where('tugas_id', $tugas_id)->where('peserta_id', $peserta_id)->first();
         //dd($submission);
         //$submission_files = SubmissionFile::where('submission_id', $submission->id)->get();
         //dd($submission);
         // // Misalnya, untuk mengecek apakah submission sudah ada
         // $submissionExists = $peserta->submissions()->where('tugas_id', $tugasId)->exists();
+        
         return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
 
@@ -40,7 +42,9 @@ class TugasController extends Controller
 
         if ($request->has('file_tugas')) {
             $fileTugasPath = $request->file('file_tugas')->store('file_tugas', 'public');
+            $filename = $request->file('file_tugas')->getClientOriginalName();
             $validated['file_tugas'] = $fileTugasPath;
+            $validated['nama_tugas'] = $filename;
         }
 
         $validated['plt_kode'] = $kode;
@@ -74,9 +78,12 @@ class TugasController extends Controller
         ]);
 
         //dd($validated);
-
         try {
             DB::beginTransaction();
+    
+            $tugas = Tugas::find($id);
+    
+            $fileTugasPathLama = $tugas->file_tugas;
     
             $updateData = [
                 'judul' => $validated['judul'] ?? null,
@@ -86,15 +93,20 @@ class TugasController extends Controller
             ];
     
             if ($request->hasFile('file_tugas')) {
-                $fileTugasPath = $request->file('file_tugas')->store('file_tugas', 'public');
-                $updateData['file_tugas'] = $fileTugasPath;
+                $fileTugasPathBaru = $request->file('file_tugas')->store('file_tugas', 'public');
+                $filename = $request->file('file_tugas')->getClientOriginalName();
+                $updateData['file_tugas'] = $fileTugasPathBaru;
+                $updateData['nama_file'] = $filename;
+                //dd($filename);
+                if ($fileTugasPathLama) {
+                    Storage::delete('public/' . $fileTugasPathLama);
+                }
             }
-
-            
+    
             $tugas->update(array_filter($updateData));
     
             DB::commit();
-
+    
             return redirect()
                 ->route('admin.viewDetailPelatihan', $plt_kode)
                 ->with('success', 'Data tugas berhasil diperbarui');

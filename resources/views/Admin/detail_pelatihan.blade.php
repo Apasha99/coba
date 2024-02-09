@@ -44,27 +44,37 @@
         </nav>
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
     </div>
-    <div class="mb-2 col-span-full xl:mb-2">
-    <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-            {{ $pelatihan->start_date }} - {{ $pelatihan->end_date }} 
+    <div class="mb-4 col-span-full xl:mb-2">
+        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Start date: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ \Carbon\Carbon::parse($pelatihan->start_date)->format('l, j F Y, h:i A') }}
+            </span> 
+        </p>
+        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            End date: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ \Carbon\Carbon::parse($pelatihan->end_date)->format('l, j F Y, h:i A') }}
+            </span> 
         </p>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Description</h3>
+        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Pelatihan</h3>
         <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
             {{ $pelatihan->deskripsi }}
         </p>
     </div>
+   
     <div class="mb-4 col-span-full xl:mb-2">
-        <button type="button" data-modal-toggle="add-materi-modal"
+        <a type="button" href="{{ route('admin.viewTambahMateri', [$pelatihan->kode]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                     clip-rule="evenodd"></path>
             </svg>
-            Add Materi
-        </button>
+            Tambah Materi
+        </a>
     </div>
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-materi">
@@ -134,7 +144,7 @@
                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                     clip-rule="evenodd"></path>
             </svg>
-            Add Tugas
+            Tambah Tugas
         </button>
     </div>
     <div id="accordion-open" data-accordion="open">
@@ -149,7 +159,7 @@
         <div id="accordion-open-body-tugas" class="hidden" aria-labelledby="accordion-open-heading-tugas">
             @foreach ($tugas as $tgs)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{ asset('storage/' . $tgs->file_tugas) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    <a href="{{ route('admin.viewDaftarSubmissionTugas', [$pelatihan->kode, $tgs->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
                     <div>
                     <a data-popover-target="popover-edit-{{ $tgs->id }}" href="{{ route('admin.viewEditTugas', [$pelatihan->kode, $tgs->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
                             <i class="material-icons-outlined text-base">edit</i>
@@ -205,7 +215,7 @@
                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                     clip-rule="evenodd"></path>
             </svg>
-            Add Test
+            Tambah Test
         </button>
     </div>
     <div id="accordion-open" data-accordion="open">

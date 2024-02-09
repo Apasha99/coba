@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PesertaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InstrukturController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\SubmissionController;
@@ -38,6 +39,8 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
+    Route::get('peserta/cetak-sertifikat', 'cetakSertifikat')->name('peserta.cetakSertifikat');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
@@ -47,6 +50,23 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
     Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editPeserta');
     Route::post('admin/daftar-peserta/edit/{id}', 'update')->name('admin.updatePeserta');
     Route::delete('/admin/daftar-peserta/delete/{peserta_id}', 'delete')->name('admin.deletePeserta');
+    Route::get('/admin/daftar-peserta/import','tambah')->name('admin.tambahPeserta');
+    Route::post('/admin/daftar-peserta/import','import')->name('admin.importPeserta');
+    Route::get('/admin/daftar-peserta/import/preview', 'preview')->name('admin.previewPeserta');
+    Route::post('/admin/daftar-peserta/generate-akun','generateAkun')->name('admin.generatePeserta');
+    Route::get('/admin/daftar-peserta/export','export')->name('admin.exportPeserta');
+    Route::get('/admin/daftar-peserta/send-email', 'daftar_peserta')->name('admin.tulisEmail');
+    Route::post('/admin/daftar-peserta/send-email', 'sendEmail')->name('admin.sendEmail');
+});
+
+Route::controller(InstrukturController::class)->middleware('only_admin')->group(function(){
+    Route::get('admin/daftar-instruktur', 'daftar_instruktur')->name('admin.viewDaftarInstruktur');
+    Route::get('admin/tambah-instruktur', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
+    Route::post('admin/daftar-instruktur/store', 'store')->name('admin.storeInstruktur');
+    Route::get('admin/daftar-peserta/search', 'searchPeserta')->name('admin.searchInstruktur');
+    Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editInstruktur');
+    Route::post('admin/daftar-peserta/edit/{id}', 'update')->name('admin.updatePeserta');
+    Route::delete('/admin/daftar-peserta/delete/{peserta_id}', 'delete')->name('admin.deleteInstruktur');
     Route::get('/admin/daftar-peserta/import','tambah')->name('admin.tambahPeserta');
     Route::post('/admin/daftar-peserta/import','import')->name('admin.importPeserta');
     Route::get('/admin/daftar-peserta/import/preview', 'preview')->name('admin.previewPeserta');
@@ -70,6 +90,7 @@ Route::controller(PelatihanController::class)->group(function(){
 });
 
 Route::controller(MateriController::class)->group(function(){
+    Route::get('admin/pelatihan/{plt_kode}/tambah-materi', 'viewTambahMateri')->middleware('only_admin')->name('admin.viewTambahMateri');
     Route::post('admin/pelatihan/{plt_kode}/materi', 'store')->middleware('only_admin')->name('admin.storeMateri');
     Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditMateri');
     Route::post('admin/pelatihan/{plt_kode}/materi/{id}', 'update')->middleware('only_admin')->name('admin.updateMateri');
@@ -99,9 +120,15 @@ Route::controller(TestController::class)->group(function(){
 });
 
 Route::controller(SubmissionController::class)->group(function(){
-    Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
-    Route::post('peserta/pelatihan/{plt_kode}/tugas/{id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
-    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/edit', 'viewEditSubmission')->middleware('only_peserta')->name('peserta.viewEditSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'update')->middleware('only_peserta')->name('peserta.updateSubmission');
+    Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
+
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->middleware('only_admin')->name('admin.inputNilai');
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->middleware('only_admin')->name('admin.downloadSubmissionTugas');
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){

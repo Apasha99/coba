@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Submission extends Model
 {
     use HasFactory;
-    protected $fillable = ['peserta_id', 'tugas_id', 'position', 'status', 'grading_status', 'nilai'];
+    protected $fillable = ['peserta_id', 'tugas_id', 'position', 'status', 'grading_status', 'nilai', 'updated_at'];
 
     public function peserta()
     {

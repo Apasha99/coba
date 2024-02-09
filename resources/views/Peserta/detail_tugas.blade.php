@@ -2,6 +2,44 @@
 
 @section('content')
     <div class="mb-4 col-span-full xl:mb-2">
+    <nav class="flex mb-5" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+                <li class="inline-flex items-center">
+                    <a href="/dashboardAdmin"
+                        class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+                        <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                            </path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li class="flex items-center">
+                    <a href="{{route('peserta.viewDetailPelatihan', $pelatihan->kode)}}"
+                        class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Detail Pelatihan
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Detail Tugas</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
         <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $tugas->judul }}</h1>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
@@ -22,11 +60,14 @@
         <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Penugasan</h3>
         <p class="text-sm font-normal text-black-500 dark:text-gray-400">
             {!! nl2br(e($tugas->deskripsi)) !!}
+            @if($tugas->file_tugas)
+            <a href="{{ asset('storage/' . $tugas->file_tugas) }}" target="_blank" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tugas->nama_file }}</a>
+            @endif
         </p>
     </div>
     @if($submission)
     <div class="mb-4 col-span-full xl:mb-2">
-        <a type="button" href="{{ route('peserta.viewSubmissionForm', [$pelatihan->kode, $tugas->id]) }}"
+        <a type="button" href="{{ route('peserta.viewEditSubmission', [$pelatihan->kode, $tugas->id, $submission->id]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Edit Submission
         </a>
@@ -112,7 +153,7 @@
                     @if($submission)
                         @php
                             $endDateTime = \Carbon\Carbon::parse($tugas->end_date);
-                            $diff = $submission->created_at->diff($endDateTime);
+                            $diff = $submission->updated_at->diff($endDateTime);
                             $now = now();
                         @endphp
                         @if($submission->created_at < $tugas->end_date)

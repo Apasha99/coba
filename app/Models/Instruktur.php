@@ -4,27 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-class Peserta extends Model
+
+class Instruktur extends Model
 {
     use HasFactory;
-    protected $table = 'peserta';
+    protected $table = 'instruktur';
     protected $primaryKey = 'id';
     protected $fillable = [
         'nama',
-        'noHP',
-        'alamat',
+        'bidang',
         'user_id'
     ];
 
-    public function peserta_pelatihan()
+    public function instruktur_pelatihan()
     {
-        return $this->hasMany(Peserta_Pelatihan::class, 'peserta_id', 'id');
-    }
-
-    public function submission()
-    {
-        return $this->hasMany(Submission::class, 'peserta_id', 'id');
+        return $this->hasMany(Instruktur_Pelatihan::class, 'instruktur_id', 'id');
     }
 
     public function user()
