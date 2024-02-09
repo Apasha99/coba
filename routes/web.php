@@ -106,6 +106,8 @@ Route::controller(SubmissionController::class)->group(function(){
 
 Route::controller(SubmissionTestController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
-    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/{question_number?}', 'test')->middleware('only_peserta')->name('peserta.test');
-    Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/start', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/soal', 'test')->middleware('only_peserta')->name('peserta.test');
+    Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
+    Route::post('/save-answer', 'Answer')->middleware('only_peserta')->name('peserta.saveAnswer');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/hasil', 'hasil')->middleware('only_peserta')->name('peserta.hasil');
 });

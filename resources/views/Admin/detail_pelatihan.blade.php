@@ -559,34 +559,8 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="acak_soal"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Acak Soal</label>
-                                <select name="acak_soal" id="acak_soal" class="block w-full mt-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                    <option value="Ya" >Ya</option>
-                                    <option value="Tidak" >Tidak</option>
-                                </select>
-                                @error('acak_soal')
-                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="acak_jawaban"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Acak Jawaban</label>
-                                <select name="acak_jawaban" id="acak_jawaban" class="block w-full mt-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                    <option value="Ya" >Ya</option>
-                                    <option value="Tidak" >Tidak</option>
-                                </select>
-                                @error('acak_jawaban')
-                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
                                 <label for="tampil_hasil"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Hasil</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test</label>
                                 <select name="tampil_hasil" id="tampil_hasil" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                     <option value="Ya" >Ya</option>
                                     <option value="Tidak" >Tidak</option>

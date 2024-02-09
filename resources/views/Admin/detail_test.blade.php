@@ -95,7 +95,7 @@
                     Total Nilai 
                 </th>
                 <td class="px-6 py-4">
-                    {{$test->totalnilai}}
+                    {{$hitung_nilai}}
                 </td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -127,23 +127,7 @@
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Acak Soal
-                </th>
-                <td class="px-6 py-4">
-                    {{$test->acak_soal}}
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Acak Jawaban
-                </th>
-                <td class="px-6 py-4">
-                    {{$test->acak_jawaban}}
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Tampilkan Hasil
+                    Tampilkan Review Test
                 </th>
                 <td class="px-6 py-4">
                     {{$test->tampil_hasil}}
@@ -192,7 +176,7 @@
                 @foreach ($soal_test as $soal)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->iteration }}
+                            {{ $soal->urutan }}
                         </td>
                         <td class="border-r px-16 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $soal->title }}<br>
@@ -355,6 +339,7 @@
                                     </div>
                                 @enderror
                             </div>
+
                             <div class="col-span-6 sm:col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto Soal</label>
                                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"

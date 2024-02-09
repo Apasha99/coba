@@ -5,23 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Nilai_Test extends Model
+class Jawaban_User_Pilgan extends Model
 {
-    use HasFactory;
     protected $primaryKey = 'id';
-    protected $table = 'nilai_test';
+    protected $table = 'jawaban_user_pilgan';
     protected $fillable = [
         'peserta_id',
         'test_id',
         'soal_id',
         'jawaban_id',
-        'nilai',
-        'user_answers',
+        'jawaban'
     ];
-
-    public function peserta()
-    {
-        return $this->belongsTo(Peserta::class, 'peserta_id', 'id');
-    }
-
 }

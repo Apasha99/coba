@@ -32,11 +32,8 @@ class TestController extends Controller
             'end_date' => ['required', 'date','after_or_equal:start_date'],
             'isActive' => ['required','boolean'],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
-            'acak_soal' => ['required'],
-            'acak_jawaban' => ['required'],
             'tampil_hasil' => ['required'],
             'durasi' => ['required','date_format:H:i:s'],
-            'totalnilai' => ['required', 'numeric', 'max:100', 'min:0'],
         ]);
         //dd($validated);
     
@@ -46,14 +43,11 @@ class TestController extends Controller
             $test = new Test([
                 'nama' => $validated['nama'],
                 'isActive' => $isActive,
-                'totalnilai' => $validated['totalnilai'],
                 'plt_kode' => $kode,
                 'start_date' => $validated['start_date'], // Tambahkan nilai untuk start_date
                 'end_date' => $validated['end_date'],
-                'acak_soal' => $validated['acak_soal'],
                 'deskripsi' => $validated['deskripsi'],
                 'durasi' => $validated['durasi'],
-                'acak_jawaban' => $validated['acak_jawaban'],
                 'tampil_hasil' => $validated['tampil_hasil'],
             ]);
             //dd($test);
@@ -77,7 +71,8 @@ class TestController extends Controller
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
         $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
-        return view('admin.detail_test', ['pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+        $hitung_nilai = Soal_Test::sum('nilai');
+        return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
     }
 
     public function storeSoal(Request $request, $plt_kode, $test_id)
@@ -90,6 +85,8 @@ class TestController extends Controller
                 'file_soal' => ['nullable','image'],
                 'tipe_option' => ['required', Rule::in(['Pilihan Ganda', 'Jawaban Singkat'])],
             ]);
+            $existingSoal = Soal_Test::where('test_id', $test_id)->orderBy('urutan', 'desc')->first();
+            $incrementedUrutan = $existingSoal ? $existingSoal->urutan + 1 : 1;
 
             if ($request->has('file_soal')) {
                 $fileSoalPath = $request->file('file_soal')->store('file_soal', 'public');
@@ -98,11 +95,18 @@ class TestController extends Controller
             $soal = Soal_Test::create([
                 'plt_kode' => $plt_kode,
                 'test_id' => $test_id,
+                'urutan' => $incrementedUrutan,
                 'title' => $validated['soal'],
                 'nilai' => $validated['nilai'],
                 'file_soal' => $validated2['file_soal']?? null,
                 'tipe' => $validated['tipe_option'],
             ]);
+
+            $existingJawaban = Jawaban_Test::where('test_id', $test_id)
+                                            ->where('soal_id', $soal->id)
+                                            ->orderBy('urutan', 'desc')
+                                            ->first();
+            $incrementUrutan = $existingJawaban ? $existingJawaban->urutan + 1 : 1;
 
             if ($validated['tipe_option'] === 'Pilihan Ganda') {
                 // Simpan jawaban pilihan ganda
@@ -114,6 +118,7 @@ class TestController extends Controller
                     'soal_id' => $soal->id,
                     'title' => $jawabanBenar,
                     'status' => true,
+                    'urutan' => $incrementUrutan,
                 ]);
                 Jawaban_Test::create([
                     'plt_kode' => $plt_kode,
@@ -121,7 +126,9 @@ class TestController extends Controller
                     'soal_id' => $soal->id,
                     'status' => false, // Set jawaban selain benar menjadi false
                     'title' => $gandaOption,
+                    'urutan' => ++$incrementUrutan,
                 ]);
+                $optionIncrementUrutan = $incrementUrutan;
 
                 // Increment $incrementUrutan only once before the loop
             } elseif ($validated['tipe_option'] === 'Jawaban Singkat') {
@@ -133,8 +140,9 @@ class TestController extends Controller
                     'soal_id' => $soal->id,
                     'title' => $jawabanBenar,
                     'status' => true,
+                    'urutan' => $incrementUrutan,
                 ]);
-            
+                $optionIncrementUrutan = $incrementUrutan;
             }
 
             $gandaOptions = $request->input('title_ganda');
@@ -147,6 +155,7 @@ class TestController extends Controller
                         'soal_id' => $soal->id,
                         'status' => false,
                         'title' => $option,
+                        'urutan' => ++$optionIncrementUrutan, 
                     ]);
                 }
             }elseif($singkatOptions){
@@ -157,6 +166,7 @@ class TestController extends Controller
                         'soal_id' => $soal->id,
                         'status' => true,
                         'title' => $option,
+                        'urutan' => ++$optionIncrementUrutan,
                     ]);
                 }
             }
@@ -194,11 +204,8 @@ class TestController extends Controller
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'isActive' => ['required', 'boolean'],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
-            'acak_soal' => ['required'],
             'durasi' => ['required','date_format:H:i:s'],
-            'acak_jawaban' => ['required'],
             'tampil_hasil' => ['required'],
-            'totalnilai' => ['required', 'numeric', 'max:100', 'min:0'],
         ]);
         
         try {
@@ -210,11 +217,8 @@ class TestController extends Controller
                 'end_date' => $validated['end_date'] ?? null,
                 'isActive' => $validated['isActive'],  // Use the validated value directly
                 'deskripsi' => $validated['deskripsi'] ?? null,
-                'acak_soal' => $validated['acak_soal'],
                 'durasi' => $validated['durasi'] ?? null,
-                'acak_jawaban' => $validated['acak_jawaban'],
                 'tampil_hasil' => $validated['tampil_hasil'],
-                'totalnilai' => $validated['totalnilai'] ?? null,
             ];
         
             $test->update(array_filter($updateData));
@@ -351,6 +355,7 @@ class TestController extends Controller
     
             $updateData = [
                 'title' => $validated['soal'] ?? null,
+                'urutan' => $soal_test->urutan,
                 'nilai' => $validated['nilai'] ?? null,
                 'file_soal' => $soal_test->file_soal, // Use existing file if not updated
                 'tipe_option' => $validated['tipe_option'] ?? null,
@@ -363,8 +368,12 @@ class TestController extends Controller
             }
     
             $soal_test->update(array_filter($updateData));
-            $jawaban_test = Jawaban_Test::where('test_id', $test_id)->where('soal_id', $soal_id)->first();
-            $jawaban_test->delete();
+            Jawaban_Test::where('test_id', $test_id)->where('soal_id', $soal_id)->delete();
+            $existingJawaban = Jawaban_Test::where('test_id', $test_id)
+                                            ->where('soal_id', $soal_id)
+                                            ->orderBy('urutan', 'desc')
+                                            ->first();
+            $incrementUrutan = $existingJawaban ? $existingJawaban->urutan + 1 : 1;
 
             if ($validated['tipe_option'] === 'Pilihan Ganda') {
                 // Simpan jawaban pilihan ganda
@@ -375,7 +384,9 @@ class TestController extends Controller
                     'soal_id' => $soal_test->id,
                     'title' => $jawabanBenar,
                     'status' => true,
+                    'urutan' => $incrementUrutan,
                 ]);
+                $optionIncrementUrutan = $incrementUrutan;
             }
 
             $gandaOptions = $request->input('title_ganda');
@@ -388,10 +399,12 @@ class TestController extends Controller
                         'soal_id' => $soal_test->id,
                         'status' => false,
                         'title' => $option,
+                        'urutan' => ++$optionIncrementUrutan,
                         
                     ]);
                 }
             }elseif($singkatOptions){
+                $optionIncrementUrutan = $incrementUrutan;
                 foreach ($singkatOptions as $option) {
                     Jawaban_Test::create([
                         'plt_kode' => $plt_kode,
@@ -399,6 +412,7 @@ class TestController extends Controller
                         'soal_id' => $soal_test->id,
                         'status' => true,
                         'title' => $option,
+                        'urutan' => ++$optionIncrementUrutan, 
                     ]);
                 }
             }
