@@ -26,7 +26,7 @@ class PelatihanController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        $test = Test::where('plt_kode', $plt_kode)->where('isActive', 1)->get();
+        $test = Test::where('plt_kode', $plt_kode)->get();
         $peserta = Peserta::where('user_id', Auth::user()->id)->first();
 
         $done = 0;

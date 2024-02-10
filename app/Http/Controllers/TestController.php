@@ -30,20 +30,18 @@ class TestController extends Controller
             'nama' => ['required'],
             'start_date' => ['required', 'date','after_or_equal:today'],
             'end_date' => ['required', 'date','after_or_equal:start_date'],
-            'isActive' => ['required','boolean'],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'tampil_hasil' => ['required'],
             'durasi' => ['required','date_format:H:i:s'],
+            'kkm' => ['required', 'max:100','min:0']
         ]);
         //dd($validated);
-    
-        $isActive = $request->input('isActive');
     
         try {
             $test = new Test([
                 'nama' => $validated['nama'],
-                'isActive' => $isActive,
                 'plt_kode' => $kode,
+                'kkm' => $validated['kkm'],
                 'start_date' => $validated['start_date'], // Tambahkan nilai untuk start_date
                 'end_date' => $validated['end_date'],
                 'deskripsi' => $validated['deskripsi'],
@@ -201,8 +199,8 @@ class TestController extends Controller
         $validated = $request->validate([
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
+            'kkm' => ['required', 'max:100','min:0'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
-            'isActive' => ['required', 'boolean'],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'durasi' => ['required','date_format:H:i:s'],
             'tampil_hasil' => ['required'],
@@ -215,7 +213,7 @@ class TestController extends Controller
                 'nama' => $validated['nama'] ?? null,
                 'start_date' => $validated['start_date'] ?? null,
                 'end_date' => $validated['end_date'] ?? null,
-                'isActive' => $validated['isActive'],  // Use the validated value directly
+                'kkm' => $validated['kkm'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'durasi' => $validated['durasi'] ?? null,
                 'tampil_hasil' => $validated['tampil_hasil'],

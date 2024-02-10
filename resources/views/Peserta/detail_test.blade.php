@@ -57,15 +57,28 @@
                 {{ \Carbon\Carbon::parse($test->end_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
+        @if ($hitungnilai >= $test->kkm)
+            <div class="mt-2 p-2 bg-green-200 rounded-lg">
+                <p class="text-center text-sm font-semibold text-green-800">
+                    Passed
+                </p>
+            </div>
+        @else
+            <div class="mt-2 p-2 bg-red-200 rounded-lg">
+                <p class="text-center text-sm font-semibold text-red-800">
+                    Failed
+                </p>
+            </div>
+        @endif
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div class="p-2 mb-4 col-span-full xl:mb-2">
+    <div class="grid grid-cols-6 gap-6 overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
             <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Test</h3>
             <p class="text-sm font-normal text-black-500 dark:text-gray-400">
                 {!! nl2br(e($test->deskripsi)) !!}
             </p>
         </div>
-        <div class="p-2 mb-4 col-span-full xl:mb-2">
+        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
             <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Durasi</h3>
             <p class="text-sm font-normal text-black-500 dark:text-gray-400">
             @if (\Carbon\Carbon::parse($test->durasi)->format('H') != '00')
@@ -77,6 +90,45 @@
             @endif
             </p>
         </div>
+        @if ($existingNilai)
+        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
+            <div class="mb-4 col-span-full xl:mb-2">
+                <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
+            </div>
+            <div class="mb-4 col-span-full xl:mb-2">
+                <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                    Test: 
+                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                        {{ $test->nama }}
+                    </span> 
+                </p>
+                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                    Total Soal: 
+                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                        {{ $hitungsoal }}
+                    </span> 
+                </p>
+                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                    Jumlah Benar: 
+                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                        {{$jawabBenar}}
+                    </span> 
+                </p>
+                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                    Total Nilai: 
+                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                        {{$hitungnilai}}
+                    </span> 
+                </p>
+                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                    KKM: 
+                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                        {{$test->kkm}}
+                    </span> 
+                </p>
+            </div>
+        </div>
+        @endif
     </div>
     <div class="col-span-full mt-4 mb-4 text-center">
         

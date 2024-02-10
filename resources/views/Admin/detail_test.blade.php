@@ -12,7 +12,7 @@
                                     d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
                                 </path>
                             </svg>
-                            Home
+                            Dashboard
                         </a>
                     </li>
                     <li class="flex items-center">
@@ -56,19 +56,6 @@
     <div class="mb-4 col-span-full xl:mb-2">
         <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}</h1>
     </div>
-    <div class="mb-4 col-span-full xl:mb-2">
-        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-            Status : 
-            <span class="text-sm font-normal sm:text-sm dark:text-white" style="background-color: {{ $test->isActive == 1 ? 'green' : 'red' }}; color: white;">
-                @if($test->isActive == 1)
-                    Aktif
-                @else
-                    Tidak Aktif
-                @endif
-            </span>
-
-        </p>
-    </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <h3 class="text-m font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Test</h3>
 
@@ -80,6 +67,14 @@
                 </th>
                 <td class="px-6 py-4">
                     {{$test->nama}}
+                </td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    KKM 
+                </th>
+                <td class="px-6 py-4">
+                    {{$test->kkm}}
                 </td>
             </tr>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -166,6 +161,9 @@
                     <th scope="col" class="border-r px-16 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
                         Soal
                     </th>
+                    <th scope="col" class="border-r px-16 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                        Tipe Soal
+                    </th>
                     <th scope="col" class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
                         Nilai
                     </th>
@@ -214,6 +212,9 @@
                             @endforeach
 
                             
+                        </td>
+                        <td class="border-r px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
+                            {{ $soal->tipe }}
                         </td>
                         <td class="border-r px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
                             {{ $soal->nilai }}

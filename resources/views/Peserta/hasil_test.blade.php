@@ -64,6 +64,12 @@
             </span> 
         </p>
         <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Total Soal: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ $hitungsoal }}
+            </span> 
+        </p>
+        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             Jumlah Benar: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{$jawabBenar}}
@@ -75,6 +81,25 @@
                 {{$hitungnilai}}
             </span> 
         </p>
+        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            KKM: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{$test->kkm}}
+            </span> 
+        </p>
+        @if ($hitungnilai >= $test->kkm)
+            <div class="mt-2 p-2 bg-green-200 rounded-lg">
+                <p class="text-center text-sm font-semibold text-green-800">
+                    Passed
+                </p>
+            </div>
+        @else
+            <div class="mt-2 p-2 bg-red-200 rounded-lg">
+                <p class="text-center text-sm font-semibold text-red-800">
+                    Failed
+                </p>
+            </div>
+        @endif
     </div>
     @if ($test->tampil_hasil == true)
         <div class="mb-4 col-span-full xl:mb-2">
@@ -106,38 +131,43 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             @if ($soal->tipe == "Pilihan Ganda")
+                            @php
+                                // Get all options for the current question
+                                $options = $jawaban_test->where('soal_id', $soal->id);
+                                $originalOrder = $options->pluck('urutan')->toArray();
+                                $shuffledOrder = collect($originalOrder)->shuffle(1);
+                                $selectedOption = old('selected_option_' . $soal->urutan) ?? session('selected_option_' . $soal->urutan) ?? null;
+                                $jawabPilgan = DB::table('jawaban_user_pilgan')
+                                    ->join('nilai_test', 'jawaban_user_pilgan.test_id', '=', 'nilai_test.test_id')
+                                    ->join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                    ->where('peserta.user_id', Auth::user()->id) // Memastikan hanya data pengguna saat ini yang diambil
+                                    ->where('jawaban_user_pilgan.test_id', $test->id)
+                                    ->whereColumn('jawaban_user_pilgan.peserta_id', '=', 'nilai_test.peserta_id') // Menggunakan whereColumn untuk kondisi join
+                                    ->where('jawaban_user_pilgan.soal_id', $soal->id)
+                                    ->get();
+
+                            @endphp
+
+                            @foreach ($shuffledOrder as $index => $shuffledIndex)
                                 @php
-                                    // Get all options for the current question
-                                    $options = $jawaban_test->where('soal_id', $soal->id);
-                                    $originalOrder = $options->pluck('urutan')->toArray();
-                                    $shuffledOrder = collect($originalOrder)->shuffle(1);
-                                    $selectedOption = old('selected_option_' . $soal->urutan) ?? session('selected_option_' . $soal->urutan) ?? null;
-                                    $jawabPilgan = DB::table('jawaban_user_pilgan')
-                                        ->join('nilai_test', 'jawaban_user_pilgan.test_id', '=', 'nilai_test.test_id')
-                                        ->join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                        ->where('peserta.user_id', Auth::user()->id)
-                                        ->where('jawaban_user_pilgan.test_id', $test->id)
-                                        ->where('jawaban_user_pilgan.soal_id', $soal->id)
-                                        ->first();
-
+                                    $jawaban = $options->where('urutan', $shuffledIndex)->first();
+                                    $isChecked = $jawabPilgan->contains('jawaban_id', $jawaban->id);
                                 @endphp
-
-                                @foreach ($shuffledOrder as $index => $shuffledIndex)
-                                    @php
-                                        $jawaban = $options->where('urutan', $shuffledIndex)->first();
-                                        $selectedPilihanGanda = $jawabPilgan;
-                                    @endphp
-                                    <label>
-                                        <input disabled id="ganda-{{ $soal->urutan }}-{{ $index }}" type="radio" name="selected_option[{{ $soal->urutan }}]" value="{{ $jawaban->id }}" onclick="handleRadioClick({{ $soal->urutan }}, '{{ $jawaban->id }}')" {{ ($jawaban->id == $selectedPilihanGanda->jawaban_id) ? 'checked' : '' }}>
-                                        {{ $jawaban->title }}
-                                    </label><br>
-                                @endforeach
+                                <label>
+                                    <input disabled id="ganda-{{ $soal->urutan }}-{{ $index }}" type="radio" name="selected_option[{{ $soal->urutan }}]" value="{{ $jawaban->id }}" onclick="handleRadioClick({{ $soal->urutan }}, '{{ $jawaban->id }}')" {{ $isChecked ? 'checked' : '' }}>
+                                    {{ $jawaban->title }}
+                                </label><br>
+                            @endforeach
 
                             @elseif ($soal->tipe == "Jawaban Singkat") 
                                 @php
                                     $jawabSingkat = DB::table('jawaban_user_singkat')
-                                        ->where('test_id', $test->id)
-                                        ->where('soal_id', $soal->id)
+                                        ->join('nilai_test', 'jawaban_user_singkat.test_id', '=', 'nilai_test.test_id')
+                                        ->join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                        ->where('peserta.user_id', Auth::user()->id)
+                                        ->where('jawaban_user_singkat.test_id', $test->id)
+                                        ->where('jawaban_user_singkat.soal_id', $soal->id)
+                                        ->whereColumn('jawaban_user_singkat.peserta_id', '=', 'nilai_test.peserta_id')
                                         ->first();
                                 @endphp
                                 <input disabled type="text" name="singkat[{{ $soal->urutan }}]" placeholder="Jawaban" id="singkat-{{ $soal->urutan }}"

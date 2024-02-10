@@ -10,6 +10,7 @@ use App\Http\Controllers\PelatihanController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TugasController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\RekapController;
 use App\Http\Controllers\SubmissionTestController;
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Route::controller(InstrukturController::class)->middleware('only_admin')->group(
     Route::get('admin/daftar-instruktur', 'daftar_instruktur')->name('admin.viewDaftarInstruktur');
     Route::get('admin/tambah-instruktur', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
     Route::post('admin/daftar-instruktur/store', 'store')->name('admin.storeInstruktur');
-    Route::get('admin/daftar-peserta/search', 'searchPeserta')->name('admin.searchInstruktur');
+    Route::get('admin/daftar-peserta/search', 'searchInstruktur')->name('admin.searchInstruktur');
     Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editInstruktur');
     Route::post('admin/daftar-peserta/edit/{id}', 'update')->name('admin.updatePeserta');
     Route::delete('/admin/daftar-peserta/delete/{peserta_id}', 'delete')->name('admin.deleteInstruktur');
@@ -137,4 +138,13 @@ Route::controller(SubmissionTestController::class)->group(function(){
     Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
     Route::post('/save-answer', 'Answer')->middleware('only_peserta')->name('peserta.saveAnswer');
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/hasil', 'hasil')->middleware('only_peserta')->name('peserta.hasil');
+});
+
+Route::controller(RekapController::class)->group(function(){
+    Route::get('admin/pelatihan/{plt_kode}/rekap', 'rekapTest')->middleware('only_admin')->name('admin.rekapTest');
+    Route::get('admin/pelatihan/{plt_kode}/rekap/download', 'download')->middleware('only_admin')->name('admin.downloadRekap');
+    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail/download', 'downloadRekap')->middleware('only_admin')->name('admin.downloadDetailRekap');
+    Route::get('admin/pelatihan/{plt_kode}/rekap/search', 'searchTest')->middleware('only_admin')->name('admin.searchTest');
+    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail/search', 'searchDetailTest')->middleware('only_admin')->name('admin.searchDetailTest');
+    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail', 'detailRekapTest')->middleware('only_admin')->name('admin.detailRekapTest');
 });

@@ -12,16 +12,13 @@ class Test extends Model
     protected $table = 'test';
     protected $fillable = [
         'nama',
-        'totalnilai',
-        'isActive',
         'plt_kode',
         'deskripsi',
-        'acak_soal',
-        'acak_jawaban',
         'tampil_hasil',
         'start_date',
         'end_date',
-        'durasi'
+        'durasi',
+        'kkm'
     ];
 
     public function soal_test()

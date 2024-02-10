@@ -33,6 +33,20 @@ class SubmissionTestController extends Controller
                 ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
                 ->first();
         //dd($test);
+        $hitungsoal = Soal_Test::where('test_id', $test_id)->count();
+        $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+            ->where('test_id', $test_id)
+            ->where('peserta.user_id', Auth::user()->id)
+            ->sum('nilai'); // Assuming 'nilai' is the column you want to sum
+        $jawabBenar = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                                    ->where('test_id', $test_id)
+                                                    ->where('peserta.user_id', Auth::user()->id)
+                                                    ->where('nilai','!=', 0)->count();
+        $existingNilai = Nilai_Test::where('test_id', $test_id)
+        ->whereHas('peserta', function($query) {
+            $query->where('user_id', Auth::user()->id);
+        })
+        ->exists();
         
         $soal_id = null;
         $soal_urutan = null;
@@ -43,8 +57,11 @@ class SubmissionTestController extends Controller
         }
     
         $currentQuestion = $soal_test->where('id', $soal_id)->sortBy('urutan')->first();
+        
     
-        return view('peserta.detail_test', ['pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
+        return view('peserta.detail_test', ['hitungsoal'=>$hitungsoal,
+        'hitungnilai'=>$hitungnilai,
+        'jawabBenar'=>$jawabBenar,'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
     }    
 
     public function test($plt_kode, $test_id)
@@ -53,12 +70,16 @@ class SubmissionTestController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
-        $nilai = Nilai_Test::leftjoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')->where('test_id', $test_id)->where('peserta.user_id', Auth::user()->id)->first();
+        $nilai = Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                            ->where('test_id', $test_id)
+                            ->where('peserta.user_id', Auth::user()->id)
+                            ->first();
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
-            ->leftJoin('peserta_pelatihan', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
-            ->where('peserta.user_id', Auth::user()->id)
-            ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
-            ->first();
+                            ->leftJoin('peserta_pelatihan', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+                            ->where('peserta.user_id', Auth::user()->id)
+                            ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
+                            ->first();
+
         // Periksa apakah tes tersedia
         if (!$test) {
             return redirect()->back()->with('error', 'Test tidak ditemukan.');
@@ -75,26 +96,27 @@ class SubmissionTestController extends Controller
         }
 
         $existingNilai = Nilai_Test::where('test_id', $test_id)
-        ->whereHas('peserta', function($query) {
-            $query->where('user_id', Auth::user()->id);
-        })
-        ->exists();
+                                    ->whereHas('peserta', function($query) {
+                                        $query->where('user_id', Auth::user()->id);
+                                    })
+                                    ->exists();
 
         // Jika sudah ada nilai untuk tes ini, kembalikan pesan error
         if ($existingNilai) {
-        return redirect()->back()->with('error', 'Anda sudah mengerjakan tes ini.');
+            return redirect()->back()->with('error', 'Anda sudah mengerjakan tes ini.');
         }
 
-        
         return view('peserta.test_2', [
             'pelatihan' => $pelatihan,
             'test' => $test,
+            'existingNilai' => $existingNilai,
             'nilai' => $nilai,
             'soal_test' => $soal_test,
             'jawaban_test' => $jawaban_test,
             'peserta' => $peserta,
         ]);
     }
+
 
 
     public function submitAnswer(Request $request, $plt_kode, $test_id)
@@ -211,6 +233,7 @@ class SubmissionTestController extends Controller
             ->where('peserta.user_id', Auth::user()->id)
             ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
             ->first();
+        $hitungsoal = Soal_Test::where('test_id', $test_id)->count();
         $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
             ->where('test_id', $test_id)
             ->where('peserta.user_id', Auth::user()->id)
@@ -226,6 +249,7 @@ class SubmissionTestController extends Controller
             'pelatihan'=>$pelatihan,
             'jawabSingkat'=>$jawabSingkat,
             'jawabPilgan'=>$jawabPilgan,
+            'hitungsoal'=>$hitungsoal,
             'test'=>$test,
             'soal_test'=>$soal_test,
             'jawaban_test'=>$jawaban_test,

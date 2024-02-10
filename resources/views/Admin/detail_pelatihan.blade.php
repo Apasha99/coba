@@ -217,14 +217,22 @@
             </svg>
             Tambah Test
         </button>
+        <a href="{{ route('admin.rekapTest', ['plt_kode' => $pelatihan->kode]) }}" class="float-right inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 sm:w-auto dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+            <svg class="w-5 h-5 mr-2 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M8 7V2.2a2 2 0 0 0-.5.4l-4 3.9a2 2 0 0 0-.3.5H8Zm2 0V2h7a2 2 0 0 1 2 2v.1a5 5 0 0 0-4.7 1.4l-6.7 6.6a3 3 0 0 0-.8 1.6l-.7 3.7a3 3 0 0 0 3.5 3.5l3.7-.7a3 3 0 0 0 1.5-.9l4.2-4.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd" d="M17.4 8a1 1 0 0 1 1.2.3 1 1 0 0 1 0 1.6l-.3.3-1.6-1.5.4-.4.3-.2Zm-2.1 2.1-4.6 4.7-.4 1.9 1.9-.4 4.6-4.7-1.5-1.5ZM17.9 6a3 3 0 0 0-2.2 1L9 13.5a1 1 0 0 0-.2.5L8 17.8a1 1 0 0 0 1.2 1.1l3.7-.7c.2 0 .4-.1.5-.3l6.6-6.6A3 3 0 0 0 18 6Z" clip-rule="evenodd"/>
+            </svg>
+            Rekap Test
+        </a>
+
     </div>
     <div id="accordion-open" data-accordion="open">
-        <h2 id="accordion-open-heading-tugas">
+        <h2 id="accordion-open-heading-test">
             <button type="button" class="flex items-center justify-between w-full mt-4 p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-open-body-test" aria-expanded="true" aria-controls="accordion-open-body-test">
-            <span class="flex items-center text-l font-semibold leading-tight tracking-tight text-gray-900 md:text-xl dark:text-white"> Test </span>
-            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-            </svg>
+                <span class="flex items-center text-l font-semibold leading-tight tracking-tight text-gray-900 md:text-xl dark:text-white"> Test </span>
+                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                </svg>
             </button>
         </h2>
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
@@ -495,19 +503,6 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="isActive"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                                <select name="isActive" id="isActive" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                    <option value="1" >Aktif</option>
-                                    <option value="0" >Tidak Aktif</option>
-                                </select>
-                                @error('isActive')
-                                    <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                             <div class="col-span-full">
                                 <label for="deskripsi"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
@@ -521,12 +516,12 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="totalnilai"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Nilai</label>
-                                <input type="number" name="totalnilai" placeholder="Masukkan Total Nilai" id="totalnilai"
+                                <label for="kkm"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM</label>
+                                <input type="number" name="kkm" placeholder="Masukkan KKM" id="kkm"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required max="100">
-                                @error('totalnilai')
+                                @error('kkm')
                                     <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
                                         {{ $message }}
                                     </div>

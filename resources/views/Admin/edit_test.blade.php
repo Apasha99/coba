@@ -87,12 +87,12 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="isActive" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                                <select name="isActive" id="isActive" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                    <option value="1" {{ $test->isActive ? 'selected' : '' }}>Aktif</option>
-                                    <option value="0" {{ !$test->isActive ? 'selected' : '' }}>Tidak Aktif</option>
-                                </select>
-                                @error('isActive')
+                                <label for="kkm"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM</label>
+                                <input type="number" name="kkm" placeholder="Masukkan KKM" id="kkm" value="{{$test->kkm}}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required max="100">
+                                @error('kkm')
                                     <div class="invalid-feedback text-xs text-red-800 dark:text-red-400">
                                         {{ $message }}
                                     </div>
