@@ -5,7 +5,6 @@
     <title>Daftar Rekap Test {{$test->nama}}</title>
     <!-- Bootstrap CSS (jika menggunakan framework Bootstrap) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- CSS styling -->
     <style>
         /* CSS style untuk membuat tampilan tabel */
@@ -43,7 +42,6 @@
             margin-bottom: 10px; /* Jarak dari bawah tombol */
         }
     </style>
-
 </head>
 <body>
     <div class="container-lg">
@@ -90,7 +88,7 @@
                         {{$test->kkm}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$hitungnilai}}
+                        {{$nilai->total_nilai}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                         @if ($hitungnilai >= $test->kkm)
@@ -107,15 +105,19 @@
                             </div>
                         @endif                                       
                     </td>
-                      
                 </tr>
                 @endforeach
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
+                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
+                </tr>
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
+                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai/$hitungpeserta }}</td>
+                </tr>
             </tbody>
         </table>
-    
     </div>
 
-    
-    
 </body>
 </html>

@@ -69,6 +69,46 @@ class RekapController extends Controller
     
         // Hitung total nilai pada tes tertentu
         $hitungnilai = Nilai_Test::where('test_id', $test_id)->sum('nilai');
+
+        $jumlahPesertaPerRentang = [
+            '0-10' => 0,
+            '11-20' => 0,
+            '21-30' => 0,
+            '31-40' => 0,
+            '41-50' => 0,
+            '51-60' => 0,
+            '61-70' => 0,
+            '71-80' => 0,
+            '81-90' => 0,
+            '91-100' => 0,
+        ];
+        
+        // Loop melalui nilaiPeserta dan menghitung jumlah peserta dalam setiap rentang
+        foreach ($nilaiPeserta as $score) {
+            $total_nilai = $score->total_nilai;
+            if ($total_nilai >= 0 && $total_nilai <= 10) {
+                $jumlahPesertaPerRentang['0-10']++;
+            } elseif ($total_nilai >= 11 && $total_nilai <= 20) {
+                $jumlahPesertaPerRentang['11-20']++;
+            } elseif ($total_nilai >= 21 && $total_nilai <= 30) {
+                $jumlahPesertaPerRentang['21-30']++;
+            } elseif ($total_nilai >= 31 && $total_nilai <= 40) {
+                $jumlahPesertaPerRentang['31-40']++;
+            } elseif ($total_nilai >= 41 && $total_nilai <= 50) {
+                $jumlahPesertaPerRentang['41-50']++;
+            } elseif ($total_nilai >= 51 && $total_nilai <= 60) {
+                $jumlahPesertaPerRentang['51-60']++;
+            } elseif ($total_nilai >= 61 && $total_nilai <= 70) {
+                $jumlahPesertaPerRentang['61-70']++;
+            } elseif ($total_nilai >= 71 && $total_nilai <= 80) {
+                $jumlahPesertaPerRentang['71-80']++;
+            } elseif ($total_nilai >= 81 && $total_nilai <= 90) {
+                $jumlahPesertaPerRentang['81-90']++;
+            } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
+                $jumlahPesertaPerRentang['91-100']++;
+            }
+        }
+        //dd($jumlahPesertaPerRentang);
     
         return view('admin.detail_rekap_test', [
             'test2' => $test2,
@@ -78,6 +118,7 @@ class RekapController extends Controller
             'pelatihan' => $pelatihan,
             'test' => $test,
             'admin' => $admin,
+            'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
         ]);
     }    
 
@@ -102,6 +143,45 @@ class RekapController extends Controller
         // Hitung total nilai pada tes tertentu
         $hitungnilai = Nilai_Test::where('test_id', $test_id)->sum('nilai');
 
+        $jumlahPesertaPerRentang = [
+            '0-10' => 0,
+            '11-20' => 0,
+            '21-30' => 0,
+            '31-40' => 0,
+            '41-50' => 0,
+            '51-60' => 0,
+            '61-70' => 0,
+            '71-80' => 0,
+            '81-90' => 0,
+            '91-100' => 0,
+        ];
+        
+        // Loop melalui nilaiPeserta dan menghitung jumlah peserta dalam setiap rentang
+        foreach ($nilaiPeserta as $score) {
+            $total_nilai = $score->total_nilai;
+            if ($total_nilai >= 0 && $total_nilai <= 10) {
+                $jumlahPesertaPerRentang['0-10']++;
+            } elseif ($total_nilai >= 11 && $total_nilai <= 20) {
+                $jumlahPesertaPerRentang['11-20']++;
+            } elseif ($total_nilai >= 21 && $total_nilai <= 30) {
+                $jumlahPesertaPerRentang['21-30']++;
+            } elseif ($total_nilai >= 31 && $total_nilai <= 40) {
+                $jumlahPesertaPerRentang['31-40']++;
+            } elseif ($total_nilai >= 41 && $total_nilai <= 50) {
+                $jumlahPesertaPerRentang['41-50']++;
+            } elseif ($total_nilai >= 51 && $total_nilai <= 60) {
+                $jumlahPesertaPerRentang['51-60']++;
+            } elseif ($total_nilai >= 61 && $total_nilai <= 70) {
+                $jumlahPesertaPerRentang['61-70']++;
+            } elseif ($total_nilai >= 71 && $total_nilai <= 80) {
+                $jumlahPesertaPerRentang['71-80']++;
+            } elseif ($total_nilai >= 81 && $total_nilai <= 90) {
+                $jumlahPesertaPerRentang['81-90']++;
+            } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
+                $jumlahPesertaPerRentang['91-100']++;
+            }
+        }
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('admin.download_detail_rekap_test', [
             'hitungpeserta' => $hitungpeserta,
@@ -109,7 +189,8 @@ class RekapController extends Controller
             'pelatihan' => $pelatihan,
             'test' => $test,
             'peserta' => $peserta,
-            'nilaiPeserta' => $nilaiPeserta
+            'nilaiPeserta' => $nilaiPeserta,
+            'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
         ]);
 
         return $pdf->stream($plt_kode . '_rekap_test_' . $test_id . '.pdf');
@@ -225,8 +306,48 @@ class RekapController extends Controller
             ->where('test.plt_kode', $plt_kode)
             ->groupBy('test.id', 'peserta.id')
             ->select('test.id', 'peserta.id')->get()->count();
+        
+            $jumlahPesertaPerRentang = [
+                '0-10' => 0,
+                '11-20' => 0,
+                '21-30' => 0,
+                '31-40' => 0,
+                '41-50' => 0,
+                '51-60' => 0,
+                '61-70' => 0,
+                '71-80' => 0,
+                '81-90' => 0,
+                '91-100' => 0,
+            ];
+            
+            // Loop melalui nilaiPeserta dan menghitung jumlah peserta dalam setiap rentang
+            foreach ($nilaiPeserta as $score) {
+                $total_nilai = $score->total_nilai;
+                if ($total_nilai >= 0 && $total_nilai <= 10) {
+                    $jumlahPesertaPerRentang['0-10']++;
+                } elseif ($total_nilai >= 11 && $total_nilai <= 20) {
+                    $jumlahPesertaPerRentang['11-20']++;
+                } elseif ($total_nilai >= 21 && $total_nilai <= 30) {
+                    $jumlahPesertaPerRentang['21-30']++;
+                } elseif ($total_nilai >= 31 && $total_nilai <= 40) {
+                    $jumlahPesertaPerRentang['31-40']++;
+                } elseif ($total_nilai >= 41 && $total_nilai <= 50) {
+                    $jumlahPesertaPerRentang['41-50']++;
+                } elseif ($total_nilai >= 51 && $total_nilai <= 60) {
+                    $jumlahPesertaPerRentang['51-60']++;
+                } elseif ($total_nilai >= 61 && $total_nilai <= 70) {
+                    $jumlahPesertaPerRentang['61-70']++;
+                } elseif ($total_nilai >= 71 && $total_nilai <= 80) {
+                    $jumlahPesertaPerRentang['71-80']++;
+                } elseif ($total_nilai >= 81 && $total_nilai <= 90) {
+                    $jumlahPesertaPerRentang['81-90']++;
+                } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
+                    $jumlahPesertaPerRentang['91-100']++;
+                }
+            }
+        
 
-        return view('admin.detail_rekap_test', ['nilaiPeserta'=>$nilaiPeserta,'test2'=>$test2,'hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
+        return view('admin.detail_rekap_test', ['jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang,'nilaiPeserta'=>$nilaiPeserta,'test2'=>$test2,'hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
     }
 
 }
