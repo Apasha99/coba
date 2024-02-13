@@ -32,7 +32,7 @@
     </div>
     <div class="sm:flex mb-4">
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <form class="lg:pr-3" action="{{route('admin.searchPeserta')}}" method="GET">
+            <form class="lg:pr-3" action="{{route('admin.search')}}" method="GET">
                 <label for="search" class="sr-only">Search</label>
                 <div class="relative mt-1 lg:w-64 xl:w-96">
                     <input type="text" name="search" id="search"

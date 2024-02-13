@@ -104,7 +104,8 @@ class PesertaController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-
+        $pelatihan = Pelatihan::select('kode','nama')->get();
+        $pst = User::where('role_id', '=', 2)->select('id')->get();
         $peserta = Peserta::leftjoin('users','users.id','=','peserta.user_id')
             ->select('peserta.nama as peserta_nama', 'alamat', 'users.username','users.email','peserta.user_id as peserta_id','noHP','password_awal')
             ->where(function ($query) use ($search) {
@@ -116,7 +117,7 @@ class PesertaController extends Controller
             })
             ->get();
 
-        return view('admin.daftar_peserta', ['peserta' => $peserta, 'admin' => $admin, 'search' => $search]);
+        return view('admin.daftar_peserta', ['pelatihan'=>$pelatihan,'pst'=>$pst,'peserta' => $peserta, 'admin' => $admin, 'search' => $search]);
     }
 
     public function edit($id)
