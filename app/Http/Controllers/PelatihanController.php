@@ -6,6 +6,7 @@ use App\Models\Pelatihan;
 use App\Models\Admin;
 use App\Models\Jawaban_Test;
 use App\Models\Materi;
+use App\Models\Bidang;
 use App\Models\Nilai_Test;
 use App\Models\Peserta;
 use App\Models\Peserta_Pelatihan;
@@ -51,7 +52,9 @@ class PelatihanController extends Controller
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->get();
-        return view('admin.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('admin.detail_pelatihan', ['bidang'=>$bidang,'pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
     public function viewDaftarPelatihan() {
@@ -84,21 +87,23 @@ class PelatihanController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+        $bidang = Bidang::all();
         if($admin){
             $pelatihan = Pelatihan::all();
-            return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
+            return view('admin.tambah_pelatihan', ['bidang'=>$bidang,'admin' => $admin, 'pelatihan' => $pelatihan]);
         }
     }
 
     public function store(Request $request): RedirectResponse {
         //dd($request->poster);
+        //dd($request);
         $validated = $request->validate([
             'kode' => ['required', 'regex:/^[A-Z0-9]{6}$/',Rule::unique('pelatihan')],
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
+            'bidang_id'=> ['required'],
             'status' => ['required', 'in:Not started yet,On going,Completed'],
-            'penyelenggara' => ['required'],
             'tempat' => ['required'],
             'deskripsi' => ['required', 'max:255'],
         ]);
@@ -192,9 +197,12 @@ class PelatihanController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+        $bidang = Bidang::all();
+        $selectedBidangId = Pelatihan::join('bidang','bidang.id','=','pelatihan.bidang_id')->where('pelatihan.id',$plt_id)->select('bidang_id')->first()->bidang_id;;
+        //dd($selectedBidangId);
         if($admin){
             $plt = Pelatihan::find($plt_id);
-            return view('admin.edit_pelatihan', ['admin' => $admin, 'plt' => $plt]);
+            return view('admin.edit_pelatihan', ['selectedBidangId'=>$selectedBidangId,'bidang'=>$bidang,'admin' => $admin, 'plt' => $plt]);
         }
     }
 
@@ -211,10 +219,10 @@ class PelatihanController extends Controller
             'status' => [ 'nullable','in:Not started yet,On going,Completed'],
             'start_date' => ['required'],
             'end_date' => ['required', 'after:start_date'],
-            'penyelenggara' => ['required'],
             'tempat' => ['nullable'],
             'deskripsi' => ['required', 'max:255'],
             'poster' => [ 'max:10240'],
+            'bidang_id'  => ['required'],
         ]);
 
         try {
@@ -225,10 +233,10 @@ class PelatihanController extends Controller
                 'start_date' => $validated['start_date'] ?? null,
                 'end_date' => $validated['end_date'] ?? null,
                 'status' => $validated['status'] ?? null,
-                'penyelenggara' => $validated['penyelenggara'] ?? null,
                 'tempat' => $validated['tempat'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'poster' => $validated['poster'] ?? null,
+                'bidang_id' => $validated['bidang_id'] ?? null,
             ];
             //dd($updateData);
             if ($request->has('poster')) {

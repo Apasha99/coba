@@ -113,14 +113,24 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="penyelenggara"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Penyelenggara</label>
-                                    <input type="text" name="penyelenggara" placeholder="penyelenggara" id="penyelenggara" value="{{$plt->penyelenggara}}"
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    @error('penyelenggara')
-                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <label for="bidang_id"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang Penyelenggara</label>
+                                        <select name="bidang_id" id="bidang_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                                            <option value="" disabled selected>Pilih Bidang</option>
+                                            
+                                            @foreach ($bidang as $bidangItem)
+                                                <option value="{{ $bidangItem->id }}" {{ $bidangItem->id == $selectedBidangId ? 'selected' : '' }}>
+                                                    {{ $bidangItem->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @error('tempat')
+                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                        role="alert">
+                                        <div>
                                             {{ $message }}
                                         </div>
+                                    </div>
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">

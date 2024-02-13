@@ -39,7 +39,7 @@
 @section('content5')
     <div class="col-span-full xl:col-auto">
         <div class="m-auto ml-2 mb-2 flex justify-between">
-            <button type="button" data-modal-toggle="add-pelatihan-modal"
+            <a type="button" href="{{route('admin.addPelatihan')}}"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -47,7 +47,7 @@
                         clip-rule="evenodd"></path>
                 </svg>
                 Tambah Pelatihan
-            </button>
+            </a>
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
             <form class="lg:pr-3" action="{{route('admin.searchPelatihan')}}" method="GET">
                 <label for="search" class="sr-only">Search</label>

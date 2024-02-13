@@ -13,7 +13,7 @@ class Pelatihan extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'penyelenggara',
+        'bidang_id',
         'status',
         'start_date',
         'end_date',

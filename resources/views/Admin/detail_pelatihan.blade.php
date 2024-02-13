@@ -14,7 +14,7 @@
                                 d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
                             </path>
                         </svg>
-                        Home
+                        Dashboard
                     </a>
                 </li>
                 <li class="flex items-center">
@@ -46,14 +46,20 @@
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
         <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-            Start date: 
+            Bidang Penyelanggara: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ $bidang }}
+            </span> 
+        </p>
+        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Start date: 
+            <span class="mt-2 text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{ \Carbon\Carbon::parse($pelatihan->start_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
         <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             End date: 
-            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+            <span class="mt-2 text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{ \Carbon\Carbon::parse($pelatihan->end_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
