@@ -112,8 +112,22 @@
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
                 </tr>
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
+                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
+                </tr>
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
+                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
+                </tr>
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai/$hitungpeserta }}</td>
+                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        @if ($hitungpeserta > 0)
+                            {{ $hitungnilai / $hitungpeserta }}
+                        @else
+                            0
+                        @endif
+                    </td>
                 </tr>
             </tbody>
         </table>

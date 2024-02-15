@@ -55,6 +55,37 @@ class PesertaController extends Controller
         return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
 
+    public function detail_peserta($peserta_id)
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+            ->where('peserta.user_id',$peserta_id)
+            ->select('peserta.user_id as peserta_id','peserta.nama as peserta_nama', 'peserta.noHP', 'peserta.alamat', 'users.foto', 'users.password_awal', 'peserta.id', 'users.username', 'users.email')
+            ->first();
+        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $pelatihan = Pelatihan::select('kode','nama')->get();
+        return view('admin.detail_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
+    }
+
+    public function create()
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+            ->select('peserta.user_id as peserta_id','peserta.nama as peserta_nama', 'peserta.noHP', 'peserta.alamat', 'users.foto', 'users.password_awal', 'peserta.id', 'users.username', 'users.email')
+            ->get();
+        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $pelatihan = Pelatihan::select('kode','nama')->get();
+        return view('admin.tambah_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
+    }
+
     public function store(Request $request): RedirectResponse {
         //dd($request);
         $validated = $request->validate([

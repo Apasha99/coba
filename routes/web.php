@@ -46,6 +46,8 @@ Route::controller(PesertaController::class)->middleware('only_peserta')->group(f
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
     Route::get('admin/daftar-peserta', 'daftar_peserta')->name('admin.viewDaftarPeserta');
+    Route::get('admin/daftar-peserta/detail/{peserta_id}', 'detail_peserta')->name('admin.viewDetailPeserta');
+    Route::get('admin/daftar-peserta/create', 'create')->name('admin.createPeserta');
     Route::post('admin/daftar-peserta/store', 'store')->name('admin.storePeserta');
     Route::get('admin/daftar-peserta/search', 'searchPeserta')->name('admin.search');
     Route::get('admin/daftar-peserta/edit/{id}', 'edit')->name('admin.editPeserta');
@@ -108,11 +110,13 @@ Route::controller(TugasController::class)->group(function(){
 });
 
 Route::controller(TestController::class)->group(function(){
+    Route::get('admin/pelatihan/{plt_kode}/create/test', 'create')->middleware('only_admin')->name('admin.addTest');
     Route::post('admin/pelatihan/{plt_kode}/test', 'store')->middleware('only_admin')->name('admin.storeTest');
     Route::post('admin/pelatihan/{plt_kode}/delete/{test_id}', 'delete')->middleware('only_admin')->name('admin.deleteTest');
     Route::get('admin/pelatihan/{plt_kode}/edit/{test_id}', 'edit')->middleware('only_admin')->name('admin.editTest');
     Route::post('admin/pelatihan/{plt_kode}/edit/{test_id}/update', 'update')->middleware('only_admin')->name('admin.updateTest');
     Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->middleware('only_admin')->name('admin.detailTest');
+    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/createSoal', 'createSoal')->middleware('only_admin')->name('admin.addSoal');
     Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/storeSoal', 'storeSoal')->middleware('only_admin')->name('admin.storeSoal');
     Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit', 'editSoal')->middleware('only_admin')->name('admin.editSoal');
     Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/update', 'updateSoal')->middleware('only_admin')->name('admin.updateSoal');

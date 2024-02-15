@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\Peserta;
 use App\Models\Soal_Test;
 use App\Models\Nilai_Test;
+use App\Models\Peserta_Pelatihan;
 use App\Models\Jawaban_Test;
 use App\Models\Jawaban_User_Pilgan;
 use App\Models\Jawaban_User_Singkat;
@@ -32,19 +33,8 @@ class RekapController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $peserta = Peserta::get();
-        $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->join('test','test.id','=','nilai_test.test_id')
-            ->where('test.plt_kode', $plt_kode)
-            ->groupby('test.id')
-            ->sum('nilai_test.nilai');
-        $hitungpeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->join('test', 'test.id', '=', 'nilai_test.test_id')
-            ->where('test.plt_kode', $plt_kode)
-            ->groupBy('test.id', 'peserta.id')
-            ->select('test.id', 'peserta.id')->get()->count();
-        //dd($hitungnilai,$hitungpeserta);
 
-        return view('admin.rekap_test', ['hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'pelatihan' => $pelatihan,  'test' => $test, 'peserta' => $peserta]);
+        return view('admin.rekap_test', ['pelatihan' => $pelatihan,  'test' => $test, 'peserta' => $peserta]);
     }
 
     public function detailRekapTest(String $plt_kode, $test_id) {
@@ -55,7 +45,8 @@ class RekapController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-    
+        $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
+                        ->where('test.id', $test_id)->count();
         // Hitung nilai untuk setiap peserta pada tes tertentu
         $nilaiPeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
             ->selectRaw('peserta.id as peserta_id, peserta.user_id, peserta.nama, SUM(nilai) as total_nilai')
@@ -118,6 +109,7 @@ class RekapController extends Controller
             'pelatihan' => $pelatihan,
             'test' => $test,
             'admin' => $admin,
+            'totalpeserta' => $totalpeserta,
             'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
         ]);
     }    
@@ -181,7 +173,8 @@ class RekapController extends Controller
                 $jumlahPesertaPerRentang['91-100']++;
             }
         }
-
+        $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
+                ->where('test.id', $test_id)->count();
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('admin.download_detail_rekap_test', [
             'hitungpeserta' => $hitungpeserta,
@@ -190,6 +183,7 @@ class RekapController extends Controller
             'test' => $test,
             'peserta' => $peserta,
             'nilaiPeserta' => $nilaiPeserta,
+            'totalpeserta'=>$totalpeserta,
             'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
         ]);
 
@@ -206,22 +200,9 @@ class RekapController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $peserta = Peserta::get();
-        $hitungnilai = Nilai_Test::join('test', 'test.id', '=', 'nilai_test.test_id')
-            ->where('test.plt_kode', $plt_kode)
-            ->sum('nilai_test.nilai');
-
-        $hitungpeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->join('test', 'test.id', '=', 'nilai_test.test_id')
-            ->where('test.plt_kode', $plt_kode)
-            ->groupBy('test.id', 'peserta.id')
-            ->select('test.id', 'peserta.id')
-            ->get()
-            ->count();
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('admin.download_rekap_test', [
-            'hitungpeserta' => $hitungpeserta,
-            'hitungnilai' => $hitungnilai,
             'pelatihan' => $pelatihan,
             'test' => $test,
             'peserta' => $peserta,
@@ -250,18 +231,8 @@ class RekapController extends Controller
             })
             ->select('pelatihan.kode','pelatihan.nama','test.nama','test.id','test.kkm')
             ->get();
-        $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-        ->join('test','test.id','=','nilai_test.test_id')
-        ->where('test.plt_kode', $plt_kode)
-        ->groupby('test.id')
-        ->sum('nilai_test.nilai');
-        $hitungpeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->join('test', 'test.id', '=', 'nilai_test.test_id')
-            ->where('test.plt_kode', $plt_kode)
-            ->groupBy('test.id', 'peserta.id')
-            ->select('test.id', 'peserta.id')->get()->count();
 
-        return view('admin.rekap_test', ['hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'test'=>$test,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
+        return view('admin.rekap_test', ['test'=>$test,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
     }
 
     public function searchDetailTest(Request $request, $plt_kode,$test_id)
@@ -272,6 +243,8 @@ class RekapController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+        $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
+                ->where('test.id', $test_id)->count();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test2 = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         // Hitung nilai untuk setiap peserta pada tes tertentu
@@ -300,7 +273,6 @@ class RekapController extends Controller
             ->groupBy('peserta.id', 'test.id', 'peserta.nama', 'peserta.user_id', 'test.kkm')
             ->select('test.id', 'peserta.nama', 'peserta.user_id', 'test.kkm')
             ->get();
-            
         $hitungpeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
             ->join('test', 'test.id', '=', 'nilai_test.test_id')
             ->where('test.plt_kode', $plt_kode)
@@ -347,7 +319,7 @@ class RekapController extends Controller
             }
         
 
-        return view('admin.detail_rekap_test', ['jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang,'nilaiPeserta'=>$nilaiPeserta,'test2'=>$test2,'hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
+        return view('admin.detail_rekap_test', ['totalpeserta'=>$totalpeserta,'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang,'nilaiPeserta'=>$nilaiPeserta,'test2'=>$test2,'hitungpeserta'=>$hitungpeserta,'hitungnilai'=>$hitungnilai,'plt'=>$plt,'pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
     }
 
 }

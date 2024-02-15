@@ -75,14 +75,6 @@
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
                         Tanggal Berakhir Test
                     </th>
-                    <th scope="col"
-                        class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Hitung Peserta
-                    </th>
-                    <th scope="col"
-                        class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Rata-rata Nilai
-                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
@@ -102,12 +94,6 @@
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                         {{$tes->end_date}}
-                    </td>
-                    <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$hitungpeserta}}
-                    </td>
-                    <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$hitungnilai/$hitungpeserta}}
                     </td>
                 </tr>
                 @endforeach

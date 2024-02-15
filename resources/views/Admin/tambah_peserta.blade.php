@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{route('admin.viewDaftarPelatihan')}}"
+                    <a href="{{route('admin.viewDaftarPeserta')}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -24,19 +24,7 @@
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        Daftar Pelatihan
-                    </a>
-                </li>
-                <li class="flex items-center">
-                    <a href="{{route('admin.viewDetailPelatihan', $pelatihan->kode)}}"
-                        class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Detail Pelatihan
+                        Daftar Peserta
                     </a>
                 </li>
                 <li>
@@ -47,28 +35,28 @@
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Tambah Test</span>
+                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Tambah Peserta</span>
                     </div>
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Tambah Test</h1>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Tambah Peserta</h1>
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('admin.storeTest', $pelatihan->kode) }}" method="post"  enctype="multipart/form-data">
+        <form action="{{ route('admin.storePeserta') }}" method="post"  enctype="multipart/form-data">
             @csrf
         </div>
         <div class="col-span-4">
                 <div
                     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Test</h3>
+                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Peserta</h3>
                     
                         <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nama"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
-                                    <input type="text" name="nama" placeholder="Masukkan judul" id="nama"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                                    <input type="text" name="nama" placeholder="Nama" id="nama"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
                                     @error('nama')
@@ -81,59 +69,12 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="deskripsi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                                    <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi" 
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        ></textarea>
-                                    @error('deskripsi')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
-                                </div>
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label for="kkm"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM</label>
-                                    <input type="number" name="kkm" placeholder="Masukkan KKM" id="kkm"
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        required max="100">
-                                    @error('kkm')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
-                                </div>
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label for="durasi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi</label>
-                                        <input type="text" name="durasi" placeholder="Durasi (HH:MM:SS)" id="durasi"
-                                            pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"
-                                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            required>
-
-                                    @error('durasi')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
-                                </div>
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label for="start_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
-                                    <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date"
+                                    <label for="username"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                    <input type="text" name="username" placeholder="Username" id="username"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                    @error('start_date')
+                                    @error('username')
                                     <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
                                         role="alert">
                                         <div>
@@ -143,12 +84,12 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="end_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
-                                    <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date"
+                                    <label for="email"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                    <input type="text" name="email" placeholder="Email" id="email"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                    @error('end_date')
+                                    @error('email')
                                     <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
                                         role="alert">
                                         <div>
@@ -158,13 +99,40 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="tampil_hasil"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test</label>
-                                    <select name="tampil_hasil" id="tampil_hasil" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                        <option value="Ya" >Ya</option>
-                                        <option value="Tidak" >Tidak</option>
-                                    </select>
-                                    @error('tampil_hasil')
+                                    <label for="noHP"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Handphone</label>
+                                    <input type="text" name="noHP" placeholder="Nomor Handphone" id="noHP"
+                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        required>
+                                    @error('noHP')
+                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                        role="alert">
+                                        <div>
+                                            {{ $message }}
+                                        </div>
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="alamat"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
+                                    <input type="text" name="alamat" placeholder="Alamat" id="alamat"
+                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        required>
+                                    @error('alamat')
+                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                        role="alert">
+                                        <div>
+                                            {{ $message }}
+                                        </div>
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="col-span-full">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto</label>
+                                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        aria-describedby="file_input_help" id="foto" name="foto" type="file" accept="image/*">
+                                    @error('foto')
                                     <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
                                         role="alert">
                                         <div>
@@ -177,7 +145,7 @@
                             <div class="col-span-6 sm:col-full mt-4">
                                 <button
                                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                    type="submit">Tambah Test</button>
+                                    type="submit">Tambah Peserta</button>
                             </div>
                         </div>
                 </div>

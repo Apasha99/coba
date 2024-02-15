@@ -120,14 +120,6 @@
                                         </th>
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Hitung Peserta
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Rata-rata Nilai
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Actions
                                         </th>
                                     </tr>
@@ -152,12 +144,6 @@
                                             <td
                                                 class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $tes->end_date }}</td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $hitungpeserta }}</td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $hitungnilai / $hitungpeserta }}</td>
                                             <td class="p-4 space-x-2 whitespace-nowrap ">
                                                 <a href="{{route('admin.detailRekapTest', [$pelatihan->kode, $tes->id])}}" class="text-blue-600 hover:text-blue-800 hover:underline">
                                                     Details

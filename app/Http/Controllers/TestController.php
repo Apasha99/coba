@@ -25,7 +25,20 @@ class TestController extends Controller
         return view('peserta.detail_test', ['pelatihan' => $pelatihan, 'test' => $test]);
     }
 
+    public function create($plt_kode){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+        if($admin){
+            $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+            $test = Test::all();
+            return view('admin.tambah_test', ['test'=>$test,'admin' => $admin, 'pelatihan' => $pelatihan]);
+        }
+    }
+
     public function store(Request $request, String $kode): RedirectResponse {
+        $pelatihan = Pelatihan::where('kode', $kode)->first();
         $validated = $request->validate([
             'nama' => ['required'],
             'start_date' => ['required', 'date','after_or_equal:today'],
@@ -51,7 +64,7 @@ class TestController extends Controller
             //dd($test);
     
             $test->save();
-            return redirect()->back()->with('success', 'Data test berhasil disimpan');
+            return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
         } catch (\Exception $e) {
             // Tampilkan pesan kesalahan atau log jika diperlukan
             //dd($e);
@@ -69,12 +82,24 @@ class TestController extends Controller
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
         $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
-        $hitung_nilai = Soal_Test::sum('nilai');
+        $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
         return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+    }
+
+    public function createSoal(String $plt_kode, String $test_id) {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+        return view('admin.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
     }
 
     public function storeSoal(Request $request, $plt_kode, $test_id)
     {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         try {
             //dd($request);
             $validated = $request->validate([
@@ -169,7 +194,7 @@ class TestController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success', 'Soal dan Jawaban berhasil disimpan');
+            return redirect()->route('admin.detailTest', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (QueryException $e) {

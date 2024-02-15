@@ -113,42 +113,27 @@
                                         <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="id" data-type="number">
                                             <span class="flex items-center">
                                                 ID
-                                                <svg id="sort-icon-user-id" class="ml-2 w-5 h-5 text-gray-500 dark:text-white cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
                                             </span>
                                         </th>
 
                                         <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="nama" data-type="string">
                                             <span class="flex items-center">
                                                 Nama Peserta
-                                                <svg id="sort-icon-nama" class="ml-2 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
                                             </span>
                                         </th>
                                         <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="kkm" data-type="number">
                                             <span class="flex items-center">
                                                 KKM
-                                                <svg id="sort-icon-kkm" class="ml-2 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
                                             </span>
                                         </th>
                                         <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="nilai" data-type="number">
                                             <span class="flex items-center">
                                                 Nilai
-                                                <svg id="sort-icon-nilai" class="ml-2 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
                                             </span>
                                         </th>
                                         <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="status" data-type="string">
                                             <span class="flex items-center">
                                                 Status
-                                                <svg id="sort-icon-status" class="ml-2 w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
                                             </span>
                                         </th>
                                     </tr>
@@ -195,9 +180,24 @@
                                         <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai/$hitungpeserta }}</td>
+                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
                                     </tr>
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            @if ($hitungpeserta > 0)
+                                                {{ $hitungnilai / $hitungpeserta }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                             <title>Grafik Jumlah Peserta per Rentang Nilai</title>
