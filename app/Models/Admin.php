@@ -14,6 +14,12 @@ class Admin extends Model
         'nama',
         'email',
         'noHP',
-        'alamat'
+        'alamat',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

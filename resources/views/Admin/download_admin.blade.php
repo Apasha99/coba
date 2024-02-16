@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Akun Peserta</title>
+    <title>Daftar Akun Admin Diskominfo</title>
     <!-- Bootstrap CSS (jika menggunakan framework Bootstrap) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -48,7 +48,7 @@
 <body>
     <div class="container-lg">
         <div class="mb-4 col-span-full xl:mb-2">
-            <h2>Daftar Akun Peserta Pelatihan</h2>
+            <h2>Daftar Akun Admin</h2>
             <h2>Dinas Kominfo Kota Semarang</h2>
         </div>
 
@@ -78,10 +78,10 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
-                @foreach ($peserta as $pst)
+                @foreach ($admin2 as $pst)
                 <tr>
                     <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                        <span class="font-semibold">{{$pst->user_id}}</span>
+                        <span class="font-semibold">{{$pst->admin_id}}</span>
                     </td>
                     <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
                         {{$pst->nama}}

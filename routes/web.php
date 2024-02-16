@@ -36,6 +36,15 @@ Route::controller(AuthController::class)->middleware('auth')->group(function(){
 
 Route::controller(AdminController::class)->middleware('only_admin')->group(function(){
     Route::get('admin/dashboard', 'admin')->name('admin.dashboard');
+    Route::get('admin/daftar-admin', 'daftar_admin')->name('admin.viewDaftarAdmin');
+    Route::get('admin/daftar-admin/detail/{admin_id}', 'detail_admin')->name('admin.viewDetailAdmin');
+    Route::get('admin/daftar-admin/create', 'create')->name('admin.createAdmin');
+    Route::post('admin/daftar-admin/store', 'store')->name('admin.storeAdmin');
+    Route::get('admin/daftar-admin/search', 'searchAdmin')->name('admin.searchAdmin');
+    Route::get('admin/daftar-admin/edit/{admin_id}', 'edit')->name('admin.editAdmin');
+    Route::post('admin/daftar-admin/edit/{admin_id}', 'update')->name('admin.updateAdmin');
+    Route::delete('/admin/daftar-admin/delete/{admin_id}', 'delete')->name('admin.deleteAdmin');
+    Route::get('admin/daftar-admin/download', 'download')->name('admin.downloadAdmin');
 });
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
