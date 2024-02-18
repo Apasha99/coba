@@ -85,6 +85,10 @@
                                     <tr>
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            ID
+                                        </th>
+                                        <th scope="col"
+                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Nama Instruktur
                                         </th>
                                         <th scope="col"
@@ -94,6 +98,10 @@
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Email
+                                        </th>
+                                        <th scope="col"
+                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            Password
                                         </th>
                                         
                                         <th scope="col"
@@ -105,9 +113,11 @@
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                     @foreach ($instruktur as $ins)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {{ $ins->instruktur_id }}</td>
                                             <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                                    <div class="text-base font-semibold text-gray-900 dark:text-white">{{ $ins->instruktur_nama }}</div>
+                                                    <a class="text-base font-semibold text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailInstruktur', $ins->instruktur_id)}}">{{ $ins->instruktur_nama }}</a>
                                                 </div>
                                             </td>
                                             <td
@@ -116,6 +126,9 @@
                                             <td
                                                 class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $ins->email }}</td>
+                                            <td
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {{ $ins->password_awal }}</td>
                                             <td class="p-4 space-x-2 whitespace-nowrap ">
                                                 @if($ins && $ins->instruktur_id)
                                                 <a href="{{ route('admin.editInstruktur',[$ins->instruktur_id]) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -164,7 +177,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6 overflow-y-auto">
-                    <form id="emailForm" method="POST" action="{{route('admin.sendEmail')}}" enctype="multipart/form-data">
+                    <form id="emailForm" method="POST" action="{{route('admin.sendEmailInstruktur')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="col-span-6 sm:col-span-6">
                             <label for="subjek"
@@ -192,14 +205,22 @@
                                     <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
                                     <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
-                                       
+                                        @if ($instruktur2 && !$instruktur2->isEmpty())
+                                            @foreach ($instruktur2 as $in)
+                                                <option value="{{ $in->users_id}}">{{ $in->users_id }} - {{$in->nama}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="flex-col items-center mt-2 mb-4">
                                     <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
                                     <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
-                                        
+                                        @if ($instruktur2 && !$instruktur2->isEmpty())
+                                            @foreach ($instruktur2 as $in)
+                                                <option value="{{ $in->users_id }}">{{ $in->users_id}} - {{$in->nama}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -233,28 +254,29 @@
                 </div>
             </div>
         </div>
-        <script>
-            document.getElementById('deliver-option').addEventListener('change', function() {
-                var exportOption = this.value;
-                if (exportOption === 'range') {
-                    document.getElementById('deliver-range').classList.remove('hidden');
-                } else {
-                    document.getElementById('deliver-range').classList.add('hidden');
-                }
-            });
-        </script>
+    </div>
+    <script>
+        document.getElementById('deliver-option').addEventListener('change', function() {
+            var exportOption = this.value;
+            if (exportOption === 'range') {
+                document.getElementById('deliver-range').classList.remove('hidden');
+            } else {
+                document.getElementById('deliver-range').classList.add('hidden');
+            }
+        });
+    </script>
         
-        <script>
-            document.getElementById('export-option').addEventListener('change', function() {
-                var exportOption = this.value;
-                if (exportOption === 'range') {
-                    document.getElementById('export-range').classList.remove('hidden');
-                } else {
-                    document.getElementById('export-range').classList.add('hidden');
-                }
-            });
-        </script>
-
+    <script>
+        document.getElementById('export-option').addEventListener('change', function() {
+            var exportOption = this.value;
+            if (exportOption === 'range') {
+                document.getElementById('export-range').classList.remove('hidden');
+            } else {
+                document.getElementById('export-range').classList.add('hidden');
+            }
+        });
+    </script>
+    
     @foreach ($instruktur as $ins)
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="delete-instruktur-modal-{{ $ins->instruktur_id }}">
@@ -303,137 +325,5 @@
     </div>
     @endforeach
 
-    <!-- Add User Modal -->
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
-        id="add-instruktur-modal">
-        <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
-                <!-- Modal header -->
-                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
-                    <h3 class="text-xl font-semibold dark:text-white">
-                        Tambah instruktur Baru
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
-                        data-modal-toggle="add-instruktur-modal">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="p-6 space-y-6">
-                    <form action="{{route('admin.storeInstruktur')}}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="nama"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
-                                <input type="text" name="nama" placeholder="Nama" id="nama"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                @error('nama')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="username"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                                <input type="text" name="username" placeholder="Username" id="username"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                @error('username')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="email"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="text" name="email" placeholder="Email" id="email"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                @error('email')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-3">
-                                <label for="noHP"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Handphone</label>
-                                <input type="text" name="noHP" placeholder="Nomor Handphone" id="noHP"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                @error('noHP')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-6 sm:col-span-6">
-                                <label for="alamat"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
-                                <input type="text" name="alamat" placeholder="Alamat" id="alamat"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    required>
-                                @error('alamat')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-span-full">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto</label>
-                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                    aria-describedby="file_input_help" id="foto" name="foto" type="file" accept="image/*">
-                                @error('foto')
-                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <!-- Tombol untuk menyimpan data -->
-                            <div class="col-span-full">
-                                <button type="submit"
-                                    class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                    data-modal-toggle="add-instruktur-modal">
-                                    Tambah instruktur
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        function navigateAction(select) {
-            var selectedOption = select.options[select.selectedIndex];
-            var url = selectedOption.getAttribute('data-url');
-            
-            if (url) {
-                window.location.href = url;
-            }
-        }
-
-        function handleActionChange(select) {
-            // Periksa apakah nilai yang dipilih adalah "delete-option"
-            if (select.value === 'delete-option') {
-                // Dapatkan ID modal dari data-modal-id
-                var modalId = select.options[select.selectedIndex].getAttribute('data-modal-id');
-
-                // Tampilkan modal penghapusan berdasarkan ID modal
-                document.getElementById(modalId).classList.remove('hidden');
-            }
-        }
-    </script>
+    
 @endsection
-
-

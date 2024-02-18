@@ -50,7 +50,8 @@ class PesertaController extends Controller
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
             ->select('peserta.user_id as peserta_id','peserta.nama as peserta_nama', 'peserta.noHP', 'peserta.alamat', 'users.foto', 'users.password_awal', 'peserta.id', 'users.username', 'users.email')
             ->get();
-        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $pst = User::leftjoin('peserta','peserta.user_id','=','users.id')
+                    ->where('role_id', '=', 2)->select('users.id','nama')->get();
         $pelatihan = Pelatihan::select('kode','nama')->get();
         return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
@@ -68,7 +69,14 @@ class PesertaController extends Controller
             ->first();
         $pst = User::where('role_id', '=', 2)->select('id')->get();
         $pelatihan = Pelatihan::select('kode','nama')->get();
-        return view('admin.detail_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
+        $pstplt = Peserta_Pelatihan::join('peserta','peserta.id','=','peserta_pelatihan.peserta_id')
+                                    ->join('users','users.id','=','peserta.user_id')
+                                    ->join('pelatihan','pelatihan.kode','=','peserta_pelatihan.plt_kode')
+                                    ->where('peserta.user_id', $peserta_id)
+                                    ->select('plt_kode','pelatihan.nama')
+                                    ->get();
+        //dd($pstplt);
+        return view('admin.detail_peserta', ['pstplt'=>$pstplt,'admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
 
     public function create()
@@ -136,7 +144,8 @@ class PesertaController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $pelatihan = Pelatihan::select('kode','nama')->get();
-        $pst = User::where('role_id', '=', 2)->select('id')->get();
+        $pst = User::leftjoin('peserta','peserta.user_id','=','users.id')
+                    ->where('role_id', '=', 2)->select('users.id','nama')->get();
         $peserta = Peserta::leftjoin('users','users.id','=','peserta.user_id')
             ->select('peserta.nama as peserta_nama', 'alamat', 'users.username','users.email','peserta.user_id as peserta_id','noHP','password_awal')
             ->where(function ($query) use ($search) {

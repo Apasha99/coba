@@ -73,19 +73,17 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
 
 Route::controller(InstrukturController::class)->middleware('only_admin')->group(function(){
     Route::get('admin/daftar-instruktur', 'daftar_instruktur')->name('admin.viewDaftarInstruktur');
+    Route::get('admin/daftar-instruktur/detail/{instruktur_id}', 'detail_instruktur')->name('admin.viewDetailInstruktur');
     Route::get('admin/tambah-instruktur', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
     Route::post('admin/daftar-instruktur/store', 'store')->name('admin.storeInstruktur');
     Route::get('admin/daftar-instruktur/search', 'searchInstruktur')->name('admin.searchInstruktur');
     Route::get('admin/daftar-instruktur/edit/{id}', 'edit')->name('admin.editInstruktur');
-    Route::post('admin/daftar-instruktur/edit/{id}', 'update')->name('admin.updatePeserta');
+    Route::post('admin/daftar-instruktur/edit/{id}', 'update')->name('admin.updateInstruktur');
     Route::delete('/admin/daftar-instruktur/delete/{peserta_id}', 'delete')->name('admin.deleteInstruktur');
-    Route::get('/admin/daftar-instruktur/import','tambah')->name('admin.tambahPeserta');
-    Route::post('/admin/daftar-instruktur/import','import')->name('admin.importPeserta');
-    Route::get('/admin/daftar-instruktur/import/preview', 'preview')->name('admin.previewPeserta');
-    Route::post('/admin/daftar-instruktur/generate-akun','generateAkun')->name('admin.generatePeserta');
-    Route::get('/admin/daftar-instruktur/export','export')->name('admin.exportPeserta');
-    Route::get('/admin/daftar-instruktur/send-email', 'daftar_peserta')->name('admin.tulisEmail');
-    Route::post('/admin/daftar-instruktur/send-email', 'sendEmail')->name('admin.sendEmail');
+    Route::get('/admin/daftar-instruktur/import','tambah')->name('admin.tambahInstruktur');
+    Route::get('/admin/daftar-instruktur/import/preview', 'preview')->name('admin.previewInstruktur');
+    Route::get('/admin/daftar-instruktur/send-email', 'daftar_instruktur')->name('admin.tulisInstruktur');
+    Route::post('/admin/daftar-instruktur/send-email', 'sendEmail')->name('admin.sendEmailInstruktur');
 });
 
 Route::controller(PelatihanController::class)->group(function(){
