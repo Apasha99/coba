@@ -32,20 +32,45 @@
     </div>
     <div class="sm:flex mb-4">
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <form class="lg:pr-3" action="{{route('admin.searchAdmin')}}" method="GET">
-                <label for="search" class="sr-only">Search</label>
-                <div class="relative mt-1 lg:w-64 xl:w-96">
-                    <input type="text" name="search" id="search"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Search for admin">
-                    <button type="submit" class="absolute inset-y-0 right-0 px-3 py-1 bg-gray-200 rounded-r-lg">
-                        Search
-                    </button>
-                </div>
-            </form>
-
+            <input type="text" id="searchInput" placeholder="Search for admin" class="mt-2 mb-4 p-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
             
         </div>
+        <script>
+            // Ambil input elemen pencarian
+            const searchInput = document.getElementById('searchInput');
+
+            // Tambahkan event listener untuk input pencarian
+            searchInput.addEventListener('input', function(event) {
+                const searchText = event.target.value.toLowerCase(); // Ambil teks pencarian dan ubah menjadi lowercase
+                const rows = document.querySelectorAll('tbody tr'); // Ambil semua baris dalam tbody
+
+                // Iterasi melalui setiap baris
+                rows.forEach(row => {
+                    let matchFound = false; // Inisialisasi variabel untuk menandai apakah pencocokan ditemukan dalam baris tertentu
+
+                    // Ambil sel-sel yang ingin dicocokkan (kolom ID, Nama, Username, Email, dll.)
+                    const cellsToSearch = row.querySelectorAll('.searchable');
+
+                    // Iterasi melalui setiap sel yang ingin dicocokkan
+                    cellsToSearch.forEach(cell => {
+                        const text = cell.textContent.toLowerCase(); // Ambil teks dari sel tersebut
+
+                        // Jika teks pencarian cocok dengan teks pada sel, tandai pencocokan ditemukan
+                        if (text.includes(searchText)) {
+                            matchFound = true;
+                        }
+                    });
+
+                    // Tampilkan atau sembunyikan baris berdasarkan apakah ada pencocokan ditemukan dalam baris tersebut
+                    if (matchFound) {
+                        row.style.display = ''; // Tampilkan baris jika ada pencocokan ditemukan
+                    } else {
+                        row.style.display = 'none'; // Sembunyikan baris jika tidak ada pencocokan ditemukan
+                    }
+                });
+            });
+        </script>
+
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
             <a type="button" href ="{{route('admin.createAdmin')}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -115,11 +140,11 @@
                                     @foreach ($admin2 as $plt)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->admin_id }}</td>
-                                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
                                                 @if($plt->foto)
-                                                    <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $plt->foto) }}" alt="{{ $plt->namad }}">
+                                                    <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $plt->foto) }}" alt="{{ $plt->nama }}">
                                                 @else
                                                     <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder jika tidak ada gambar -->
                                                 @endif
@@ -128,10 +153,10 @@
                                                 </div>
                                             </td>
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->username }}</td>
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->email }}</td>
                                             <td
                                                 class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -234,6 +259,7 @@
             }
         }
     </script>
+
     
 @endsection
 

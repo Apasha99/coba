@@ -132,7 +132,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-
+                                @if($jawaban_test)
                                 <div id="tipe-Jawaban Singkat" class="hidden mt-2">
                                     <!-- Opsi Jawaban Jawaban Singkat -->
                                     <div class="flex-col items-center mb-4">
@@ -140,7 +140,7 @@
                                         <div id="options-container-singkat">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test as $jawaban)
-                                                <div class="flex items-center mb-1">
+                                                <div class="flex items-center mb-1" id="jawaban-container-{{ $jawaban->id }}">
                                                     @if ($soal_test->tipe == "Jawaban Singkat")
                                                     <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat"
                                                         value="{{ $jawaban->title }}"
@@ -158,7 +158,7 @@
                                         <button type="button" onclick="addOption('singkat')" class="block w-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">+</button>
                                     </div>
                                 </div>
-
+                                
                                 <div id="tipe-Pilihan Ganda" class="hidden mt-2">
                                     <!-- Opsi Jawaban Pilihan Ganda -->
                                     <div class="flex-col items-center mb-4">
@@ -194,7 +194,7 @@
                                         <button type="button" onclick="addOption('ganda2')" class="block w-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">+</button>
                                     </div>
                                 </div>
-
+                                @endif
                                 <script>
                                     function handleTipeSoalChange() {
                                         const selectedTipe = document.getElementById('tipe-option').value;
@@ -222,7 +222,7 @@
                                         }).then(response => {
                                             if (response.ok) {
                                                 // Remove the deleted element from the DOM
-                                                const deletedElement = document.getElementById('jawaban-' + jawabanId);
+                                                const deletedElement = document.getElementById('jawaban-container-' + jawabanId);
                                                 if (deletedElement) {
                                                     deletedElement.remove();
                                                 }
@@ -243,13 +243,14 @@
                                         const form = document.getElementById('edit-id'); // Replace 'your-form-id' with the actual ID of your form
 
                                         if (tipe === 'ganda2') {
-
+                                            // Mendapatkan jumlah elemen dengan ID yang dimulai dengan 'jawaban-'
+                                            const jumlahJawaban = document.querySelectorAll('[id^="jawaban-"]').length;
                                             const newOptionInput = document.createElement('div');
                                             newOptionInput.innerHTML = `
-                                                <div class="flex items-center mb-3">
+                                                <div class="flex items-center mb-3" id="jawaban-${jumlahJawaban}">
                                                     <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban" 
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('admin.deleteJawaban', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
@@ -258,13 +259,13 @@
                                             `;
                                             document.getElementById('options-container-ganda2').appendChild(newOptionInput);
                                         } else if (tipe === 'singkat') {
-                                           
+                                            const jumlahJawaban = document.querySelectorAll('[id^="jawaban-"]').length;
                                             const newOptionInput = document.createElement('div');
                                             newOptionInput.innerHTML = `
-                                                <div class="flex items-center mb-3">
+                                                <div class="flex items-center mb-3" id="jawaban-${jumlahJawaban}">
                                                     <input type="text" name="title_singkat[]" placeholder="Jawaban Benar" 
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('admin.deleteJawaban', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
