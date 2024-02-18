@@ -322,4 +322,28 @@ class InstrukturController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengirim email');
     }
 
+    public function download()
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email', 'users.password_awal')
+            ->get();
+
+        $instruktur2 = User::join('instruktur', 'instruktur.user_id', '=', 'users.id')
+            ->where('users.role_id', '=', 3)
+            ->select('instruktur.user_id as users_id', 'instruktur.nama')
+            ->get();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.download_instruktur', [
+            'admin' => $admin,
+            'instruktur' => $instruktur,
+            'instruktur2' => $instruktur2,
+        ]);
+
+        return $pdf->stream('daftar_instruktur'.'.pdf');
+    }
+
 }

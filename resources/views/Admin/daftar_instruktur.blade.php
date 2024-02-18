@@ -61,6 +61,11 @@
                 <i class="fa-solid fas fa-envelope fa-lg mr-3"></i>
                 Send Mail
             </a>
+            <a href="{{route('admin.downloadInstruktur')}}"
+                class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                <i class="fa-solid fa-file-arrow-up fa-lg mr-3"></i>
+                Download List
+            </a>
         </div>
     </div>
     @if (isset($status))
@@ -104,10 +109,6 @@
                                         </th>
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Bidang
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Actions
                                         </th>
                                     </tr>
@@ -131,9 +132,6 @@
                                             <td
                                                 class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $ins->password_awal }}</td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $ins->bidang }}</td>
                                             <td class="p-4 space-x-2 whitespace-nowrap ">
                                                 @if($ins && $ins->instruktur_id)
                                                 <a href="{{ route('admin.editInstruktur',[$ins->instruktur_id]) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

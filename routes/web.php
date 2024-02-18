@@ -74,7 +74,7 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
 Route::controller(InstrukturController::class)->middleware('only_admin')->group(function(){
     Route::get('admin/daftar-instruktur', 'daftar_instruktur')->name('admin.viewDaftarInstruktur');
     Route::get('admin/daftar-instruktur/detail/{instruktur_id}', 'detail_instruktur')->name('admin.viewDetailInstruktur');
-    Route::get('admin/tambah-instruktur', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
+    Route::get('admin/daftar-instruktur/tambah', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
     Route::post('admin/daftar-instruktur/store', 'store')->name('admin.storeInstruktur');
     Route::get('admin/daftar-instruktur/search', 'searchInstruktur')->name('admin.searchInstruktur');
     Route::get('admin/daftar-instruktur/edit/{user_id}', 'viewEditInstruktur')->name('admin.editInstruktur');
@@ -84,6 +84,7 @@ Route::controller(InstrukturController::class)->middleware('only_admin')->group(
     Route::get('/admin/daftar-instruktur/import/preview', 'preview')->name('admin.previewInstruktur');
     Route::get('/admin/daftar-instruktur/send-email', 'daftar_instruktur')->name('admin.tulisInstruktur');
     Route::post('/admin/daftar-instruktur/send-email', 'sendEmail')->name('admin.sendEmailInstruktur');
+    Route::get('admin/daftar-instruktur/download', 'download')->name('admin.downloadInstruktur');
 });
 
 Route::controller(InstrukturController::class)->group(function(){
