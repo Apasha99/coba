@@ -85,12 +85,17 @@ class InstrukturController extends Controller
 
     public function viewTambahInstruktur(){
         $bidang = Bidang::get();
-        //dd($bidang);
         return view('admin.tambah_instruktur', ['bidang' => $bidang]);
     }
 
+    public function viewEditInstruktur($user_id){
+        $bidang = Bidang::get();
+        $instruktur = Instruktur::where('user_id', $user_id)->first();
+        
+        return view('admin.edit_instruktur', ['instruktur' => $instruktur, 'bidang' => $bidang]);
+    }
+
     public function store(Request $request): RedirectResponse {
-        //dd($request);
         $validated = $request->validate([
             'nama' => ['required'],
             'email' => ['required', 'unique:users,email','email'],
@@ -190,16 +195,17 @@ class InstrukturController extends Controller
             'nama' => ['required'],
             'username' => ['required'],
             'email' => ['required', 'email'],
+            'bidang' => ['required'],
             'new_password' => ['nullable', 'min:8', 'string'],
             'conf_password' => ['nullable', 'same:new_password'],
         ]);
-        //dd($validated);
+        
         try {
             DB::beginTransaction();
 
             $updateData = [
-                'id' =>$instruktur->id,
                 'nama' => $validated['nama'],
+                'bidang' => $validated['bidang']
             ];
             //dd($updateData);
             $instruktur->update(array_filter($updateData));
@@ -210,7 +216,6 @@ class InstrukturController extends Controller
 
             if ($request->has('new_password')) {
                 $updateData2['password'] = ($validated['new_password']);
-                $updateData2['password_awal'] = $validated['new_password'];
             }
 
             $instruktur->user->update(array_filter($updateData2));

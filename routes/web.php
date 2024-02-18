@@ -86,6 +86,10 @@ Route::controller(InstrukturController::class)->middleware('only_admin')->group(
     Route::post('/admin/daftar-instruktur/send-email', 'sendEmail')->name('admin.sendEmailInstruktur');
 });
 
+Route::controller(InstrukturController::class)->group(function(){
+    Route::get('instruktur/dashboard', 'instruktur')->middleware('only_instruktur')->name('instruktur.dashboard');
+});
+
 Route::controller(PelatihanController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::post('joinPelatihan', 'joinPelatihan')->middleware('only_peserta')->name('peserta.joinPelatihan');

@@ -39,6 +39,8 @@ class AuthController extends Controller
                 return redirect()->intended('/admin/dashboard')->with('success', 'Login successful');
             } else if ($user->role_id === 2) {
                 return redirect()->intended('/peserta/dashboard')->with('success', 'Login successful');
+            } else if ($user->role_id === 3) {
+                return redirect()->intended('/instruktur/dashboard')->with('success', 'Login successful');
             }
         }
 
