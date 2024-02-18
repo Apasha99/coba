@@ -73,8 +73,7 @@
             {{ $error }}
         </div>
     @endif
-    <div
-        class="bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
+    <div class="bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
         <div class="w-full mb-1">
             <div class="flex flex-col">
                 <div class="overflow-x-auto">
@@ -256,7 +255,6 @@
                         </div>
                     </div>
                     </form>
-                </div>
                 </div>
             </div>
         </div>

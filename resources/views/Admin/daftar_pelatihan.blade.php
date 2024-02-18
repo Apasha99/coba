@@ -64,9 +64,9 @@
         </div>
     </div>
 
-        <div class="flex flex-wrap">
+        <div class="grid grid-cols-3 gap-4">
         @foreach ($pelatihan as $plt)
-        <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div class="relative lock mt-2 w-70 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
                 <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">

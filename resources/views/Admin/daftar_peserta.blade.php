@@ -171,7 +171,7 @@
             </div>
         </div>
     </div>
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-full"
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="email-peserta-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
             <!-- Modal content -->
