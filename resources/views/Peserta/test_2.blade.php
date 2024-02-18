@@ -10,7 +10,7 @@
         @php
             $shuffledSoalTest = $soal_test->shuffle();
         @endphp
-        <p>Durasi Tes: <span id="countdownTimer">{{$test->durasi}}</span></p>
+        <p class="dark:text-white">Durasi Tes: <span id="countdownTimer" class="dark:text-white">{{$test->durasi}}</span></p>
 
         @foreach ($shuffledSoalTest as $index => $soal)
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

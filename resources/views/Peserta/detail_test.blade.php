@@ -57,18 +57,20 @@
                 {{ \Carbon\Carbon::parse($test->end_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
-        @if ($hitungnilai >= $test->kkm)
-            <div class="mt-2 p-2 bg-green-200 rounded-lg">
-                <p class="text-center text-sm font-semibold text-green-800">
-                    Passed
-                </p>
-            </div>
-        @else
-            <div class="mt-2 p-2 bg-red-200 rounded-lg">
-                <p class="text-center text-sm font-semibold text-red-800">
-                    Failed
-                </p>
-            </div>
+        @if($hitungnilai != null)
+            @if ($hitungnilai >= $test->kkm)
+                <div class="mt-2 p-2 bg-green-200 rounded-lg">
+                    <p class="text-center text-sm font-semibold text-green-800">
+                        Passed
+                    </p>
+                </div>
+            @else
+                <div class="mt-2 p-2 bg-red-200 rounded-lg">
+                    <p class="text-center text-sm font-semibold text-red-800">
+                        Failed
+                    </p>
+                </div>
+            @endif
         @endif
     </div>
     <div class="grid grid-cols-6 gap-6 overflow-x-auto shadow-md sm:rounded-lg">

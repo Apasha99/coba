@@ -77,9 +77,9 @@ Route::controller(InstrukturController::class)->middleware('only_admin')->group(
     Route::get('admin/tambah-instruktur', 'viewTambahInstruktur')->name('admin.viewTambahInstruktur');
     Route::post('admin/daftar-instruktur/store', 'store')->name('admin.storeInstruktur');
     Route::get('admin/daftar-instruktur/search', 'searchInstruktur')->name('admin.searchInstruktur');
-    Route::get('admin/daftar-instruktur/edit/{id}', 'edit')->name('admin.editInstruktur');
+    Route::get('admin/daftar-instruktur/edit/{user_id}', 'viewEditInstruktur')->name('admin.editInstruktur');
     Route::post('admin/daftar-instruktur/edit/{id}', 'update')->name('admin.updateInstruktur');
-    Route::delete('/admin/daftar-instruktur/delete/{peserta_id}', 'delete')->name('admin.deleteInstruktur');
+    Route::delete('/admin/daftar-instruktur/delete/{instruktur_id}', 'delete')->name('admin.deleteInstruktur');
     Route::get('/admin/daftar-instruktur/import','tambah')->name('admin.tambahInstruktur');
     Route::get('/admin/daftar-instruktur/import/preview', 'preview')->name('admin.previewInstruktur');
     Route::get('/admin/daftar-instruktur/send-email', 'daftar_instruktur')->name('admin.tulisInstruktur');

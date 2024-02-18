@@ -163,22 +163,6 @@ class InstrukturController extends Controller
         return view('admin.daftar_instruktur', ['instruktur2'=>$instruktur2,'pelatihan'=>$pelatihan,'instruktur' => $instruktur, 'admin' => $admin, 'search' => $search]);
     }
 
-    public function edit($id)
-    {
-        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
-            ->where('admin.user_id', Auth::user()->id)
-            ->select('admin.nama', 'admin.id', 'users.username')
-            ->first();
-
-        if ($admin) {
-            $instruktur = Instruktur::leftJoin('users', 'users.id', '=', 'instruktur.user_id')
-                            ->where('instruktur.user_id', $id)
-                            ->first();
-            return view('admin.edit_instruktur', ['admin' => $admin, 'instruktur' => $instruktur]);
-        }
-            
-    }
-
     public function update(Request $request, $id)
     {
         $instruktur = Instruktur::leftJoin('users', 'users.id', '=', 'instruktur.user_id')
@@ -199,6 +183,7 @@ class InstrukturController extends Controller
             'new_password' => ['nullable', 'min:8', 'string'],
             'conf_password' => ['nullable', 'same:new_password'],
         ]);
+        //dd($request);
         
         try {
             DB::beginTransaction();
