@@ -105,17 +105,29 @@
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
                         <div class="overflow-hidden shadow">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
                                     <tr>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400">
-                                            ID
+                                        <th scope="col" class="p-4 text-xs font-large items-center justify-start text-gray-500 uppercase dark:text-gray-400">
+                                            <span style="float: left;">ID</span>
+                                            <span id="sortIcon" style="float: left;">
+                                                <svg class="ml-2 w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                </svg>
+                                            </span>
+                                            <div style="clear: both;"></div>
                                         </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Nama
+
+                                        <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            <span style="float: left;">Nama</span>
+                                                <span id="sortButton" style="float: left;">
+                                                    <svg class="ml-2 w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                    </svg>
+                                                </span>
+                                            <div style="clear: both;"></div>
                                         </th>
+
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Username
@@ -258,7 +270,70 @@
                 document.getElementById(modalId).classList.remove('hidden');
             }
         }
+
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var table = document.getElementById('myTable');
+        var rows = table.rows;
+        var isSortAscendingId = true;
+        var isSortAscendingName = true;
+
+        document.getElementById('sortIcon').addEventListener('click', function() {
+            sortById(); // sort by ID
+        });
+
+        document.getElementById('sortButton').addEventListener('click', function() {
+            sortByName(); // sort by name
+        });
+
+        function sortById() {
+            var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                var cellA = Number(a.cells[0].innerText);
+                var cellB = Number(b.cells[0].innerText);
+
+                if (isNaN(cellA) || isNaN(cellB)) {
+                    // If either value is not a number, return 0 (no change)
+                    return 0;
+                }
+
+                if (isSortAscendingId) {
+                    return cellA - cellB;
+                } else {
+                    return cellB - cellA;
+                }
+            });
+
+            for (var i = 0; i < sortedRows.length; i++) {
+                table.appendChild(sortedRows[i]);
+            }
+
+            isSortAscendingId = !isSortAscendingId;
+        }
+
+        function sortByName() {
+            var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                var cellA = a.cells[1].innerText;
+                var cellB = b.cells[1].innerText;
+
+                if (isSortAscendingName) {
+                    return cellA.localeCompare(cellB);
+                } else {
+                    return cellB.localeCompare(cellA);
+                }
+            });
+
+            for (var i = 0; i < sortedRows.length; i++) {
+                table.appendChild(sortedRows[i]);
+            }
+
+            isSortAscendingName = !isSortAscendingName;
+        }
+    });
+    </script>
+
+
+
 
     
 @endsection
