@@ -86,7 +86,10 @@
             </a>
             <a href="{{route('admin.downloadInstruktur')}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
-                <i class="fa-solid fa-file-arrow-up fa-lg mr-3"></i>
+                <svg class="w-5 h-5  mr-2 -ml-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M13 11.1V4a1 1 0 1 0-2 0v7.1L8.8 8.4a1 1 0 1 0-1.6 1.2l4 5a1 1 0 0 0 1.6 0l4-5a1 1 0 1 0-1.6-1.2L13 11Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M9.7 15.9 7.4 13H5a2 2 0 0 0-2 2v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.4l-2.3 2.9a3 3 0 0 1-4.6 0Zm7.3.1a1 1 0 1 0 0 2 1 1 0 1 0 0-2Z" clip-rule="evenodd"/>
+                </svg>
                 Download List
             </a>
         </div>
@@ -107,31 +110,43 @@
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
                         <div class="overflow-hidden shadow">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                                <thead class="bg-purple-600 dark:bg-purple-500">
                                     <tr>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            No
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                            <span style="float: left;">ID</span>
+                                            <span id="sortIcon" style="float: left;">
+                                                <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                </svg>
+                                            </span>
+                                            <div style="clear: both;"></div>
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Nama Instruktur
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                            <span style="float: left;">Nama</span>
+                                                <span id="sortButton" style="float: left;">
+                                                    <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                    </svg>
+                                                </span>
+                                            <div style="clear: both;"></div>
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             Username
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             Email
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             Password
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             Actions
                                         </th>
                                     </tr>
@@ -142,21 +157,21 @@
                                     @endphp
                                     @foreach ($instruktur as $ins)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
-                                                {{ $counter++ }}</td>
+                                            <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                {{ $ins->instruktur_id }}</td>
                                             <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
-                                                <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                                    <a class="text-base font-semibold text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailInstruktur', $ins->instruktur_id)}}">{{ $ins->instruktur_nama }}</a>
+                                                <div class="text-sm font-small text-gray-500 dark:text-gray-400">
+                                                    <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailInstruktur', $ins->instruktur_id)}}">{{ $ins->instruktur_nama }}</a>
                                                 </div>
                                             </td>
                                             <td
-                                                class="p-4 text-base font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $ins->username }}</td>
                                             <td
-                                                class="p-4 text-base font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $ins->email }}</td>
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $ins->password_awal }}</td>
                                             <td class="p-4 space-x-2 whitespace-nowrap ">
                                                 @if($ins && $ins->instruktur_id)
@@ -360,7 +375,111 @@
         });
     </script>
     
+    @foreach ($instruktur as $ins)
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
+        id="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+        <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white">
+                        Hapus instruktur
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
+                        data-modal-toggle="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6 overflow-y-auto">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white p-2" for="delete">Apakah anda yakin ingin menghapus instruktur {{$ins->nama}}?</label>
+                    <div class="col-span-full flex justify-between">
+                        <form id="deleteForm" method="POST" action="{{route('admin.deleteInstruktur', $ins->instruktur_id)}}">
+                            @csrf
+                            @method('DELETE')
+                            <div class="flex">
+                                <button type="submit"
+                                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mr-4"
+                                    data-modal-toggle="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+                                    Hapus
+                                </button>
+                                <button type="button"
+                                    class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                    data-modal-toggle="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+                                    Batal
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var table = document.getElementById('myTable');
+        var rows = table.rows;
+        var isSortAscendingId = true;
+        var isSortAscendingName = true;
 
-    
+        document.getElementById('sortIcon').addEventListener('click', function() {
+            sortById(); // sort by ID
+        });
+
+        document.getElementById('sortButton').addEventListener('click', function() {
+            sortByName(); // sort by name
+        });
+
+        function sortById() {
+            var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                var cellA = Number(a.cells[0].innerText);
+                var cellB = Number(b.cells[0].innerText);
+
+                if (isNaN(cellA) || isNaN(cellB)) {
+                    // If either value is not a number, return 0 (no change)
+                    return 0;
+                }
+
+                if (isSortAscendingId) {
+                    return cellA - cellB;
+                } else {
+                    return cellB - cellA;
+                }
+            });
+
+            for (var i = 0; i < sortedRows.length; i++) {
+                table.appendChild(sortedRows[i]);
+            }
+
+            isSortAscendingId = !isSortAscendingId;
+        }
+
+        function sortByName() {
+            var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                var cellA = a.cells[1].innerText;
+                var cellB = b.cells[1].innerText;
+
+                if (isSortAscendingName) {
+                    return cellA.localeCompare(cellB);
+                } else {
+                    return cellB.localeCompare(cellA);
+                }
+            });
+
+            for (var i = 0; i < sortedRows.length; i++) {
+                table.appendChild(sortedRows[i]);
+            }
+
+            isSortAscendingName = !isSortAscendingName;
+        }
+    });
+    </script>
 @endsection
