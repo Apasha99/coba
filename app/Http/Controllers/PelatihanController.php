@@ -7,6 +7,8 @@ use App\Models\Admin;
 use App\Models\Jawaban_Test;
 use App\Models\Materi;
 use App\Models\Bidang;
+use App\Models\Instruktur;
+use App\Models\Instruktur_Pelatihan;
 use App\Models\Nilai_Test;
 use App\Models\Peserta;
 use App\Models\Peserta_Pelatihan;
@@ -57,6 +59,24 @@ class PelatihanController extends Controller
         return view('admin.detail_pelatihan', ['bidang'=>$bidang,'pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
     }
 
+    public function viewDaftarPartisipan(String $plt_kode){
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->pluck('peserta_id');
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->pluck('instruktur_id');
+        $allPeserta = Peserta::whereNotIn('id', $pesertaTerdaftar)->get();
+        $allInstruktur = Instruktur::whereNotIn('id', $instrukturTerdaftar)->get();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->get();
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->get();
+        //dd($allPeserta);
+    
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('admin.daftar_partisipan', ['bidang' => $bidang, 'pelatihan' => $pelatihan, 
+                                                'pesertaTerdaftar' => $pesertaTerdaftar, 'instrukturTerdaftar' => $instrukturTerdaftar,
+                                                'allPeserta' => $allPeserta, 'allInstruktur' => $allInstruktur]);
+    }
+    
+
     public function viewDaftarPelatihan() {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
                 ->where('admin.user_id', Auth::user()->id)
@@ -80,7 +100,6 @@ class PelatihanController extends Controller
             return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
         }
     }
-    
 
     public function create(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
@@ -134,7 +153,6 @@ class PelatihanController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->first();
 
-        // Use DB transaction to ensure data consistency
         DB::beginTransaction();
 
         try {
@@ -143,10 +161,8 @@ class PelatihanController extends Controller
             }
 
             if (!$tugas) {
-                // Jika kode pelatihan tidak ditemukan di tabel tugas, hapus pelatihan saja
                 $pelatihan->delete();
 
-                // Commit the transaction
                 DB::commit();
 
                 return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada tugas terkait.');
@@ -154,10 +170,8 @@ class PelatihanController extends Controller
 
 
             if (!$test) {
-                // Jika kode pelatihan tidak ditemukan di tabel Test, hapus pelatihan saja
                 $pelatihan->delete();
 
-                // Commit the transaction
                 DB::commit();
 
                 return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada test terkait.');
@@ -302,6 +316,78 @@ class PelatihanController extends Controller
             ->get();
 
         return view('admin.daftar_pelatihan', ['pelatihan' => $pelatihan, 'admin' => $admin, 'search' => $search]);
+    }
+
+    public function inviteInstruktur(Request $request, String $plt_kode)
+    {
+        try {
+            $request->validate([
+                'instruktur_ids' => 'required|array',
+                'instruktur_ids.*' => 'exists:instruktur,id',
+            ]);
+
+            $instrukturIds = $request->instruktur_ids;
+
+            foreach ($instrukturIds as $instrukturId) {
+                Instruktur_Pelatihan::create([
+                    'instruktur_id' => $instrukturId,
+                    'plt_kode' => $plt_kode,
+                ]);
+            }
+
+            return redirect()->route('admin.viewDaftarPartisipan', $plt_kode)->with('success', 'Instruktur berhasil diundang');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.viewDaftarPartisipan', $plt_kode)->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function invitePeserta(Request $request, String $plt_kode)
+    {
+        try {
+            $request->validate([
+                'peserta_ids' => 'required|array',
+                'peserta_ids.*' => 'exists:peserta,id',
+            ]);
+
+            $pesertaIds = $request->peserta_ids;
+
+            foreach ($pesertaIds as $pesertaId) {
+                Peserta_Pelatihan::create([
+                    'peserta_id' => $pesertaId,
+                    'plt_kode' => $plt_kode,
+                ]);
+            }
+
+            return redirect()->route('admin.viewDaftarPartisipan', $plt_kode)->with('success', 'Peserta berhasil diundang');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.viewDaftarPartisipan', $plt_kode)->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function removeInstruktur($plt_kode, $instruktur_id)
+    {
+        try {
+            Instruktur_Pelatihan::where('plt_kode', $plt_kode)
+                                ->where('instruktur_id', $instruktur_id)
+                                ->delete();
+            
+            return redirect()->back()->with('success', 'Instruktur berhasil dihapus dari pelatihan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus instruktur dari pelatihan. Error: ' . $e->getMessage());
+        }
+    }
+
+    public function removePeserta($plt_kode, $peserta_id)
+    {
+        try {
+            Peserta_Pelatihan::where('plt_kode', $plt_kode)
+                                ->where('peserta_id', $peserta_id)
+                                ->delete();
+            
+            return redirect()->back()->with('success', 'Peserta berhasil dihapus dari pelatihan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus peserta dari pelatihan. Error: ' . $e->getMessage());
+        }
     }
 
 }

@@ -1,7 +1,47 @@
-@extends('admin.layout.layout')
+@extends('admin.layout.layout_navbar')
 <link
 	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
 	rel="stylesheet">
+@section('navbar')
+<!-- <nav class="bg-gray-50 dark:bg-gray-700">
+    <div class="max-w-screen-xl px-4 py-3 mx-auto">
+        <div class="flex items-center">
+            <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
+                <li>
+                    <a href="#" class="text-gray-900 dark:text-white font-bold underline border-b-2 border-transparent hover:border-white-500" aria-current="page">Pelatihan</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="text-gray-900 dark:text-white font-medium border-b-2 border-transparent hover:border-white">Partisipan</a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-900 dark:text-white border-b-2 border-transparent hover:border-white">Team</a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-900 dark:text-white border-b-2 border-transparent hover:border-white">Features</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> -->
+<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px">
+        <li class="me-2">
+            <a href="{{ route('admin.viewDetailPelatihan', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pelatihan</a>
+        </li>
+        <li class="me-2">
+            <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Partisipan</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Settings</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Contacts</a>
+        </li>
+        <li>
+            <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">Disabled</a>
+        </li>
+    </ul>
+</div>
 @section('content')
     <div class="mb-2 col-span-full xl:mb-2">
     <nav class="flex mb-5" aria-label="Breadcrumb">
@@ -472,6 +512,7 @@
         </div>
     </div>
     </div>
+@endsection
 @endsection
 
 
