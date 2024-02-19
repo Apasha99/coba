@@ -491,10 +491,15 @@ class PesertaController extends Controller
         return view('peserta.sertifikat');
     }
 
-    public function cetakSertifikat()
+    public function cetakSertifikat($plt_kode, $peserta_id)
     {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $peserta = Peserta::where('id', $peserta_id)->first();
+
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('peserta.sertifikat');
+$pdf->setPaper('A4', 'landscape'); // Set ukuran kertas ke A4 dengan orientasi landscape
+$pdf->loadView('peserta.sertifikat', ['pelatihan' => $pelatihan, 'peserta' => $peserta]);
+
         
         return $pdf->stream('sertifikat.pdf');
     }

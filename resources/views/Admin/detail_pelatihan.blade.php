@@ -1,28 +1,8 @@
-@extends('admin.layout.layout_navbar')
+@extends('admin.layout.layout_tabs')
 <link
 	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
 	rel="stylesheet">
-@section('navbar')
-<!-- <nav class="bg-gray-50 dark:bg-gray-700">
-    <div class="max-w-screen-xl px-4 py-3 mx-auto">
-        <div class="flex items-center">
-            <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
-                <li>
-                    <a href="#" class="text-gray-900 dark:text-white font-bold underline border-b-2 border-transparent hover:border-white-500" aria-current="page">Pelatihan</a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="text-gray-900 dark:text-white font-medium border-b-2 border-transparent hover:border-white">Partisipan</a>
-                </li>
-                <li>
-                    <a href="#" class="text-gray-900 dark:text-white border-b-2 border-transparent hover:border-white">Team</a>
-                </li>
-                <li>
-                    <a href="#" class="text-gray-900 dark:text-white border-b-2 border-transparent hover:border-white">Features</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav> -->
+@section('tabs')
 <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px">
         <li class="me-2">
@@ -33,12 +13,6 @@
         </li>
         <li class="me-2">
             <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Settings</a>
-        </li>
-        <li class="me-2">
-            <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Contacts</a>
-        </li>
-        <li>
-            <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">Disabled</a>
         </li>
     </ul>
 </div>
@@ -183,7 +157,7 @@
         @endforeach
     </div>
     <div class="mb-2 mt-6 col-span-full xl:mb-2">
-        <button type="button" data-modal-toggle="add-tugas-modal"
+        <a type="button" href="{{ route('admin.viewTambahTugas', [$pelatihan->kode]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -191,7 +165,7 @@
                     clip-rule="evenodd"></path>
             </svg>
             Tambah Tugas
-        </button>
+        </a>
     </div>
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-tugas">

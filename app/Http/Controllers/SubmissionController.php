@@ -60,13 +60,19 @@ class SubmissionController extends Controller
     
 
     public function store(Request $request, String $plt_kode, String $tugas_id)
-    {
-        // $request->validate([
-        //     'submission_files[]' => 'required|mimetypes:*/*|max:5120',
-        // ]);
+{
+    try {
+        $request->validate([
+            'submission_files' => 'required|array',
+            'submission_files.*' => 'required', // Aturan ini menjamin minimal satu file diunggah
+        ]);
         
         $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
        
+        // Gunakan transaction untuk memastikan keberhasilan penyimpanan data
+        DB::beginTransaction();
+
+        // Simpan data submission
         $submission = Submission::create([
             'peserta_id' => $peserta_id,
             'tugas_id' => $tugas_id,
@@ -78,6 +84,7 @@ class SubmissionController extends Controller
                 $filename = $file->getClientOriginalName();
                 $path = $file->store('submission_files', 'public');
 
+                // Simpan data submission file
                 SubmissionFile::create([
                     'submission_id' => $submission->id,
                     'nama_file' => $filename,
@@ -86,8 +93,18 @@ class SubmissionController extends Controller
             }
         }
 
+        // Commit transaksi jika tidak ada kesalahan
+        DB::commit();
+
         return redirect()->route('peserta.viewDetailTugas', [$plt_kode, $tugas_id])->with('success', 'Tugas berhasil disubmit');
+    } catch (\Exception $e) {
+        // Rollback transaksi jika terjadi kesalahan
+        DB::rollback();
+
+        // Redirect kembali dengan pesan error
+        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
+}
 
     public function update(Request $request, $plt_kode, $tugas_id, $submission_id)
     {

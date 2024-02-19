@@ -36,14 +36,28 @@
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Description</h3>
+        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Tanggal Mulai: 
+            <span class="mt-2 text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ \Carbon\Carbon::parse($pelatihan->start_date)->format('l, j F Y, h:i A') }}
+            </span> 
+        </p>
+        <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Tanggal Selesai: 
+            <span class="mt-2 text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                {{ \Carbon\Carbon::parse($pelatihan->end_date)->format('l, j F Y, h:i A') }}
+            </span> 
+        </p>
+    </div>
+    <div class="mb-4 col-span-full xl:mb-2">
+        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Pelatihan</h3>
         <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
             {{ $pelatihan->deskripsi }}
         </p>
     </div>
     @if ($completed == 'true')
     <div class="mb-4 col-span-full xl:mb-2">
-        <a type="button" href="{{ route('peserta.cetakSertifikat') }}"
+        <a type="button" href="{{ route('peserta.cetakSertifikat', [$pelatihan->kode, $peserta->id]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Unduh Sertifikat
         </a>
@@ -77,19 +91,19 @@
             </button>
         </h2>
         <div id="accordion-open-body-tugas" class="hidden" aria-labelledby="accordion-open-heading-tugas">
-            @foreach ($tugas as $tgs)
+            @foreach ($tugas->where('start_date', '<=', now()) as $tgs)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{ route('peserta.viewDetailTugas', [$pelatihan->kode, $tgs->id]) }} }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    <a href="{{ route('peserta.viewDetailTugas', [$pelatihan->kode, $tgs->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
                     @php
                         $submission = $tgs->submissions()->where('peserta_id', $peserta->id)->first();
                     @endphp
                     @if ($submission)
                     <div class="flex items-center">
                         <div class="flex items-center p-2 mb-4 text-white rounded-lg bg-green-400 dark:bg-green-500 dark:text-white">
-                        <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 4.7 4.5 9.3-9"/>
-                        </svg>
-                        <span class="sr-only">Info</span>
+                            <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 4.7 4.5 9.3-9"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
                             <div class="ms-2 text-sm font-medium">
                                 Done
                             </div>
@@ -116,6 +130,31 @@
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{route('peserta.viewDetailTest',[$pelatihan->kode, $tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                    @if ($totalNilaiTes[$tes->id] >= $tes->kkm)
+                    <div class="flex items-center">
+                        <div class="flex items-center p-2 mb-4 text-white rounded-lg bg-green-400 dark:bg-green-500 dark:text-white">
+                        <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 4.7 4.5 9.3-9"/>
+                        </svg>
+                        <span class="sr-only">Info</span>
+                            <div class="ms-2 text-sm font-medium">
+                                Passed
+                            </div>
+                        </div>
+                    </div>
+                    @elseif ($totalNilaiTes[$tes->id] < $tes->kkm)
+                    <div class="flex items-center">
+                        <div class="flex items-center p-2 mb-4 text-white rounded-lg bg-red-400 dark:bg-red-500 dark:text-white">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
+                        </svg>
+                        <span class="sr-only">Info</span>
+                            <div class="ms-2 text-sm font-medium">
+                                Failed
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             @endforeach
         </div>
