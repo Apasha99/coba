@@ -115,6 +115,9 @@
                             <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
                                     <tr>
+                                        <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            No
+                                        </th>
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             Nama
@@ -130,8 +133,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                @php
+                                    $counter = 1;
+                                @endphp
                                 @foreach ($instrukturTerdaftar as $instruktur)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                            <div class="text-base font-small text-gray-900 dark:text-white">{{ $counter++ }}</div>
+                                        </td>
                                         <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                                 <div class="text-base font-small text-gray-900 dark:text-white">{{ $instruktur->instruktur->nama }}</div>
@@ -142,17 +151,43 @@
                                             Instruktur
                                         </td>
                                         <td class="p-4 space-x-2 whitespace-nowrap ">
-                                            <button type="button" data-modal-toggle="delete-instruktur-modal"
-                                                class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
+                                            <button data-modal-toggle="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" class="text-red-600 underline hover:text-red-800 hover:underline">
+                                                Remove
                                             </button>
                                         </td>
                                     </tr>
+                                    <div id="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-md max-h-full">
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="remove-instruktur-modal-{{ $instruktur->instruktur->id }}">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                                <div class="p-4 md:p-5 text-center">
+                                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                    </svg>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus instruktur ini dari pelatihan?</h3>
+                                                    <form id="delete" method="POST" action="{{ route('admin.removeInstruktur', [$pelatihan->kode, $instruktur->instruktur->id]) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                        <button data-modal-hide="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                            Ya
+                                                        </button>
+                                                    </form>
+                                                    <button data-modal-hide="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Batal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach    
                                 @foreach ($pesertaTerdaftar as $peserta)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                            <div class="text-base font-small text-gray-900 dark:text-white">{{ $counter++ }}</div>
+                                        </td>
                                         <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                                 <div class="text-base font-small text-gray-900 dark:text-white">{{ $peserta->peserta->nama }}</div>
@@ -163,14 +198,37 @@
                                             Peserta
                                         </td>
                                         <td class="p-4 space-x-2 whitespace-nowrap ">
-                                            <button type="button" data-modal-toggle="delete-instruktur-modal"
-                                                class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
+                                            <button data-modal-toggle="remove-peserta-modal-{{ $peserta->peserta->id }}" class="text-red-600 underline hover:text-red-800 hover:underline">
+                                                Remove
                                             </button>
                                         </td>
                                     </tr>
+                                    <div id="remove-peserta-modal-{{ $peserta->peserta->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-md max-h-full">
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="remove-peserta-modal-{{ $peserta->peserta->id }}">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                                <div class="p-4 md:p-5 text-center">
+                                                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                    </svg>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus peserta ini dari pelatihan?</h3>
+                                                    <form id="delete" method="POST" action="{{ route('admin.removePeserta', [$pelatihan->kode, $peserta->peserta->id]) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                        <button data-modal-hide="remove-peserta-modal-{{ $peserta->peserta->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                            Ya
+                                                        </button>
+                                                    </form>
+                                                    <button data-modal-hide="remove-peserta-modal-{{ $peserta->peserta->id }}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Batal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                                 </tbody>
                             </table>
@@ -204,15 +262,15 @@
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 </div>
-                <input type="text" id="input-group-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search user">
+                <input type="text" id="searchInstruktur" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search user">
             </div>
             </div>
             <form action="{{ route('admin.inviteInstruktur', $pelatihan->kode) }}" method="POST">
                 @csrf
                 <input type="hidden" name="pelatihan_id" value="{{ $pelatihan->id }}">
-                <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200 searchable" aria-labelledby="dropdownSearchButton">
                     @foreach ($allInstruktur as $instruktur)
-                    <li>
+                    <li class="searchable">
                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                             <input id="checkbox-item-{{ $instruktur->id }}" type="checkbox" name="instruktur_ids[]" value="{{ $instruktur->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                             <label for="checkbox-item-{{ $instruktur->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $instruktur->nama }}</label>
@@ -248,22 +306,19 @@
             </div>
             <!-- Modal body -->
             <div class="p-3">
-            <label for="input-group-search" class="sr-only">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <!-- <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg> -->
+                <label for="input-group-search" class="sr-only">Search</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    </div>
+                    <input type="text" id="searchPeserta" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search user">
                 </div>
-                <input type="text" id="input-group-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search user">
-            </div>
             </div>
             <form action="{{ route('admin.invitePeserta', $pelatihan->kode) }}" method="POST">
                 @csrf
                 <input type="hidden" name="pelatihan_id" value="{{ $pelatihan->id }}">
                 <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                     @foreach ($allPeserta as $peserta)
-                    <li>
+                    <li class="searchable">
                         <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                             <input id="checkbox-item-{{ $peserta->id }}" type="checkbox" name="peserta_ids[]" value="{{ $peserta->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                             <label for="checkbox-item-{{ $peserta->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $peserta->nama }}</label>
@@ -279,6 +334,61 @@
         </div>
     </div>
 </div>
+<script>
+    const searchInstruktur = document.getElementById('searchInstruktur');
+
+    searchInstruktur.addEventListener('input', function(event) {
+        const searchText = event.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.searchable'); 
+
+        rows.forEach(row => {
+            let matchFound = false; 
+            const cellsToSearch = row.querySelectorAll('.text-sm');
+
+            cellsToSearch.forEach(cell => {
+                const text = cell.textContent.toLowerCase(); 
+
+                if (text.includes(searchText)) {
+                    matchFound = true;
+                }
+            });
+
+            if (matchFound) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<script>
+    const searchPeserta = document.getElementById('searchPeserta');
+
+    searchPeserta.addEventListener('input', function(event) {
+        const searchText = event.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.searchable'); 
+
+        rows.forEach(row => {
+            let matchFound = false; 
+            const cellsToSearch = row.querySelectorAll('.text-sm');
+
+            cellsToSearch.forEach(cell => {
+                const text = cell.textContent.toLowerCase(); 
+
+                if (text.includes(searchText)) {
+                    matchFound = true;
+                }
+            });
+
+            if (matchFound) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection
 @endsection
 

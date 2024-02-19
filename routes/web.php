@@ -103,8 +103,10 @@ Route::controller(PelatihanController::class)->group(function(){
     Route::post('admin/daftar-pelatihan/edit/{plt_id}', 'update')->middleware('only_admin')->name('admin.updatePelatihan');
     Route::delete('/admin/daftar-pelatihan/delete/{plt_kode}', 'delete')->middleware('only_admin')->name('admin.deletePelatihan');
     Route::get('/admin/search-pelatihan', 'searchPelatihan')->middleware('only_admin')->name('admin.searchPelatihan');
-    Route::post('/admin/invite-instruktur/{plt_kode}', 'inviteInstruktur')->middleware('only_admin')->name('admin.inviteInstruktur');
-    Route::post('/admin/invite-peserta/{plt_kode}', 'invitePeserta')->middleware('only_admin')->name('admin.invitePeserta');
+    Route::post('/admin/pelatihan/{plt_kode}/invite-instruktur', 'inviteInstruktur')->middleware('only_admin')->name('admin.inviteInstruktur');
+    Route::post('/admin/pelatihan/{plt_kode}/invite-peserta', 'invitePeserta')->middleware('only_admin')->name('admin.invitePeserta');
+    Route::delete('/admin/pelatihan/{plt_kode}/remove-instruktur/{instruktur_id}', 'removeInstruktur')->middleware('only_admin')->name('admin.removeInstruktur');
+    Route::delete('/admin/pelatihan/{plt_kode}/remove-peserta/{peserta_id}', 'removePeserta')->middleware('only_admin')->name('admin.removePeserta');
 });
 
 Route::controller(MateriController::class)->group(function(){

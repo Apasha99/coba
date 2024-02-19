@@ -364,4 +364,30 @@ class PelatihanController extends Controller
         }
     }
 
+    public function removeInstruktur($plt_kode, $instruktur_id)
+    {
+        try {
+            Instruktur_Pelatihan::where('plt_kode', $plt_kode)
+                                ->where('instruktur_id', $instruktur_id)
+                                ->delete();
+            
+            return redirect()->back()->with('success', 'Instruktur berhasil dihapus dari pelatihan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus instruktur dari pelatihan. Error: ' . $e->getMessage());
+        }
+    }
+
+    public function removePeserta($plt_kode, $peserta_id)
+    {
+        try {
+            Peserta_Pelatihan::where('plt_kode', $plt_kode)
+                                ->where('peserta_id', $peserta_id)
+                                ->delete();
+            
+            return redirect()->back()->with('success', 'Peserta berhasil dihapus dari pelatihan');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus peserta dari pelatihan. Error: ' . $e->getMessage());
+        }
+    }
+
 }
