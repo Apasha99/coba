@@ -108,7 +108,10 @@
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
             <a href="{{route('admin.downloadDetailRekap',[$pelatihan->kode,$test2->id])}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
-                <i class="fa-solid fa-file-arrow-up fa-lg mr-3"></i>
+                <svg class="w-5 h-5  mr-2 -ml-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M13 11.1V4a1 1 0 1 0-2 0v7.1L8.8 8.4a1 1 0 1 0-1.6 1.2l4 5a1 1 0 0 0 1.6 0l4-5a1 1 0 1 0-1.6-1.2L13 11Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M9.7 15.9 7.4 13H5a2 2 0 0 0-2 2v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.4l-2.3 2.9a3 3 0 0 1-4.6 0Zm7.3.1a1 1 0 1 0 0 2 1 1 0 1 0 0-2Z" clip-rule="evenodd"/>
+                </svg>
                 Download Rekap
             </a>
         </div>
@@ -130,31 +133,33 @@
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full  align-middle">
                         <div class="overflow-hidden shadow">
-                            <table class="min-w-full divide-y-100 divide-gray-200 table-fixed dark:divide-gray-800">
-                                <thead class="bg-gray-100 dark:bg-gray-700" style="width: 100%; margin-left: 0;">
+                            <table class="min-w-full divide-y-100 divide-gray-200 table-fixed dark:divide-gray-800" id="myTable">
+                                <thead class="bg-purple-600 dark:bg-purple-500" style="width: 100%; margin-left: 0;">
                                     <tr>
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="id" data-type="number">
-                                            <span class="flex items-center">
-                                                ID
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                            <span style="float: left;">ID</span>
+                                            <span id="sortIcon" style="float: left;">
+                                                <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                </svg>
                                             </span>
+                                            <div style="clear: both;"></div>
                                         </th>
 
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="nama" data-type="string">
-                                            <span class="flex items-center">
-                                                Nama Peserta
-                                            </span>
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                            <span style="float: left;">Nama</span>
                                         </th>
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="kkm" data-type="number">
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white" data-column="kkm" data-type="number">
                                             <span class="flex items-center">
                                                 KKM
                                             </span>
                                         </th>
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="nilai" data-type="number">
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white" data-column="nilai" data-type="number">
                                             <span class="flex items-center">
                                                 Nilai
                                             </span>
                                         </th>
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400" data-column="status" data-type="string">
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white" data-column="status" data-type="string">
                                             <span class="flex items-center">
                                                 Status
                                             </span>
@@ -181,18 +186,18 @@
                                     @endphp
                                     @foreach ($nilaiPeserta as $score)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->user_id }} </td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->nama }}</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $test2->kkm }}</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->total_nilai }}</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white" >
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->user_id }} </td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->nama }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $test2->kkm }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->total_nilai }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white" >
                                             @if ($hitungnilai >= $test2->kkm)
                                             <div class="mt-2 p-2 bg-green-200 rounded-lg">
-                                                <p class="text-center text-sm font-semibold text-green-800">Passed</p>
+                                                <p class="text-center text-sm font-small text-green-800">Passed</p>
                                             </div>
                                             @else
                                             <div class="mt-2 p-2 bg-red-200 rounded-lg">
-                                                <p class="text-center text-sm font-semibold text-red-800">Failed</p>
+                                                <p class="text-center text-sm font-small text-red-800">Failed</p>
                                             </div>
                                             @endif
                                         </td>
@@ -200,19 +205,19 @@
                                     @endforeach
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
-                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
                                             @if ($hitungpeserta > 0)
                                                 {{ $hitungnilai / $hitungpeserta }}
                                             @else
@@ -273,6 +278,65 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var table = document.getElementById('myTable');
+            var rows = table.rows;
+            var isSortAscendingId = true;
+            var isSortAscendingName = true;
+
+            document.getElementById('sortIcon').addEventListener('click', function() {
+                sortById(); // sort by ID
+            });
+
+            document.getElementById('sortButton').addEventListener('click', function() {
+                sortByName(); // sort by name
+            });
+
+            function sortById() {
+                var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                    var cellA = Number(a.cells[0].innerText);
+                    var cellB = Number(b.cells[0].innerText);
+
+                    if (isNaN(cellA) || isNaN(cellB)) {
+                        // If either value is not a number, return 0 (no change)
+                        return 0;
+                    }
+
+                    if (isSortAscendingId) {
+                        return cellA - cellB;
+                    } else {
+                        return cellB - cellA;
+                    }
+                });
+
+                for (var i = 0; i < sortedRows.length; i++) {
+                    table.appendChild(sortedRows[i]);
+                }
+
+                isSortAscendingId = !isSortAscendingId;
+            }
+
+            function sortByName() {
+                var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+                    var cellA = a.cells[1].innerText;
+                    var cellB = b.cells[1].innerText;
+
+                    if (isSortAscendingName) {
+                        return cellA.localeCompare(cellB);
+                    } else {
+                        return cellB.localeCompare(cellA);
+                    }
+                });
+
+                for (var i = 0; i < sortedRows.length; i++) {
+                    table.appendChild(sortedRows[i]);
+                }
+
+                isSortAscendingName = !isSortAscendingName;
+            }
+        });
+    </script>
 @endsection
 
 

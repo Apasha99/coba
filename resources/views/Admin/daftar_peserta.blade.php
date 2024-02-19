@@ -57,7 +57,10 @@
             </a>
             <a data-modal-toggle="export-peserta-modal"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
-                <i class="fa-solid fa-file-arrow-up fa-lg mr-3"></i>
+                <svg class="w-5 h-5  mr-2 -ml-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M13 11.1V4a1 1 0 1 0-2 0v7.1L8.8 8.4a1 1 0 1 0-1.6 1.2l4 5a1 1 0 0 0 1.6 0l4-5a1 1 0 1 0-1.6-1.2L13 11Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M9.7 15.9 7.4 13H5a2 2 0 0 0-2 2v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.4l-2.3 2.9a3 3 0 0 1-4.6 0Zm7.3.1a1 1 0 1 0 0 2 1 1 0 1 0 0-2Z" clip-rule="evenodd"/>
+                </svg>
                 Download List
             </a>
         </div>
@@ -79,93 +82,96 @@
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
                         <div class="overflow-hidden shadow">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-large text-left text-gray-500 uppercase dark:text-gray-400">
-                                            <span style="float: left;">ID</span>
-                                            <span id="sortIcon" style="float: left;">
-                                                <svg class="ml-2 w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                                                </svg>
-                                            </span>
-                                            <div style="clear: both;"></div>
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            <span style="float: left;">Nama</span>
-                                                <span id="sortButton" style="float: left;">
-                                                    <svg class="ml-2 w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <div class="table-container">
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                                    <thead class="bg-purple-600 dark:bg-purple-500">
+                                        <tr>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                <span style="float: left;">ID</span>
+                                                <span id="sortIcon" style="float: left;">
+                                                    <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                                                     </svg>
                                                 </span>
-                                            <div style="clear: both;"></div>
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Username
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Email
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Password
-                                        </th>
-                                        <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    @foreach ($peserta as $plt)
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
-                                                {{ $plt->peserta_id }}</td>
-                                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
-                                                @if($plt->foto)
-                                                    <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $plt->foto) }}" alt="{{ $plt->peserta_nama }}">
-                                                @else
-                                                    <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder jika tidak ada gambar -->
-                                                @endif
-                                                <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                                    <a class="text-base font-semibold text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailPeserta', $plt->peserta_id)}}">{{ $plt->peserta_nama }}</a>
-                                                </div>
-                                            </td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
-                                                {{ $plt->username }}</td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
-                                                {{ $plt->email }}</td>
-                                            <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $plt->password_awal }}</td>
-                                            <td class="p-4 space-x-2 whitespace-nowrap ">
-                                                @if($plt && $plt->peserta_id)
-                                                <a href="{{ route('admin.editPeserta',[$plt->peserta_id]) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-                                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </a>
-                                                @endif
-                                                <button type="button" data-modal-toggle="delete-peserta-modal-{{ $plt->peserta_id }}"
-                                                    class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </button>
-                                            </td>
-
+                                                <div style="clear: both;"></div>
+                                            </th>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                <span style="float: left;">Nama</span>
+                                                    <span id="sortButton" style="float: left;">
+                                                        <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                                        </svg>
+                                                    </span>
+                                                <div style="clear: both;"></div>
+                                            </th>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                Username
+                                            </th>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                Email
+                                            </th>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                Password
+                                            </th>
+                                            <th scope="col"
+                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                                Actions
+                                            </th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700 overflow-y-auto max-h-80">
+                                        @foreach ($peserta as $plt)
+                                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                    {{ $plt->peserta_id }}
+                                                </td>
+
+                                                <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
+                                                    @if($plt->foto)
+                                                        <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $plt->foto) }}" alt="{{ $plt->peserta_nama }}">
+                                                    @else
+                                                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder jika tidak ada gambar -->
+                                                    @endif
+                                                    <div class="text-sm font-small text-gray-500 dark:text-gray-400">
+                                                        <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailPeserta', $plt->peserta_id)}}">{{ $plt->peserta_nama }}</a>
+                                                    </div>
+                                                </td>
+                                                <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                    {{ $plt->username }}
+                                                </td>
+                                                <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                                    {{ $plt->email }}
+                                                </td>
+                                                <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {{ $plt->password_awal }}
+                                                </td>
+                                                <td class="p-4 space-x-2 whitespace-nowrap ">
+                                                    @if($plt && $plt->peserta_id)
+                                                    <a href="{{ route('admin.editPeserta',[$plt->peserta_id]) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                                                            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </a>
+                                                    @endif
+                                                    <button type="button" data-modal-toggle="delete-peserta-modal-{{ $plt->peserta_id }}"
+                                                        class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

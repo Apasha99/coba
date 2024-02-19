@@ -107,9 +107,6 @@
                         </svg>
                     </button>
 
-                    
-
-
                     <div class="z-20 z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg dark:bg-gray-700 dark:divide-gray-600"
                         id="apps-dropdown"
                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1139.33px, 64.6667px, 0px);"
@@ -224,7 +221,7 @@
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <svg class="w-5 h-5 text-gray-500" fill="currentColor"
+                                            <svg class="w-5 h-5 text-gray-800" fill="currentColor"
                                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd"
                                                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -237,10 +234,10 @@
                                     </div>
                                 </form>
                             </li>
-                            <li>
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <a href="/admin/dashboard"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                                    class="flex items-center p-2 text-base hover:text-gray-900 text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('admin/dashboard') ? 'bg-purple-500 text-white' : '' }}">
+                                    <svg class="w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
@@ -248,37 +245,10 @@
                                     <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{route('admin.viewDaftarAdmin')}}"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Admin</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin.viewDaftarPeserta')}}"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Peserta</span>
-                                </a>
-                            </li>
-                            
-                            <li>
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <a href="{{ route('admin.viewDaftarPelatihan') }}"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                                class="flex items-center p-2 text-base text-gray-900 hover:text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('admin/daftar-pelatihan') ? 'bg-purple-500 text-white' : '' }}">
+                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                                         <path fill-rule="evenodd"
@@ -288,20 +258,31 @@
                                     <span class="ml-3" sidebar-toggle-item="">Pelatihan</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('admin.viewDaftarInstruktur') }}"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Instruktur</span>
-                                </a>
-                            </li>
-                            
+                            <div class="flex flex-col">
+                                <details>
+                                    <summary class="cursor-pointer flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.3-2a6 6 0 0 0 0-6A4 4 0 0 1 20 8a4 4 0 0 1-6.7 3Zm2.2 9a4 4 0 0 0 .5-2v-1a6 6 0 0 0-1.5-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.5Z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="ml-3">User Management</span>
+                                        <svg class="ml-auto w-4 h-4 transform group-hover:rotate-180 transition duration-150 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </summary>
+                                    <ul class="pl-4">
+                                        <li>
+                                            <a href="{{route('admin.viewDaftarAdmin')}}" class="block p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Admin</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('admin.viewDaftarPeserta')}}" class="block p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Peserta</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('admin.viewDaftarInstruktur')}}" class="block p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">Instruktur</a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </div>
+
                         </ul>
 
                     </div>
@@ -309,6 +290,12 @@
 
             </div>
         </aside>
+
+        <!-- Sidebar toggle button -->
+        <button id="sidebarToggle"
+            class="absolute top-0 left-0 z-30 lg:hidden p-4 text-gray-700 focus:outline-none dark:text-gray-200">
+            <i class="fas fa-bars"></i>
+        </button>
 
         <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
 
@@ -400,6 +387,24 @@
         <polyline id="SvgjsPolyline1003" points="0,0"></polyline>
         <path id="SvgjsPath1004" d="M0 0 "></path>
     </svg>
+    <script>
+        // Mendapatkan elemen-elemen yang diperlukan
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        // Menambahkan event listener untuk tombol toggle sidebar
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden'); // Toggle kelas 'hidden' untuk sidebar
+            sidebarBackdrop.classList.toggle('hidden'); // Toggle kelas 'hidden' untuk sidebar backdrop
+        });
+
+        // Menambahkan event listener untuk klik di luar sidebar untuk menutupnya
+        sidebarBackdrop.addEventListener('click', () => {
+            sidebar.classList.add('hidden'); // Menambah kelas 'hidden' untuk menyembunyikan sidebar
+            sidebarBackdrop.classList.add('hidden'); // Menambah kelas 'hidden' untuk menyembunyikan sidebar backdrop
+        });
+    </script>
 </body>
 
 </html>
