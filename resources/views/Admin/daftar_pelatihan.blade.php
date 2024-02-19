@@ -49,31 +49,60 @@
                 Tambah Pelatihan
             </a>
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <form class="lg:pr-3" action="{{route('admin.searchPelatihan')}}" method="GET">
-                <label for="search" class="sr-only">Search</label>
-                <div class="relative mt-1 lg:w-96 xl:w-128">
-                    <input type="text" name="search" id="search"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full lg:w-96 xl:w-128 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Cari Pelatihan nama/status/kode">
-
-                    <button type="submit" class="absolute inset-y-0 right-0 px-3 py-1 bg-gray-200 rounded-r-lg">
-                        Search
-                    </button>
-                </div>
-            </form>
+            <input type="text" id="searchInput" placeholder="Search for pelatihan" class="mt-2 mr-3 mb-4 p-2 border border-gray-200 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
+        <script>
+            // Ambil input elemen pencarian
+            const searchInput = document.getElementById('searchInput');
+
+            // Tambahkan event listener untuk input pencarian
+            searchInput.addEventListener('input', function(event) {
+                const searchText = event.target.value.toLowerCase(); // Ambil teks pencarian dan ubah menjadi lowercase
+                const rows = document.querySelectorAll('.pelatihan-row'); // Ambil semua baris yang berisi data pelatihan
+
+                // Iterasi melalui setiap baris
+                rows.forEach(row => {
+                    let matchFound = false; // Inisialisasi variabel untuk menandai apakah pencocokan ditemukan dalam baris tertentu
+
+                    // Ambil seluruh elemen dalam baris yang ingin dicocokkan (nama, kode, status)
+                    const elementsToSearch = row.querySelectorAll('.searchable');
+
+                    // Iterasi melalui setiap elemen yang ingin dicocokkan
+                    elementsToSearch.forEach(element => {
+                        const text = element.textContent.toLowerCase(); // Ambil teks dari elemen tersebut
+
+                        // Jika teks pencarian cocok dengan teks pada elemen, tandai pencocokan ditemukan
+                        if (text.includes(searchText)) {
+                            matchFound = true;
+                        }
+                    });
+
+                    // Tampilkan atau sembunyikan baris berdasarkan apakah ada pencocokan ditemukan dalam baris tersebut
+                    if (matchFound) {
+                        row.style.display = ''; // Tampilkan baris jika ada pencocokan ditemukan
+                    } else {
+                        row.style.display = 'none'; // Sembunyikan baris jika tidak ada pencocokan ditemukan
+                    }
+                });
+            });
+        </script>
+
     </div>
 
-        <div class="flex flex-wrap">
+        <div class="grid grid-cols-3 gap-4">
         @foreach ($pelatihan as $plt)
-        <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div class="relative lock mt-2 w-70 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 pelatihan-row">
             <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
                 <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
                 <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                     <div>
-                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
-                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                            <p>{{ $plt->kode }} - {{ $plt->status }} - {{$plt->pesertaPelatihan}} peserta</p>
+                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white searchable">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
+                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400 searchable">
+                            <p>
+                                <span class="searchable">{{ $plt->kode }}</span> - 
+                                <span class="searchable">{{ $plt->status }}</span> - 
+                                <span class="searchable">{{ $plt->pesertaPelatihan }} peserta</span>
+                            </p>
                             <div class="relative lock justify-between mt-2">
                                 @if($plt && $plt->id)
                                 <a href="{{ route('admin.editPelatihan', $plt->id) }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

@@ -44,7 +44,7 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('admin.updateInstruktur', ['id' => $instruktur->id]) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin.updateInstruktur', ['id' => $instruktur->user_id]) }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="col-span-4">
                     <div
@@ -86,24 +86,24 @@
                                         @enderror
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
-                                    <label for="bidang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang</label>
-                                    <select id="bidang" name="bidang" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option value="" selected disabled>Pilih Bidang</option>
-                                        @foreach($bidang as $bid)
-                                        <option value="{{ $bid->nama }}" {{ $instruktur->bidang === $bid->nama ? 'selected' : '' }}>
-                                            {{ $bid->nama }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('bidang')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
+                                        <label for="bidang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang</label>
+                                        <select id="bidang" name="bidang" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option value="" selected disabled>Pilih Bidang</option>
+                                            @foreach($bidang as $bid)
+                                            <option value="{{ $bid->nama }}" {{ $instruktur->bidang === $bid->nama ? 'selected' : '' }}>
+                                                {{ $bid->nama }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        @error('bidang')
+                                        <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                            role="alert">
+                                            <div>
+                                                {{ $message }}
+                                            </div>
                                         </div>
+                                        @enderror
                                     </div>
-                                    @enderror
-                                </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="new_password"
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Baru</label>

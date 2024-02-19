@@ -220,11 +220,8 @@ class AdminController extends Controller
     public function delete(Request $request, String $admin_id)
     {
         try {
-            $admin = Admin::leftJoin('users', 'users.id', '=', 'admin.user_id')
-                ->where('admin.user_id', $admin_id)
-                ->select('admin.user_id', 'users.id')
-                ->first();
-
+            $admin = Admin::where('user_id', $admin_id)->first();
+            //dd($admin);
             if (!$admin) {
                 return redirect()->route('admin.viewDaftarAdmin')->with('error', 'Tidak dapat menemukan admin yang ingin dihapus.');
             }
@@ -232,8 +229,11 @@ class AdminController extends Controller
             DB::beginTransaction();
 
             try {
+                // Hapus entri admin terlebih dahulu
                 $admin->delete();
-                User::where('id', $admin->id)->delete();
+
+                // Hapus pengguna terkait
+                User::where('id', $admin->user_id)->delete();
 
                 DB::commit();
 
@@ -242,10 +242,10 @@ class AdminController extends Controller
                 DB::rollback();
                 dd($e);
 
-                return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Terjadi kesalahan saat menghapus admin dan data terkait.');
+                return redirect()->route('admin.viewDaftarAdmin')->with('error', 'Terjadi kesalahan saat menghapus admin dan data terkait.');
             }
         } catch (\Exception $e) {
-            return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Terjadi kesalahan saat menghapus admin dan data terkait.');
+            return redirect()->route('admin.viewDaftarAdmin')->with('error', 'Terjadi kesalahan saat menghapus admin dan data terkait.');
         }
     }
 

@@ -57,18 +57,20 @@
                 {{ \Carbon\Carbon::parse($test->end_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
-        @if ($hitungnilai >= $test->kkm)
-            <div class="mt-2 p-2 bg-green-200 rounded-lg">
-                <p class="text-center text-sm font-semibold text-green-800">
-                    Passed
-                </p>
-            </div>
-        @else
-            <div class="mt-2 p-2 bg-red-200 rounded-lg">
-                <p class="text-center text-sm font-semibold text-red-800">
-                    Failed
-                </p>
-            </div>
+        @if($hitungnilai != null)
+            @if ($hitungnilai >= $test->kkm)
+                <div class="mt-2 p-2 bg-green-200 rounded-lg">
+                    <p class="text-center text-sm font-semibold text-green-800">
+                        Passed
+                    </p>
+                </div>
+            @else
+                <div class="mt-2 p-2 bg-red-200 rounded-lg">
+                    <p class="text-center text-sm font-semibold text-red-800">
+                        Failed
+                    </p>
+                </div>
+            @endif
         @endif
     </div>
     <div class="grid grid-cols-6 gap-6 overflow-x-auto shadow-md sm:rounded-lg">
@@ -131,12 +133,12 @@
         @endif
     </div>
     <div class="col-span-full mt-4 mb-4 text-center">
-        
+        @if($hitungnilai == null)
         <a type="button" href="{{ route('peserta.test', ['plt_kode' => $pelatihan->kode, 'test_id' => $test->id]) }}"
             class="inline-flex items-center justify-center w-1/2 px-12 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Mulai
         </a>
-        
+        @endif
     </div>
     
 @endsection

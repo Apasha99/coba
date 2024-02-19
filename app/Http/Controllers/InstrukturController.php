@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InstrukturRegistered; 
 class InstrukturController extends Controller
 {
     public function instruktur() {
@@ -41,14 +42,45 @@ class InstrukturController extends Controller
             ->first();
 
         $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
-            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email')
+            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email', 'users.password_awal')
+            ->get();
+
+        $instruktur2 = User::join('instruktur', 'instruktur.user_id', '=', 'users.id')
+            ->where('users.role_id', '=', 3)
+            ->select('instruktur.user_id as users_id', 'instruktur.nama')
+            ->get();
+
+        //dd($ins);
+
+        $pelatihan = Pelatihan::select('kode','nama')->get();
+
+        return view('admin.daftar_instruktur', ['admin' => $admin, 'instruktur' => $instruktur,'instruktur2'=>$instruktur2,'pelatihan'=>$pelatihan]);
+    }
+
+    public function detail_instruktur($instruktur_id)
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+        
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+            ->where('instruktur.user_id',$instruktur_id)
+            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email', 'users.password_awal')
+            ->first();
+
+        $pltins = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+            ->leftjoin('instruktur_pelatihan','instruktur_pelatihan.instruktur_id', '=','instruktur.id')
+            ->leftjoin('pelatihan','pelatihan.kode','=','instruktur_pelatihan.plt_kode')
+            ->where('instruktur.user_id',$instruktur_id)
+            ->select('instruktur_pelatihan.plt_kode','pelatihan.nama as pltnama')
             ->get();
 
         $ins = User::where('role_id', '=', 3)->select('id')->get();
 
         $pelatihan = Pelatihan::select('kode','nama')->get();
 
-        return view('admin.daftar_instruktur', ['admin' => $admin, 'instruktur' => $instruktur,'ins'=>$ins,'pelatihan'=>$pelatihan]);
+        return view('admin.detail_instruktur', ['pltins'=>$pltins,'admin' => $admin, 'instruktur' => $instruktur,'ins'=>$ins,'pelatihan'=>$pelatihan]);
     }
 
     public function viewTambahInstruktur(){
@@ -81,7 +113,7 @@ class InstrukturController extends Controller
             $user = User::create([
                 'username' => $username,
                 'email' => $request->email,
-                'password' => Hash::make($password),
+                'password' => $password,
                 'password_awal' => $password,
                 'role_id' => 3,
             ]);
@@ -107,14 +139,18 @@ class InstrukturController extends Controller
     public function searchInstruktur(Request $request)
     {
         //dd($request);
+        $pelatihan = Pelatihan::select('kode','nama')->get();
         $search = $request->input('search');
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-            $pelatihan = Pelatihan::select('kode','nama')->get();
+        $instruktur2 = User::join('instruktur', 'instruktur.user_id', '=', 'users.id')
+                ->where('users.role_id', '=', 3)
+                ->select('instruktur.user_id as users_id', 'instruktur.nama')
+                ->get();
         $instruktur = Instruktur::leftjoin('users','users.id','=','instruktur.user_id')
-            ->select('instruktur.nama as instruktur_nama', 'users.username','users.email','instruktur.user_id as instruktur_id')
+            ->select('instruktur.nama as instruktur_nama', 'users.username','users.email','instruktur.user_id as instruktur_id','password_awal')
             ->where(function ($query) use ($search) {
                 $query
                     ->where('instruktur.nama', 'like', '%' . $search . '%')
@@ -124,19 +160,20 @@ class InstrukturController extends Controller
             })
             ->get();
 
-        return view('admin.daftar_instruktur', ['pelatihan'=>$pelatihan, 'instruktur' => $instruktur, 'admin' => $admin, 'search' => $search]);
+        return view('admin.daftar_instruktur', ['instruktur2'=>$instruktur2,'pelatihan'=>$pelatihan,'instruktur' => $instruktur, 'admin' => $admin, 'search' => $search]);
     }
 
     public function update(Request $request, $id)
     {
-        // $instruktur = Instruktur::leftJoin('users', 'users.id', '=', 'instruktur.user_id')
-        //                     ->where('instruktur.user_id', $id)
-        //                     ->select('instruktur.id as id', 'user_id','nama','username', 'email',
-        //                     'noHP','alamat','password','password_awal','foto')
-        //                     ->first();
-        $instruktur = Instruktur::where('id', $id)->first();
+        $instruktur = Instruktur::leftJoin('users', 'users.id', '=', 'instruktur.user_id')
+                            ->where('instruktur.user_id', $id)
+                            ->select('instruktur.id as id', 'user_id','nama','username', 'email',
+                            'password','password_awal')
+                            ->first();
         //dd($instruktur);
-       
+        if (!$instruktur) {
+            return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Tidak dapat menemukan instruktur yang ingin diedit.');
+        }
 
         $validated = $request->validate([
             'nama' => ['required'],
@@ -146,6 +183,7 @@ class InstrukturController extends Controller
             'new_password' => ['nullable', 'min:8', 'string'],
             'conf_password' => ['nullable', 'same:new_password'],
         ]);
+        //dd($request);
         
         try {
             DB::beginTransaction();
@@ -216,7 +254,7 @@ class InstrukturController extends Controller
                 return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Terjadi kesalahan saat menghapus instruktur dan data terkait.');
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return redirect()->route('admin.viewDaftarinstruktur')->with('error', 'Tidak dapat menemukan instruktur yang ingin dihapus.');
+            return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Tidak dapat menemukan instruktur yang ingin dihapus.');
         }
     }
 
@@ -232,6 +270,80 @@ class InstrukturController extends Controller
             ->get();
 
         return view('admin.import_instruktur', compact('admin', 'instruktur'));
+    }
+
+    public function sendEmail(Request $request)
+    {
+        //dd($request);
+        // Validasi input
+        $request->validate([
+            'subjek' => 'required|string',
+            'deliver_option' => 'required|in:all,range',
+            'start_user_id' => 'required_if:deliver_option,range|exists:users,id',
+            'end_user_id' => 'required_if:deliver_option,range|exists:users,id', 'after_or_equal:start_user_id',
+            'kode' => 'required|exists:pelatihan,kode',
+        ]);    
+        
+        $fromName = 'Dinas Kominfo Kota Semarang';
+        $subjek = $request->input('subjek');
+        $kode = $request->input('kode');
+
+        $exportOption = $request->input('deliver_option');
+        $startUserId = $request->input('start_user_id');
+        $endUserId = $request->input('end_user_id');
+
+        $users = null;
+
+        if ($exportOption === 'all') {
+            $users = User::where('role_id', '=', 3)->get();
+        } elseif ($exportOption === 'range' && $startUserId && $endUserId) {
+            // Ambil user dalam rentang tertentu
+            $users = User::where('role_id', '=', 3)
+                ->whereBetween('id', [$startUserId, $endUserId])
+                ->get();
+        } else {
+            return redirect()->back()->with('error', 'Opsi pengiriman tidak valid.');
+        }
+
+        if ($users->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada pengguna yang dipilih.');
+        }
+
+        // Loop melalui pengguna dan kirim email
+        foreach ($users as $user) {
+            $username = $user->username;
+            $password = $user->password_awal;
+            $toAddress = $user->email;
+            
+            Mail::to($toAddress)
+                ->send(new InstrukturRegistered($username, $password, $kode,$fromName, $subjek));
+        }
+
+        return redirect()->back()->with('success', 'Berhasil mengirim email');
+    }
+
+    public function download()
+    {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->where('admin.user_id', Auth::user()->id)
+            ->select('admin.nama', 'admin.id', 'users.username')
+            ->first();
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email', 'users.password_awal')
+            ->get();
+
+        $instruktur2 = User::join('instruktur', 'instruktur.user_id', '=', 'users.id')
+            ->where('users.role_id', '=', 3)
+            ->select('instruktur.user_id as users_id', 'instruktur.nama')
+            ->get();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('admin.download_instruktur', [
+            'admin' => $admin,
+            'instruktur' => $instruktur,
+            'instruktur2' => $instruktur2,
+        ]);
+
+        return $pdf->stream('daftar_instruktur'.'.pdf');
     }
 
 }

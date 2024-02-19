@@ -32,20 +32,44 @@
     </div>
     <div class="sm:flex mb-4">
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <form class="lg:pr-3" action="{{route('admin.search')}}" method="GET">
-                <label for="search" class="sr-only">Search</label>
-                <div class="relative mt-1 lg:w-64 xl:w-96">
-                    <input type="text" name="search" id="search"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Search for peserta">
-                    <button type="submit" class="absolute inset-y-0 right-0 px-3 py-1 bg-gray-200 rounded-r-lg">
-                        Search
-                    </button>
-                </div>
-            </form>
-
-            
+            <input type="text" id="searchInput" placeholder="Search for peserta" class="mt-2 mb-4 p-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
+        <script>
+            // Ambil input elemen pencarian
+            const searchInput = document.getElementById('searchInput');
+
+            // Tambahkan event listener untuk input pencarian
+            searchInput.addEventListener('input', function(event) {
+                const searchText = event.target.value.toLowerCase(); // Ambil teks pencarian dan ubah menjadi lowercase
+                const rows = document.querySelectorAll('tbody tr'); // Ambil semua baris dalam tbody
+
+                // Iterasi melalui setiap baris
+                rows.forEach(row => {
+                    let matchFound = false; // Inisialisasi variabel untuk menandai apakah pencocokan ditemukan dalam baris tertentu
+
+                    // Ambil sel-sel yang ingin dicocokkan (kolom ID, Nama, Username, Email, dll.)
+                    const cellsToSearch = row.querySelectorAll('.searchable');
+
+                    // Iterasi melalui setiap sel yang ingin dicocokkan
+                    cellsToSearch.forEach(cell => {
+                        const text = cell.textContent.toLowerCase(); // Ambil teks dari sel tersebut
+
+                        // Jika teks pencarian cocok dengan teks pada sel, tandai pencocokan ditemukan
+                        if (text.includes(searchText)) {
+                            matchFound = true;
+                        }
+                    });
+
+                    // Tampilkan atau sembunyikan baris berdasarkan apakah ada pencocokan ditemukan dalam baris tersebut
+                    if (matchFound) {
+                        row.style.display = ''; // Tampilkan baris jika ada pencocokan ditemukan
+                    } else {
+                        row.style.display = 'none'; // Sembunyikan baris jika tidak ada pencocokan ditemukan
+                    }
+                });
+            });
+        </script>
+
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
             <a type="button" href ="{{route('admin.createPeserta')}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -123,9 +147,9 @@
                                     @foreach ($peserta as $plt)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->peserta_id }}</td>
-                                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
                                                 @if($plt->foto)
                                                     <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $plt->foto) }}" alt="{{ $plt->peserta_nama }}">
                                                 @else
@@ -136,10 +160,10 @@
                                                 </div>
                                             </td>
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->username }}</td>
                                             <td
-                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                 {{ $plt->email }}</td>
                                             <td
                                                 class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -171,7 +195,7 @@
             </div>
         </div>
     </div>
-    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-full"
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
         id="email-peserta-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
             <!-- Modal content -->
@@ -208,35 +232,35 @@
                             @enderror
                         </div>
                         <div class="col-span-6 justify-between items-center">
-                        <div class="items-center">
-                            <label for="deliver-option" class="text-sm font-medium text-gray-900 dark:text-white">Kepada</label>
-                            <select name="deliver_option" id="deliver-option" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                <option value="all">Semua</option>
-                                <option value="range">Rentang</option>
-                            </select>
+                            <div class="items-center">
+                                <label for="deliver-option" class="text-sm font-medium text-gray-900 dark:text-white">Kepada</label>
+                                <select name="deliver_option" id="deliver-option" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                    <option value="all">Semua</option>
+                                    <option value="range">Rentang</option>
+                                </select>
 
-                            <!-- Rentang id -->
-                            <div id="deliver-range" class="hidden">
-                                <div class="flex-col items-center mt-2">
-                                    <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
-                                    <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
-                                        @foreach ($pst as $data)
-                                            <option value="{{ $data->id }}" >{{ $data->id }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="flex-col items-center mt-2 mb-4">
-                                    <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
-                                    <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
-                                        @foreach ($pst as $data)
-                                            <option value="{{ $data->id }}">{{ $data->id }}</option>
-                                        @endforeach
-                                    </select>
+                                <!-- Rentang id -->
+                                <div id="deliver-range" class="hidden">
+                                    <div class="flex-col items-center mt-2">
+                                        <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
+                                        <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                            @foreach ($pst as $data)
+                                                <option value="{{ $data->id }}" >{{ $data->id }} - {{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="flex-col items-center mt-2 mb-4">
+                                        <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
+                                        <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
+                                            @foreach ($pst as $data)
+                                                <option value="{{ $data->id }}">{{ $data->id }} - {{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <div class="col-span-6 sm:col-span-6">
                             <label for="kode"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pelatihan</label>
@@ -260,48 +284,48 @@
                                 Batal
                             </button>
                         </div>
-                    </div>
                     </form>
-                </div>
                 </div>
             </div>
         </div>
-        <script>
-            document.getElementById('deliver-option').addEventListener('change', function() {
-                var exportOption = this.value;
-                if (exportOption === 'range') {
-                    document.getElementById('deliver-range').classList.remove('hidden');
-                } else {
-                    document.getElementById('deliver-range').classList.add('hidden');
-                }
-            });
-        </script>
-        <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
-            id="export-peserta-modal">
-            <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
-                    <!-- Modal header -->
-                    <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
-                        <h3 class="text-xl font-semibold dark:text-white">
-                            Export Peserta
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
-                            data-modal-toggle="export-peserta-modal">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-6 space-y-6 overflow-y-auto">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white mt-2" for="export-id">Pilih ID yang ingin di download</label>
-                        <form id="exportForm" method="GET" action="{{ route('admin.exportPeserta') }}">
-                            @csrf
-                            <div class="col-span-full justify-between items-center">
+    </div>
+        
+    <script>
+        document.getElementById('deliver-option').addEventListener('change', function() {
+            var exportOption = this.value;
+            if (exportOption === 'range') {
+                document.getElementById('deliver-range').classList.remove('hidden');
+            } else {
+                document.getElementById('deliver-range').classList.add('hidden');
+            }
+        });
+    </script>
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
+        id="export-peserta-modal">
+        <div class="relative w-50 h-50 max-w-2xl px-4 md:h-50">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800 overflow">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white">
+                        Export Peserta
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
+                        data-modal-toggle="export-peserta-modal">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6 overflow-y-auto">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white mt-2" for="export-id">Pilih ID yang ingin di download</label>
+                    <form id="exportForm" method="GET" action="{{ route('admin.exportPeserta') }}">
+                        @csrf
+                        <div class="col-span-full justify-between items-center">
                             <div class="items-center">
                                 <label for="export-option" class=" text-sm font-medium text-gray-900 dark:text-white">Export Option:</label>
                                 <select name="export_option" id="export-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
@@ -351,21 +375,21 @@
                                 </button>
                             </div>
                         </div>
-                        </form>
-                    </div>
-                    </div>
+                    </form>
                 </div>
+            </div>
         </div>
-        <script>
-            document.getElementById('export-option').addEventListener('change', function() {
-                var exportOption = this.value;
-                if (exportOption === 'range') {
-                    document.getElementById('export-range').classList.remove('hidden');
-                } else {
-                    document.getElementById('export-range').classList.add('hidden');
-                }
-            });
-        </script>
+    </div>
+    <script>
+        document.getElementById('export-option').addEventListener('change', function() {
+            var exportOption = this.value;
+            if (exportOption === 'range') {
+                document.getElementById('export-range').classList.remove('hidden');
+            } else {
+                document.getElementById('export-range').classList.add('hidden');
+            }
+        });
+    </script>
 
     @foreach ($peserta as $plt)
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
