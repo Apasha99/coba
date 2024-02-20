@@ -6,6 +6,7 @@ use App\Models\Materi;
 use App\Models\Pelatihan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MateriController extends Controller
@@ -30,10 +31,18 @@ class MateriController extends Controller
 
         try {
             Materi::create($validated);
-    
-            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data materi berhasil disimpan');
+            
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data materi berhasil disimpan');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $kode)->with('success', 'Data materi berhasil disimpan');
+            }
         } catch (\Exception $e) {
-            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('error', 'Data materi berhasil disimpan');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Gagal menyimpan data materi');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $kode)->with('success', 'Gagal menyimpan data materi');
+            }
         }
     }
 
@@ -69,14 +78,19 @@ class MateriController extends Controller
     
             DB::commit();
 
-            return redirect()
-                ->route('admin.viewDetailPelatihan', $plt_kode)
-                ->with('success', 'Data materi berhasil diperbarui');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $plt_kode)->with('success', 'Data materi berhasil diperbarui');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $plt_kode)->with('success', 'Data materi berhasil diperbarui');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal memperbarui data materi.');
+
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $plt_kode)->with('success', 'Gagal memperbarui data materi');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $plt_kode)->with('success', 'Gagal memperbarui data materi');
+            }
         }
     }
 

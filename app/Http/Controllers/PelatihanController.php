@@ -103,7 +103,6 @@ class PelatihanController extends Controller
                                                 'pesertaTerdaftar' => $pesertaTerdaftar, 'instrukturTerdaftar' => $instrukturTerdaftar,
                                                 'allPeserta' => $allPeserta, 'allInstruktur' => $allInstruktur]);
     }
-    
 
     public function viewDaftarPelatihan() {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')

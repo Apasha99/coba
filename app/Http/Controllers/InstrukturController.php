@@ -15,7 +15,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\InstrukturRegistered; 
+use App\Mail\InstrukturRegistered;
+use App\Models\Materi;
+use App\Models\Peserta;
+use App\Models\Peserta_Pelatihan;
+use App\Models\Submission;
+use App\Models\Test;
+use App\Models\Tugas;
+
 class InstrukturController extends Controller
 {
     public function instruktur() {
@@ -29,9 +36,94 @@ class InstrukturController extends Controller
             $pelatihan = Pelatihan::join('instruktur_pelatihan', 'pelatihan.kode', '=', 'instruktur_pelatihan.plt_kode')
                 ->where('instruktur_pelatihan.instruktur_id', $instruktur->id)
                 ->get();
-      
+            
             return view('instruktur.dashboard',['instruktur'=>$instruktur, 'pelatihan'=>$pelatihan]);
         }
+    }
+
+    public function viewDaftarPelatihan() {
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->leftJoin('instruktur_pelatihan','instruktur.id','=','instruktur_pelatihan.instruktur_id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->select('instruktur.nama', 'instruktur.id', 'users.username','instruktur_pelatihan.plt_kode')
+                ->first();
+
+            $pelatihan = Pelatihan::join('instruktur_pelatihan', 'pelatihan.kode', '=', 'instruktur_pelatihan.plt_kode')
+                ->where('instruktur_pelatihan.instruktur_id', $instruktur->id)
+                ->get();
+    
+            return view('instruktur.daftar_pelatihan', ['instruktur'=>$instruktur, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewDetailPelatihan(String $plt_kode) {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $materi = Materi::where('plt_kode', $plt_kode)->get();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->get();
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('instruktur.detail_pelatihan', ['bidang'=>$bidang,'pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
+    }
+
+    public function viewDaftarPartisipan(String $plt_kode){
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->pluck('peserta_id');
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->pluck('instruktur_id');
+        $allPeserta = Peserta::whereNotIn('id', $pesertaTerdaftar)->get();
+        $allInstruktur = Instruktur::whereNotIn('id', $instrukturTerdaftar)->get();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->get();
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->get();
+    
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('instruktur.daftar_partisipan', ['bidang' => $bidang, 'pelatihan' => $pelatihan, 
+                                                'pesertaTerdaftar' => $pesertaTerdaftar, 'instrukturTerdaftar' => $instrukturTerdaftar,
+                                                'allPeserta' => $allPeserta, 'allInstruktur' => $allInstruktur]);
+    }
+
+    public function viewTambahMateri($plt_kode){
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('instruktur.tambah_materi', ['pelatihan' => $pelatihan]);
+    }
+
+    public function viewEditMateri($plt_kode, $id){
+        $materi = Materi::find($id);
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('instruktur.edit_materi', ['materi' => $materi, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewTambahTugas($plt_kode){
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('instruktur.tambah_tugas', ['pelatihan' => $pelatihan]);
+    }
+
+    public function viewEditTugas($plt_kode, $id){
+        $tugas = Tugas::find($id);
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('instruktur.edit_tugas', ['tugas' => $tugas, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewDaftarSubmissionTugas(String $plt_kode, String $tugas_id){
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
+        $submissions = Submission::where('tugas_id', $tugas_id)->get();
+    
+        $peserta_pelatihan = Peserta_Pelatihan::where('plt_kode', $plt_kode)->pluck('peserta_id');
+        $peserta = Peserta::whereIn('id', $peserta_pelatihan)->get();
+        
+        $submission_peserta = Submission::join('peserta', 'submissions.peserta_id', '=', 'peserta.id')
+            ->join('submission_files', 'submissions.id', '=', 'submission_files.submission_id')
+            ->whereIn('submissions.peserta_id', $peserta_pelatihan)
+            ->select('peserta.nama', 'submissions.updated_at', 'submission_files.*')
+            ->get();
+       
+        return view('instruktur.daftar_submission_tugas', [
+            'pelatihan' => $pelatihan,
+            'tugas' => $tugas,
+            'submissions' => $submissions,
+            'peserta' => $peserta,
+            'submission_peserta' => $submission_peserta
+        ]);
     }
 
     public function daftar_instruktur()

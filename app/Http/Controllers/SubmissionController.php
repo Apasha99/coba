@@ -47,8 +47,7 @@ class SubmissionController extends Controller
             ->whereIn('submissions.peserta_id', $peserta_pelatihan)
             ->select('peserta.nama', 'submissions.updated_at', 'submission_files.*')
             ->get();
-        //dd($pelatihan->peserta_pelatihan);
-        //dd($submissions->submission_file);
+        
         return view('admin.daftar_submission_tugas', [
             'pelatihan' => $pelatihan,
             'tugas' => $tugas,
