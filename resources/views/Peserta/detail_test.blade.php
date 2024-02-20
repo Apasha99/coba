@@ -77,44 +77,51 @@
             @endif
             </p>
         </div>
-        @if ($existingNilai)
-        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
-            <div class="mb-4 col-span-full xl:mb-2">
-                <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
+        @if ($existing == true)
+            <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
+                <div class="mb-4 col-span-full xl:mb-2">
+                    <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
+                </div>
+                <div class="mb-4 col-span-full xl:mb-2">
+                    <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                        Test: 
+                        <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                            {{ $test->nama }}
+                        </span> 
+                    </p>
+                    <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+                        Total Soal: 
+                        <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+                            {{ $hitungsoal }}
+                        </span> 
+                    </p>
+                </div>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <th  colspan="4" class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                                Attempt
+                            </th>
+                            <th colspan="4" class="border-r px-16 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                                Total Nilai
+                            </th>
+                        </tr>
+                        @foreach ($existingNilai as $nilai)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td colspan="4" class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $nilai->attempt }}
+                                </td>
+                                
+                                <td colspan="4" class="border-r px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
+                                    {{ $nilai->totalnilai }}
+                                </td>
+                                
+                            </tr>
+                            
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <div class="mb-4 col-span-full xl:mb-2">
-                <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                    Test: 
-                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                        {{ $test->nama }}
-                    </span> 
-                </p>
-                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                    Total Soal: 
-                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                        {{ $hitungsoal }}
-                    </span> 
-                </p>
-                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                    Jumlah Benar: 
-                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                        {{$jawabBenar}}
-                    </span> 
-                </p>
-                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                    Total Nilai: 
-                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                        {{$hitungnilai}}
-                    </span> 
-                </p>
-                <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                    KKM: 
-                    <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                        {{$test->kkm}}
-                    </span> 
-                </p>
-            </div>
-        </div>
         @endif
     </div>
     <div class="col-span-full mt-4 mb-4 text-center">

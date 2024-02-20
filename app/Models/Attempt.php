@@ -14,6 +14,6 @@ class Attempt extends Model
         'peserta_id',
         'test_id',
         'totalnilai',
-        'attempt'
+        'attempt',
     ];
 }

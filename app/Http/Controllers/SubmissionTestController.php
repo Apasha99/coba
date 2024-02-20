@@ -35,18 +35,21 @@ class SubmissionTestController extends Controller
                 ->first();
         //dd($test);
         $hitungsoal = Soal_Test::where('test_id', $test_id)->count();
-        $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->where('test_id', $test_id)
-            ->where('peserta.user_id', Auth::user()->id)
-            ->sum('nilai'); // Assuming 'nilai' is the column you want to sum
-        $jawabBenar = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                                    ->where('test_id', $test_id)
-                                                    ->where('peserta.user_id', Auth::user()->id)
-                                                    ->where('nilai','!=', 0)->count();
-        $existingNilai = Nilai_Test::where('test_id', $test_id)
+
+        $existingNilai = Attempt::where('peserta_id', Auth::user()->peserta->id)
+                                ->where('test_id',$test_id)->get();
+        //dd($existingNilai);
+
+        $existingAttempt = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
             $query->where('user_id', Auth::user()->id)
                 ->where('attempt','=', 3);
+        })
+        ->exists();
+
+        $existing = Nilai_Test::where('test_id', $test_id)
+        ->whereHas('peserta', function($query) {
+            $query->where('user_id', Auth::user()->id);
         })
         ->exists();
 
@@ -63,9 +66,8 @@ class SubmissionTestController extends Controller
         $currentQuestion = $soal_test->where('id', $soal_id)->sortBy('urutan')->first();
         
     
-        return view('peserta.detail_test', ['hitungsoal'=>$hitungsoal,
-        'hitungnilai'=>$hitungnilai,
-        'jawabBenar'=>$jawabBenar,'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
+        return view('peserta.detail_test', ['existing'=>$existing,'hitungsoal'=>$hitungsoal,'existingAttempt'=>$existingAttempt,
+        'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
     }    
 
     public function test($plt_kode, $test_id)
@@ -108,7 +110,7 @@ class SubmissionTestController extends Controller
 
         // Jika sudah ada nilai untuk tes ini, kembalikan pesan error
         if ($existingNilai) {
-            return redirect()->back()->with('error', 'Anda sudah mengerjakan tes ini.');
+            return redirect()->back()->with('error', 'Anda sudah mencapai batas attempt untuk mengerjakan tes ini.');
         }
 
         return view('peserta.test_2', [
@@ -129,6 +131,7 @@ class SubmissionTestController extends Controller
         $peserta = Peserta::join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
                     ->where('peserta.id', Auth::user()->peserta->id)
                     ->where('nilai_test.test_id', $test_id)
+                    ->latest('attempt')
                     ->first();
 
         if ($peserta == null) {
@@ -194,30 +197,30 @@ class SubmissionTestController extends Controller
                 'user_answers' => $currentQuestion->tipe == "Pilihan Ganda" ? json_encode($currentAnswer->title) : json_encode($currentAnswer),
                 'attempt' => $attempt
             ]);
-
-            if ($peserta == null) {
-                // Jika peserta belum memiliki nilai untuk tes ini, kita hitung semua nilai untuk tes ini
-                $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                            ->where('test_id', $test_id)
-                                            ->where('peserta.user_id', Auth::user()->id)
-                                            ->sum('nilai');
-            } else {
-                // Jika peserta sudah memiliki nilai untuk tes ini, kita hitung nilai hanya untuk percobaan saat ini
-                $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                            ->where('test_id', $test_id)
-                                            ->where('peserta.user_id', Auth::user()->id)
-                                            ->where('attempt', $attempt)
-                                            ->sum('nilai');
-            }
-            Attempt::Create(
-                [
-                    'peserta_id' => Auth::user()->peserta->id,
-                    'test_id' => $test_id,
-                    'totalnilai' => $hitungnilai,
-                    'attempt' => $attempt
-                ]
-            );
         }
+
+        if ($peserta == null) {
+            // Jika peserta belum memiliki nilai untuk tes ini, kita hitung semua nilai untuk tes ini
+            $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                        ->where('test_id', $test_id)
+                                        ->where('peserta.user_id', Auth::user()->id)
+                                        ->sum('nilai');
+        } else {
+            // Jika peserta sudah memiliki nilai untuk tes ini, kita hitung nilai hanya untuk percobaan saat ini
+            $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                        ->where('test_id', $test_id)
+                                        ->where('peserta.user_id', Auth::user()->id)
+                                        ->where('attempt', $attempt)
+                                        ->sum('nilai');
+        }
+        Attempt::Create(
+            [
+                'peserta_id' => Auth::user()->peserta->id,
+                'test_id' => $test_id,
+                'totalnilai' => $hitungnilai,
+                'attempt' => $attempt
+            ]
+        );
 
         return redirect()->route('peserta.hasil', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id])->with('success', 'Jawaban berhasil disubmit');
     }
