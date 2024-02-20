@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelatihan;
 use App\Models\Test;
+use App\Models\Attempt;
 use App\Models\Peserta;
 use App\Models\Soal_Test;
 use App\Models\Nilai_Test;
@@ -44,9 +45,12 @@ class SubmissionTestController extends Controller
                                                     ->where('nilai','!=', 0)->count();
         $existingNilai = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
-            $query->where('user_id', Auth::user()->id);
+            $query->where('user_id', Auth::user()->id)
+                ->where('attempt','=', 3);
         })
         ->exists();
+
+        //dd($existingNilai);
         
         $soal_id = null;
         $soal_urutan = null;
@@ -97,7 +101,8 @@ class SubmissionTestController extends Controller
 
         $existingNilai = Nilai_Test::where('test_id', $test_id)
                                     ->whereHas('peserta', function($query) {
-                                        $query->where('user_id', Auth::user()->id);
+                                        $query->where('user_id', Auth::user()->id)
+                                            ->where('attempt','=', 3);
                                     })
                                     ->exists();
 
@@ -121,105 +126,102 @@ class SubmissionTestController extends Controller
 
     public function submitAnswer(Request $request, $plt_kode, $test_id)
     {
+        $peserta = Peserta::join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
+                    ->where('peserta.id', Auth::user()->peserta->id)
+                    ->where('nilai_test.test_id', $test_id)
+                    ->first();
+
+        if ($peserta == null) {
+            $attempt = 1;
+        
+        } else {
+            // Jika peserta sudah memiliki data nilai untuk tes tertentu, kita akan menambahkan 1 ke nilai attempt sebelumnya
+            $attempt = $peserta->attempt + 1;
+        }
+
         foreach ($request->input('soal_id') as $urutan => $soal_id) {
-            // Ambil satu per satu soal berdasarkan ID
             $currentQuestion = Soal_Test::find($soal_id);
-            //dd($request);
+
             if ($currentQuestion->tipe == "Jawaban Singkat") {
-                $jawabanSingkat = $request->input('singkat');
-                $jawabanSingkatSoal = $jawabanSingkat[$urutan] ?? null;
-            }else{
+                $jawabanSingkatSoal = $request->input('singkat')[$urutan] ?? null;
+            } else {
                 $selectedOptionId = $request->input('selected_option.' . $urutan);
-                //dd($selectedOptionId);
             }
 
-            // Setelah menyimpan ke sesi, lakukan penyimpanan ke dalam database
             $test = Test::find($test_id);
-            $question_number = $urutan;
 
-            // Pastikan nomor pertanyaan berada dalam rentang yang valid
-            if ($question_number < 1 || $question_number > $test->soal_test->count()) {
-                abort(404); // or handle it as appropriate for your application
-            }
-
-            // Inisialisasi nilai awal
             $nilai = 0;
             $currentAnswer = null;
 
-            // Lakukan logika berdasarkan tipe soal untuk setiap soal
             if ($currentQuestion->tipe == "Pilihan Ganda") {
                 $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->first();
-            
                 $nilai = ($jawabanBenar && $jawabanBenar->id == $selectedOptionId) ? $currentQuestion->nilai : 0;
-                //dd($jawabanBenar, $selectedOptionId, $nilai);
                 $currentAnswer = Jawaban_Test::find($selectedOptionId);
-
-                Jawaban_User_Pilgan::updateOrCreate(
-                    [
-                        'peserta_id' => Auth::user()->peserta->id,
-                        'test_id' => $test_id,
-                        'soal_id' => $currentQuestion->id,
-                    ],
-                    [
-                        'jawaban_id' => $currentAnswer ? $currentAnswer->id : null,
-                        'jawaban' => $currentAnswer ? $currentAnswer->title : null,
-                    ]
-
-                );
-                // Simpan nilai ke dalam tabel Nilai_Test
-                Nilai_Test::updateOrCreate(
-                    [
-                        'peserta_id' => Auth::user()->peserta->id,
-                        'test_id' => $test_id,
-                        'soal_id' => $currentQuestion->id,
-                    ],
-                    [
-                        'nilai' => $nilai,
-                        'user_answers' => json_encode($currentAnswer ? $currentAnswer->title : null), // Ensure proper encoding
-                    ]
-                );
             } elseif ($currentQuestion->tipe == "Jawaban Singkat") {
-                // Ambil semua jawaban benar terkait dengan soal
                 $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->pluck('title');
-            
-                // Periksa apakah jawaban singkat pengguna cocok dengan salah satu dari jawaban benar
-                if (in_array($jawabanSingkatSoal, $jawabanBenar->toArray())) {
-                    // Tandai jawaban sebagai benar dan atur nilai
-                    $nilai = $currentQuestion->nilai;
-                    $currentAnswer = $jawabanSingkatSoal; // Jawaban singkat pengguna yang benar
-                } else {
-                    // Jika jawaban tidak cocok, nilai tetap 0
-                    $nilai = 0;
-                    $currentAnswer = $jawabanSingkatSoal;
-                }
-            
-                Jawaban_User_Singkat::updateOrCreate(
-                    [
-                        'peserta_id' => Auth::user()->peserta->id,
-                        'test_id' => $test_id,
-                        'soal_id' => $currentQuestion->id,
-                    ],
-                    [
-                        'jawaban' => $jawabanSingkatSoal, // Simpan jawaban singkat langsung
-                    ]
-                );
-                // Simpan nilai ke dalam tabel Nilai_Test
-                Nilai_Test::updateOrCreate(
-                    [
-                        'peserta_id' => Auth::user()->peserta->id,
-                        'test_id' => $test_id,
-                        'soal_id' => $currentQuestion->id,
-                    ],
-                    [
-                        'nilai' => $nilai,
-                        'user_answers' => json_encode($currentAnswer), // Ensure proper encoding
-                    ]
-                );
-            }    
+                $nilai = in_array($jawabanSingkatSoal, $jawabanBenar->toArray()) ? $currentQuestion->nilai : 0;
+                $currentAnswer = $jawabanSingkatSoal;
+            }
+
+            if ($currentQuestion->tipe == "Pilihan Ganda") {
+                $jawabanUserPilganData = [
+                    'peserta_id' => Auth::user()->peserta->id,
+                    'test_id' => $test_id,
+                    'soal_id' => $currentQuestion->id,
+                    'jawaban_id' => $currentAnswer ? $currentAnswer->id : null,
+                    'jawaban' => $currentAnswer ? $currentAnswer->title : null,
+                    'attempt' => $attempt
+                ];
+
+                Jawaban_User_Pilgan::create($jawabanUserPilganData);
+            } elseif ($currentQuestion->tipe == "Jawaban Singkat") {
+                $jawabanUserSingkatData = [
+                    'peserta_id' => Auth::user()->peserta->id,
+                    'test_id' => $test_id,
+                    'soal_id' => $currentQuestion->id,
+                    'jawaban' => $currentAnswer,
+                    'attempt' => $attempt
+                ];
+
+                Jawaban_User_Singkat::create($jawabanUserSingkatData);
+            }
+
+            Nilai_Test::create([
+                'peserta_id' => Auth::user()->peserta->id,
+                'test_id' => $test_id,
+                'soal_id' => $currentQuestion->id,
+                'nilai' => $nilai,
+                'user_answers' => $currentQuestion->tipe == "Pilihan Ganda" ? json_encode($currentAnswer->title) : json_encode($currentAnswer),
+                'attempt' => $attempt
+            ]);
+
+            if ($peserta == null) {
+                // Jika peserta belum memiliki nilai untuk tes ini, kita hitung semua nilai untuk tes ini
+                $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                            ->where('test_id', $test_id)
+                                            ->where('peserta.user_id', Auth::user()->id)
+                                            ->sum('nilai');
+            } else {
+                // Jika peserta sudah memiliki nilai untuk tes ini, kita hitung nilai hanya untuk percobaan saat ini
+                $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                            ->where('test_id', $test_id)
+                                            ->where('peserta.user_id', Auth::user()->id)
+                                            ->where('attempt', $attempt)
+                                            ->sum('nilai');
+            }
+            Attempt::Create(
+                [
+                    'peserta_id' => Auth::user()->peserta->id,
+                    'test_id' => $test_id,
+                    'totalnilai' => $hitungnilai,
+                    'attempt' => $attempt
+                ]
+            );
         }
 
         return redirect()->route('peserta.hasil', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id])->with('success', 'Jawaban berhasil disubmit');
     }
+
 
     public function hasil($plt_kode, $test_id)
     {
@@ -227,7 +229,17 @@ class SubmissionTestController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
-        $nilai = Nilai_Test::leftjoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')->where('test_id', $test_id)->where('peserta.user_id', Auth::user()->id)->get();
+        $latestAttempt = Peserta::join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->where('nilai_test.test_id', $test_id)
+                ->max('nilai_test.attempt');
+
+        $nilai = Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                    ->where('test_id', $test_id)
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->where('attempt', $latestAttempt)
+                    ->get();
+
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
             ->leftJoin('peserta_pelatihan', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
             ->where('peserta.user_id', Auth::user()->id)
@@ -237,13 +249,15 @@ class SubmissionTestController extends Controller
         $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
             ->where('test_id', $test_id)
             ->where('peserta.user_id', Auth::user()->id)
+            ->where('nilai_test.attempt', $latestAttempt)
             ->sum('nilai'); // Assuming 'nilai' is the column you want to sum
         $jawabBenar = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
                                 ->where('test_id', $test_id)
+                                ->where('attempt', $latestAttempt)
                                 ->where('peserta.user_id', Auth::user()->id)
                                 ->where('nilai','!=', 0)->count();
-        $jawabSingkat = Jawaban_User_Singkat::where('test_id',$test_id)->get();
-        $jawabPilgan = Jawaban_User_Pilgan::where('test_id',$test_id)->get();
+        $jawabSingkat = Jawaban_User_Singkat::where('test_id',$test_id)->where('attempt', $latestAttempt)->get();
+        $jawabPilgan = Jawaban_User_Pilgan::where('test_id',$test_id)->where('attempt', $latestAttempt)->get();
         
         return view('peserta.hasil_test', [
             'pelatihan'=>$pelatihan,

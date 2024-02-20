@@ -137,6 +137,11 @@
                                 $originalOrder = $options->pluck('urutan')->toArray();
                                 $shuffledOrder = collect($originalOrder)->shuffle(1);
                                 $selectedOption = old('selected_option_' . $soal->urutan) ?? session('selected_option_' . $soal->urutan) ?? null;
+                                $latestAttempt = DB::table('peserta')
+                                    ->join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
+                                    ->where('peserta.user_id', Auth::user()->id)
+                                    ->where('nilai_test.test_id', $test->id)
+                                    ->max('nilai_test.attempt');
                                 $jawabPilgan = DB::table('jawaban_user_pilgan')
                                     ->join('nilai_test', 'jawaban_user_pilgan.test_id', '=', 'nilai_test.test_id')
                                     ->join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
@@ -144,6 +149,7 @@
                                     ->where('jawaban_user_pilgan.test_id', $test->id)
                                     ->whereColumn('jawaban_user_pilgan.peserta_id', '=', 'nilai_test.peserta_id') // Menggunakan whereColumn untuk kondisi join
                                     ->where('jawaban_user_pilgan.soal_id', $soal->id)
+                                    ->where('jawaban_user_pilgan.attempt', $latestAttempt)
                                     ->get();
 
                             @endphp
@@ -161,12 +167,18 @@
 
                             @elseif ($soal->tipe == "Jawaban Singkat") 
                                 @php
+                                    $latestAttempt = DB::table('peserta')
+                                        ->join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
+                                        ->where('peserta.user_id', Auth::user()->id)
+                                        ->where('nilai_test.test_id', $test->id)
+                                        ->max('nilai_test.attempt');
                                     $jawabSingkat = DB::table('jawaban_user_singkat')
                                         ->join('nilai_test', 'jawaban_user_singkat.test_id', '=', 'nilai_test.test_id')
                                         ->join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
                                         ->where('peserta.user_id', Auth::user()->id)
                                         ->where('jawaban_user_singkat.test_id', $test->id)
                                         ->where('jawaban_user_singkat.soal_id', $soal->id)
+                                        ->where('jawaban_user_singkat.attempt', $latestAttempt)
                                         ->whereColumn('jawaban_user_singkat.peserta_id', '=', 'nilai_test.peserta_id')
                                         ->first();
                                 @endphp

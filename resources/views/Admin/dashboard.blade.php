@@ -5,6 +5,12 @@
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Welcome, {{ $admin->nama }}!</h1>
     </div>
 
+    <div class="p-4 flex justify-start items-center">
+        <div class="responsive-video">
+            <iframe width="500" height="215" src="https://www.youtube.com/embed/MkmHZAZt_Qc?autoplay=1&playlist=MkmHZAZt_Qc&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
     <div class="col-span-full xl:col-auto">
         <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -14,7 +20,7 @@
                     <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Diskominfo</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
                         <p>{{ $admin->id }}</p>
-                        
+                         
                     </div>
                 </div>
             </div>
