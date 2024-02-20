@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Storage;
 
 class TugasController extends Controller
 {
+    public function viewTambahTugas($plt_kode){
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
+        return view('admin.tambah_tugas', ['pelatihan' => $pelatihan]);
+    }
+
     public function viewDetailTugas(String $plt_kode, String $tugas_id) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
@@ -51,9 +56,9 @@ class TugasController extends Controller
 
         try {
             Tugas::create($validated);
-            return redirect()->back()->with('success', 'Data tugas berhasil disimpan');
+            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data tugas berhasil disimpan');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data');
+            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
         }
     }
 

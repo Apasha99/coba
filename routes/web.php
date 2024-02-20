@@ -50,7 +50,7 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
-    Route::get('peserta/cetak-sertifikat', 'cetakSertifikat')->name('peserta.cetakSertifikat');
+    Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
@@ -119,6 +119,7 @@ Route::controller(MateriController::class)->group(function(){
 });
 
 Route::controller(TugasController::class)->group(function(){
+    Route::get('admin/pelatihan/{plt_kode}/tambah-tugas', 'viewTambahTugas')->middleware('only_admin')->name('admin.viewTambahTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas', 'store')->middleware('only_admin')->name('admin.storeTugas');
     Route::get('admin/pelatihan/{plt_kode}/tugas/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->middleware('only_admin')->name('admin.updateTugas');

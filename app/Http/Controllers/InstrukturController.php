@@ -246,12 +246,12 @@ class InstrukturController extends Controller
 
                 DB::commit();
 
-                return redirect()->route('admin.viewDaftarInstruktur')->with('success', 'instruktur dan semua data terkait berhasil dihapus.');
+                return redirect()->route('admin.viewDaftarInstruktur')->with('success', 'Instruktur dan semua data terkait berhasil dihapus');
             } catch (\Exception $e) {
                 DB::rollback();
                 dd($e);
 
-                return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Terjadi kesalahan saat menghapus instruktur dan data terkait.');
+                return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Terjadi kesalahan saat menghapus instruktur dan data terkait');
             }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return redirect()->route('admin.viewDaftarInstruktur')->with('error', 'Tidak dapat menemukan instruktur yang ingin dihapus.');
@@ -302,11 +302,11 @@ class InstrukturController extends Controller
                 ->whereBetween('id', [$startUserId, $endUserId])
                 ->get();
         } else {
-            return redirect()->back()->with('error', 'Opsi pengiriman tidak valid.');
+            return redirect()->back()->with('error', 'Opsi pengiriman tidak valid');
         }
 
         if ($users->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak ada pengguna yang dipilih.');
+            return redirect()->back()->with('error', 'Tidak ada pengguna yang dipilih');
         }
 
         // Loop melalui pengguna dan kirim email

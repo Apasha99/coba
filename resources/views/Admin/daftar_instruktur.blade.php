@@ -32,7 +32,7 @@
     </div>
     <div class="sm:flex mb-4">
         <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <input type="text" id="searchInput" placeholder="Search for instruktur" class="mt-2 mb-4 p-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"> 
+            <input type="text" id="searchInput" placeholder="Search" class="mt-2 mb-4 p-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"> 
         </div>
         <script>
             // Ambil input elemen pencarian
@@ -152,6 +152,9 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                    @php
+                                        $counter = 1;
+                                    @endphp
                                     @foreach ($instruktur as $ins)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
@@ -179,12 +182,66 @@
                                                     </svg>
                                                 </a>
                                                 @endif
-                                                <button type="button" data-modal-toggle="delete-instruktur-modal-{{ $ins->instruktur_id }}"
+                                                <button type="button" data-modal-target="delete-instruktur-modal-{{ $ins->instruktur_id }}" data-modal-toggle="delete-instruktur-modal-{{ $ins->instruktur_id }}"
                                                     class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 ml-3">
                                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                                     </svg>
                                                 </button>
+
+                                                <div id="delete-instruktur-modal-{{ $ins->instruktur_id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
+                                                            <div class="p-4 md:p-5 text-center">
+                                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                                </svg>
+                                                                <h3 class="mb-5 text-m font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus instruktur ini?</h3>
+                                                                <div class="flex space-x-2 justify-center">
+                                                                    <form id="deleteForm" method="POST" action="{{route('admin.deleteInstruktur', $ins->instruktur_id)}}">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                        <button data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                                            Ya
+                                                                        </button>
+                                                                    </form>
+                                                                    <button data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                                        Tidak
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- <div id="delete-instruktur-modal-{{ $ins->instruktur_id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
+                                                            <div class="p-4 md:p-5 text-center">
+                                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                                </svg>
+                                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400 -mx-12">Apakah Anda yakin ingin menghapus instruktur ini?</h3>
+                                                                <button data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                                    Ya
+                                                                </button>
+                                                                <button data-modal-hide="delete-instruktur-modal-{{ $ins->instruktur_id }}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Batal</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
                                             </td>
                                         </tr>
                                     @endforeach
@@ -196,6 +253,7 @@
             </div>
         </div>
     </div>
+    
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-full"
         id="email-instruktur-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
@@ -364,6 +422,7 @@
         </div>
     </div>
     @endforeach
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         var table = document.getElementById('myTable');
@@ -423,5 +482,4 @@
         }
     });
     </script>
-    
 @endsection

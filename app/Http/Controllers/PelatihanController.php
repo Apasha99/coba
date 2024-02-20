@@ -31,23 +31,46 @@ class PelatihanController extends Controller
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->get();
         $peserta = Peserta::where('user_id', Auth::user()->id)->first();
+    
+        $totalNilaiTes = [];
+        $doneTest = 0;
+        foreach ($test as $tes) {
+            $nilaiPeserta = Nilai_Test::where('test_id', $tes->id)
+                ->where('peserta_id', $peserta->id)
+                ->get();
+    
+            $totalNilai = $nilaiPeserta->sum('nilai');
 
-        $done = 0;
+            if ($totalNilai >= $tes->kkm) {
+                $doneTest++;
+            }
+    
+            $totalNilaiTes[$tes->id] = $totalNilai;
+        }
+    
+        $doneTugas = 0;
         foreach ($tugas as $tgs) {
             if ($tgs->submissions()->where('peserta_id', $peserta->id)->first()) {
-                $done++;
+                $doneTugas++;
             }
         }
-
+    
         $completed = false;
-        if ($done == count($tugas)) {
+        if ($doneTugas == count($tugas) && $doneTest == count($test)) {
             $completed = true;
         }
-
-        return view('peserta.detail_pelatihan', ['pelatihan' => $pelatihan, 'materi' => $materi, 
-                                                'tugas' => $tugas, 'test' => $test, 'peserta' => $peserta,
-                                                'completed' => $completed]);
+    
+        return view('peserta.detail_pelatihan', [
+            'pelatihan' => $pelatihan,
+            'materi' => $materi, 
+            'tugas' => $tugas, 
+            'test' => $test, 
+            'peserta' => $peserta,
+            'totalNilaiTes' => $totalNilaiTes,
+            'completed' => $completed
+        ]);
     }
+    
 
     public function viewDetailPelatihanAdmin(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
