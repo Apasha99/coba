@@ -89,6 +89,14 @@ Route::controller(InstrukturController::class)->middleware('only_admin')->group(
 
 Route::controller(InstrukturController::class)->group(function(){
     Route::get('instruktur/dashboard', 'instruktur')->middleware('only_instruktur')->name('instruktur.dashboard');
+    Route::get('instruktur/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_instruktur')->name('instruktur.viewDaftarPelatihan');
+    Route::get('instruktur/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_instruktur')->name('instruktur.viewDetailPelatihan');
+    Route::get('instruktur/pelatihan/{plt_kode}/daftar-partisipan', 'viewDaftarPartisipan')->middleware('only_instruktur')->name('instruktur.viewDaftarPartisipan');
+    Route::get('instruktur/pelatihan/{plt_kode}/tambah-materi', 'viewTambahMateri')->middleware('only_instruktur')->name('instruktur.viewTambahMateri');
+    Route::get('instruktur/pelatihan/{plt_kode}/materi/{id}', 'viewEditMateri')->middleware('only_instruktur')->name('instruktur.viewEditMateri');
+    Route::get('instruktur/pelatihan/{plt_kode}/tambah-tugas', 'viewTambahTugas')->middleware('only_instruktur')->name('instruktur.viewTambahTugas');
+    Route::get('instruktur/pelatihan/{plt_kode}/tugas/{id}', 'viewEditTugas')->middleware('only_instruktur')->name('instruktur.viewEditTugas');
+    Route::get('instruktur/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_instruktur')->name('instruktur.viewDaftarSubmissionTugas');
 });
 
 Route::controller(PelatihanController::class)->group(function(){
@@ -111,19 +119,19 @@ Route::controller(PelatihanController::class)->group(function(){
 
 Route::controller(MateriController::class)->group(function(){
     Route::get('admin/pelatihan/{plt_kode}/tambah-materi', 'viewTambahMateri')->middleware('only_admin')->name('admin.viewTambahMateri');
-    Route::post('admin/pelatihan/{plt_kode}/materi', 'store')->middleware('only_admin')->name('admin.storeMateri');
+    Route::post('pelatihan/{plt_kode}/materi/store', 'store')->withoutMiddleware('only_peserta')->name('materi.store');
     Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditMateri');
-    Route::post('admin/pelatihan/{plt_kode}/materi/{id}', 'update')->middleware('only_admin')->name('admin.updateMateri');
-    Route::post('admin/pelatihan/{plt_kode}/materi/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteMateri');
+    Route::post('pelatihan/{plt_kode}/materi/{id}', 'update')->withoutMiddleware('only_peserta')->name('materi.update');
+    Route::post('pelatihan/{plt_kode}/materi/{id}/delete', 'delete')->withoutMiddleware('only_peserta')->name('materi.delete');
     //Route::get('admin/pelatihan/{plt_kode}/materi/{id}', 'view')->middleware('only_admin')->name('admin.storeMateri');
 });
 
 Route::controller(TugasController::class)->group(function(){
     Route::get('admin/pelatihan/{plt_kode}/tambah-tugas', 'viewTambahTugas')->middleware('only_admin')->name('admin.viewTambahTugas');
-    Route::post('admin/pelatihan/{plt_kode}/tugas', 'store')->middleware('only_admin')->name('admin.storeTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas', 'store')->withoutMiddleware('only_peserta')->name('tugas.store');
     Route::get('admin/pelatihan/{plt_kode}/tugas/{id}', 'viewEdit')->middleware('only_admin')->name('admin.viewEditTugas');
-    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->middleware('only_admin')->name('admin.updateTugas');
-    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->middleware('only_admin')->name('admin.deleteTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->withoutMiddleware('only_peserta')->name('tugas.update');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->withoutMiddleware('only_peserta')->name('tugas.delete');
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}', 'viewDetailTugas')->middleware('only_peserta')->name('peserta.viewDetailTugas');
 });
 
@@ -150,8 +158,8 @@ Route::controller(SubmissionController::class)->group(function(){
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
 
     Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
-    Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->middleware('only_admin')->name('admin.inputNilai');
-    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->middleware('only_admin')->name('admin.downloadSubmissionTugas');
+    Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->withoutMiddleware('only_peserta')->name('submissionTugas.inputNilai');
+    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->withoutMiddleware('only_peserta')->name('submissionTugas.downloadSubmissionTugas');
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){

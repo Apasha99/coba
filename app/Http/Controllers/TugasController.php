@@ -27,11 +27,6 @@ class TugasController extends Controller
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
         $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
         $submission = Submission::where('tugas_id', $tugas_id)->where('peserta_id', $peserta_id)->first();
-        //dd($submission);
-        //$submission_files = SubmissionFile::where('submission_id', $submission->id)->get();
-        //dd($submission);
-        // // Misalnya, untuk mengecek apakah submission sudah ada
-        // $submissionExists = $peserta->submissions()->where('tugas_id', $tugasId)->exists();
         
         return view('peserta.detail_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
@@ -56,9 +51,17 @@ class TugasController extends Controller
 
         try {
             Tugas::create($validated);
-            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data tugas berhasil disimpan');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data tugas berhasil disimpan');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $kode)->with('success', 'Data tugas berhasil disimpan');
+            }
         } catch (\Exception $e) {
-            return redirect()->route('admin.viewDetailPelatihan', $kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Gagal menyimpan data tugas');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $kode)->with('success', 'Gagal menyimpan data tugas');
+            }
         }
     }
 
@@ -112,15 +115,20 @@ class TugasController extends Controller
     
             DB::commit();
     
-            return redirect()
-                ->route('admin.viewDetailPelatihan', $plt_kode)
-                ->with('success', 'Data tugas berhasil diperbarui');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $plt_kode)->with('success', 'Data tugas berhasil diperbarui');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $plt_kode)->with('success', 'Data tugas berhasil diperbarui');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal memperbarui data tugas.');
+
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $plt_kode)->with('success', 'Gagal memperbarui data tugas');
+            } else {
+                return redirect()->route('instruktur.viewDetailPelatihan', $plt_kode)->with('success', 'Gagal memperbarui data tugas');
+            }
         }
     }
 
