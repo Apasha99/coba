@@ -58,7 +58,7 @@
             </span> 
         </p>
     </div>
-    <div class="grid grid-cols-6 gap-6 overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="grid grid-cols-6 gap-3 overflow-x-auto shadow-md sm:rounded-lg">
         <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
             <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Test</h3>
             <p class="text-sm font-normal text-black-500 dark:text-gray-400">

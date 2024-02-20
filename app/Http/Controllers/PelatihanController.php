@@ -6,6 +6,7 @@ use App\Models\Pelatihan;
 use App\Models\Admin;
 use App\Models\Jawaban_Test;
 use App\Models\Materi;
+use App\Models\Attempt;
 use App\Models\Bidang;
 use App\Models\Instruktur;
 use App\Models\Instruktur_Pelatihan;
@@ -31,21 +32,25 @@ class PelatihanController extends Controller
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->get();
         $peserta = Peserta::where('user_id', Auth::user()->id)->first();
-    
+        
         $totalNilaiTes = [];
+
         $doneTest = 0;
         foreach ($test as $tes) {
-            $nilaiPeserta = Nilai_Test::where('test_id', $tes->id)
+            $nilaiPeserta = Attempt::where('test_id', $tes->id)
                 ->where('peserta_id', $peserta->id)
+                ->select('totalnilai')
                 ->get();
-    
-            $totalNilai = $nilaiPeserta->sum('nilai');
 
-            if ($totalNilai >= $tes->kkm) {
-                $doneTest++;
+            foreach ($nilaiPeserta as $nilai) {
+                // Memeriksa apakah nilai peserta lebih besar dari atau sama dengan KKM
+                if ($nilai->totalnilai >= $tes->kkm) {
+                    $doneTest++;
+                    break; // Keluar dari loop karena tes sudah selesai
+                }
             }
-    
-            $totalNilaiTes[$tes->id] = $totalNilai;
+        
+            $totalNilaiTes[$tes->id] = $nilaiPeserta->toArray();
         }
     
         $doneTugas = 0;
