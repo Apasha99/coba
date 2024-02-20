@@ -13,6 +13,7 @@ class Jawaban_User_Singkat extends Model
         'peserta_id',
         'test_id',
         'soal_id',
-        'jawaban'
+        'jawaban',
+        'attempt'
     ];
 }

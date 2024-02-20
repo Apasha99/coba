@@ -17,6 +17,7 @@ class Nilai_Test extends Model
         'jawaban_id',
         'nilai',
         'user_answers',
+        'attempt'
     ];
 
     public function peserta()

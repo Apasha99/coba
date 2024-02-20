@@ -487,7 +487,6 @@
     </div>
     </div>
 @endsection
-@endsection
 
 
 

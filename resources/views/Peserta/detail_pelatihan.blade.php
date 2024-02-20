@@ -130,7 +130,11 @@
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{route('peserta.viewDetailTest',[$pelatihan->kode, $tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
-                    @if ($totalNilaiTes[$tes->id] >= $tes->kkm)
+                    @if ($totalNilaiTes[$tes->id] == null)
+                    <div class="flex items-center">
+                        
+                    </div>
+                    @elseif ($totalNilaiTes[$tes->id] >= $tes->kkm)
                     <div class="flex items-center">
                         <div class="flex items-center p-2 mb-4 text-white rounded-lg bg-green-400 dark:bg-green-500 dark:text-white">
                         <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

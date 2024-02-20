@@ -36,7 +36,7 @@
                                     // Get all options for the current question
                                     $options = $jawaban_test->where('soal_id', $soal->id);
                                     $originalOrder = $options->pluck('urutan')->toArray();
-                                    $shuffledOrder = collect($originalOrder)->shuffle(1);
+                                    $shuffledOrder = collect($originalOrder)->shuffle();
                                     $selectedOption = old('selected_option_' . $soal->urutan) ?? session('selected_option_' . $soal->urutan) ?? null;
                                 @endphp
 
