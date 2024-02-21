@@ -19,6 +19,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="https://flowbite-admin-dashboard.vercel.app//app.css">
     <link rel="apple-touch-icon" sizes="180x180"
         href="https://flowbite-admin-dashboard.vercel.app/apple-touch-icon.png">
@@ -26,6 +30,8 @@
         href="https://flowbite-admin-dashboard.vercel.app/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16"
         href="https://flowbite-admin-dashboard.vercel.app/favicon-16x16.png">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <link rel="icon" type="image/png" href="https://flowbite-admin-dashboard.vercel.app/favicon.ico">
     <link rel="manifest" href="https://flowbite-admin-dashboard.vercel.app/site.webmanifest">
     <link rel="mask-icon" href="https://flowbite-admin-dashboard.vercel.app/safari-pinned-tab.svg" color="#5bbad5">
@@ -49,6 +55,9 @@
     <meta property="og:image" content="https://flowbite-admin-dashboard.vercel.app/images/og-image.png">
     <meta property="og:image:type" content="image/png">
 
+    <style>
+        
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -167,7 +176,7 @@
                             </button>
                         </div>
 
-                        <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
+                        <div class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
                             id="dropdown-2"
                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
                             data-popper-placement="bottom">
@@ -175,27 +184,22 @@
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
                                     {{auth()->user()->username}}
                                 </p>
-                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                                    role="none">
-                                    {{auth()->user()->id}}
-                                </p>
                             </div>
                             <ul class="py-1" role="none">
                                 <li>
-
+                                    <a href="/"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Profil</a>
                                 </li>
                                 <li>
                                     <a href="/"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Settings</a>
-                                </li>
-                                <li>
-
+                                        role="menuitem">Ubah Password</a>
                                 </li>
                                 <li>
                                     <a href="/logout"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Sign out</a>
+                                        role="menuitem">Keluar</a>
                                 </li>
                             </ul>
                         </div>

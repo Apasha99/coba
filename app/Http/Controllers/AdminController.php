@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Bidang;
+use App\Models\Instruktur;
+use App\Models\Instruktur_Pelatihan;
+use App\Models\Materi;
 use App\Models\Roles;
 use App\Models\User;
 use App\Models\Pelatihan;
+use App\Models\Peserta;
+use App\Models\Peserta_Pelatihan;
+use App\Models\Test;
+use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +32,8 @@ class AdminController extends Controller
             $role = Roles::leftJoin('users', 'roles.id', '=', 'users.role_id')
                         ->where('roles.id', Auth::user()->role_id)
                         ->first();
-            return view('admin.dashboard',['admin'=>$admin,'role'=>$role]);
+            $pelatihan = Pelatihan::where('status', 'On going')->get();
+            return view('admin.dashboard',['admin' => $admin,'role' => $role, 'pelatihan' => $pelatihan]);
         }
     }
 
@@ -56,6 +65,57 @@ class AdminController extends Controller
         //dd($admin2);
         $pst = User::where('role_id', '=', 1)->select('id')->get();
         return view('admin.detail_admin', ['admin' => $admin,'admin2'=>$admin2,'pst'=>$pst]);
+    }
+
+    public function viewDetailPelatihan(String $plt_kode) {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $materi = Materi::where('plt_kode', $plt_kode)->get();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->get();
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('admin.detail_pelatihan', ['bidang'=>$bidang,'pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
+    }
+
+    public function viewDaftarPartisipan(String $plt_kode){
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->pluck('peserta_id');
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->pluck('instruktur_id');
+        $allPeserta = Peserta::whereNotIn('id', $pesertaTerdaftar)->get();
+        $allInstruktur = Instruktur::whereNotIn('id', $instrukturTerdaftar)->get();
+        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->get();
+        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->get();
+        //dd($allPeserta);
+    
+        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
+                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
+        return view('admin.daftar_partisipan', ['bidang' => $bidang, 'pelatihan' => $pelatihan, 
+                                                'pesertaTerdaftar' => $pesertaTerdaftar, 'instrukturTerdaftar' => $instrukturTerdaftar,
+                                                'allPeserta' => $allPeserta, 'allInstruktur' => $allInstruktur]);
+    }
+
+    public function viewDaftarPelatihan() {
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->select('admin.nama', 'admin.id', 'users.username')
+                ->first();
+    
+        if($admin){
+            $pelatihan = Pelatihan::all();
+    
+            // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
+            foreach ($pelatihan as $p) {
+                $kodePelatihan = $p->kode;
+    
+                // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
+                $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
+    
+                // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
+                $p->pesertaPelatihan = $pesertaPelatihan;
+            }
+    
+            return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
+        }
     }
 
     public function create()

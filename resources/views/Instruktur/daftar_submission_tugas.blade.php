@@ -75,23 +75,35 @@
     </div> -->
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="min-w-full w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="min-w-full w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="myTable">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
-                    Nama Peserta
+                <span style="float: left;">Nama</span>
+                    <span id="sortNama" style="float: left;">
+                        <svg class="ml-2 w-4 h-4 text-gray dark:text-gray" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                        </svg>
+                    </span>
+                    <div style="clear: both;"></div>
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Waktu Submit
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Nilai
+                    <span style="float: left;">Nilai</span>
+                    <span id="sortNilai" style="float: left;">
+                        <svg class="ml-2 w-4 h-4 text-gray dark:text-gray" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                        </svg>
+                    </span>
+                    <div style="clear: both;"></div>
                 </th>
                 <th scope="col" class="px-6 py-3">
                     File Jawaban
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Action
+                    Aksi
                 </th>
             </tr>
         </thead>
@@ -102,10 +114,10 @@
                     {{ $submission->peserta->nama }}
                 </th>
                 <td class="px-6 py-4">
-                    {{ $submission->updated_at }}
-                    @if ($submission->updated_at > $tugas->end_date)
+                    {{ $submission->submitted_at }}
+                    @if ($submission->submitted_at > $tugas->end_date)
                         <div class="mt-2">
-                            <span class="bg-red-200 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Late</span>
+                            <span class="bg-red-200 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Terlambat</span>
                         </div>
                     @endif
                 </td>
@@ -122,7 +134,7 @@
                     @endforeach
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <a data-modal-toggle="add-nilai-modal" data-tooltip-target="tooltip-nilai-{{ $submission->id }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    <a data-modal-toggle="add-nilai-modal-{{ $submission->id }}" data-tooltip-target="tooltip-nilai-{{ $submission->id }}" class="inline-flex items-center px-2 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     <svg class="w-4 h-4 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M8 7V2.2a2 2 0 0 0-.5.4l-4 3.9a2 2 0 0 0-.3.5H8Zm2 0V2h7a2 2 0 0 1 2 2v.1a5 5 0 0 0-4.7 1.4l-6.7 6.6a3 3 0 0 0-.8 1.6l-.7 3.7a3 3 0 0 0 3.5 3.5l3.7-.7a3 3 0 0 0 1.5-.9l4.2-4.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
                         <path fill-rule="evenodd" d="M17.4 8a1 1 0 0 1 1.2.3 1 1 0 0 1 0 1.6l-.3.3-1.6-1.5.4-.4.3-.2Zm-2.1 2.1-4.6 4.7-.4 1.9 1.9-.4 4.6-4.7-1.5-1.5ZM17.9 6a3 3 0 0 0-2.2 1L9 13.5a1 1 0 0 0-.2.5L8 17.8a1 1 0 0 0 1.2 1.1l3.7-.7c.2 0 .4-.1.5-.3l6.6-6.6A3 3 0 0 0 18 6Z" clip-rule="evenodd"/>
@@ -144,7 +156,7 @@
                     
                     <!-- modal nilai -->
                     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
-                        id="add-nilai-modal">
+                        id="add-nilai-modal-{{ $submission->id }}">
                         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
                             <!-- Modal content -->
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
@@ -155,7 +167,7 @@
                                     </h1>
                                     <button type="button"
                                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
-                                        data-modal-toggle="add-nilai-modal">
+                                        data-modal-toggle="add-nilai-modal-{{ $submission->id }}">
                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd"
                                                 d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -204,9 +216,77 @@
         </tbody>
     </table>
 </div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+    var table = document.getElementById('myTable');
+    var rows = table.rows;
+    var isSortAscendingNilai = true;
+    var isSortAscendingNama = true;
 
+    document.getElementById('sortNama').addEventListener('click', function() {
+        sortByNama(); // sort by nama
+    });
+    document.getElementById('sortNilai').addEventListener('click', function() {
+        sortByNilai(); // sort by nilai
+    });
 
-    </div>
+    function sortByNilai() {
+        var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+            var cellA = Number(a.cells[2].innerText); // Mengambil nilai dari kolom nilai (indeks 2)
+            var cellB = Number(b.cells[2].innerText); // Mengambil nilai dari kolom nilai (indeks 2)
+
+            if (isNaN(cellA) || isNaN(cellB)) {
+                // Jika salah satu nilai bukan angka, kembalikan 0 (tidak ada perubahan)
+                return 0;
+            }
+
+            if (isSortAscendingNilai) {
+                return cellA - cellB;
+            } else {
+                return cellB - cellA;
+            }
+        });
+
+        // Menghapus semua baris kecuali header dari tabel
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // Menambahkan kembali baris-baris yang sudah diurutkan
+        sortedRows.forEach(function(row) {
+            table.appendChild(row);
+        });
+
+        isSortAscendingNilai = !isSortAscendingNilai;
+    }
+
+    function sortByNama() {
+        var sortedRows = Array.from(rows).slice(1).sort(function(a, b) {
+            var namaA = a.cells[0].innerText.toLowerCase();
+            var namaB = b.cells[0].innerText.toLowerCase();
+
+            if (isSortAscendingNama) {
+                return namaA.localeCompare(namaB);
+            } else {
+                return namaB.localeCompare(namaA);
+            }
+        });
+
+        // Menghapus semua baris kecuali header dari tabel
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // Menambahkan kembali baris-baris yang sudah diurutkan
+        sortedRows.forEach(function(row) {
+            table.appendChild(row);
+        });
+
+        isSortAscendingNama = !isSortAscendingNama;
+    }
+});
+    </script>
 @endsection
 
 

@@ -58,7 +58,7 @@
         </nav>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-    <h1 class="mb-2 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Partisipan</h1>
+    <h1 class="mb-3 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Partisipan</h1>
         <button data-modal-toggle="modal-inv-ins"
             class="inline-flex items-center justify-center mb-2 w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@
             <div class="flex flex-col">
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
-                        <div class="overflow-hidden shadow">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
                                     <tr>
