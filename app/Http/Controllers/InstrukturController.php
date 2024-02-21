@@ -438,4 +438,57 @@ class InstrukturController extends Controller
         return $pdf->stream('daftar_instruktur'.'.pdf');
     }
 
+    public function ubahPassword(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+    
+        return view('instruktur.ubah_password', compact('instruktur'));
+    }
+    
+
+    public function updatePassword(Request $request, $instruktur_id){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:8|string',
+            'conf_password' => 'required|same:new_password',
+        ]);
+    
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->where('user_id',$instruktur_id)
+                ->first();
+    
+        if (!$instruktur) {
+            return response()->json(['error' => 'Instruktur not found'], 404);
+        }
+    
+        // Verifikasi password yang dimasukkan dengan password_awal
+        if (!Hash::check($request->input('password'), $instruktur->password)) {
+            return response()->json(['error' => 'Current password does not match'], 400);
+        }
+    
+        try{
+            DB::beginTransaction();
+    
+            $updateData = [];
+    
+            if ($request->has('new_password')) {
+                $updateData['password'] = Hash::make($request->input('new_password'));
+                $updateData['password_awal'] = $request->input('new_password');
+            }
+    
+            $instruktur->user()->update($updateData);
+    
+            DB::commit();
+    
+            return redirect()->back()->with('success','Password berhasil diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Gagal update password');
+        }
+    }
+    
+    
+
 }

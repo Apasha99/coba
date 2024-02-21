@@ -44,7 +44,7 @@ class AuthController extends Controller
             }
         }
 
-        return back()->with('error', 'Login Gagal');
+        return back()->with('error', 'Username atau Password salah');
     }
 
 

@@ -127,7 +127,7 @@ class SubmissionTestController extends Controller
             $currentQuestion = Soal_Test::find($soal_id);
 
             if ($currentQuestion->tipe == "Jawaban Singkat") {
-                $jawabanSingkatSoal = $request->input('singkat')[$urutan] ?? null;
+                $jawabanSingkatSoal = strtolower($request->input('singkat')[$urutan] ?? null);
             } else {
                 $selectedOptionId = $request->input('selected_option.' . $urutan);
             }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelatihan;
 use App\Models\Test;
 use App\Models\Admin;
+use App\Models\Attempt;
 use App\Models\Instruktur;
 use App\Models\Soal_Test;
 use App\Models\Jawaban_Test;
@@ -90,6 +91,9 @@ class TestController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->first();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
@@ -99,7 +103,7 @@ class TestController extends Controller
         if(Auth::user()->role_id == 1){
             return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
         } else{
-            return view('instruktur.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+            return view('instruktur.detail_test', ['instruktur'=>$instruktur,'hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
         }
     }
 
@@ -154,8 +158,8 @@ class TestController extends Controller
 
             if ($validated['tipe_option'] === 'Pilihan Ganda') {
                 // Simpan jawaban pilihan ganda
-                $jawabanBenar = $request->input('ganda-benar');
-                $gandaOption = $request->input('ganda');
+                $jawabanBenar = strtolower($request->input('ganda-benar'));
+                $gandaOption = strtolower($request->input('ganda'));
                 Jawaban_Test::create([
                     'plt_kode' => $plt_kode,
                     'test_id' => $test_id,
@@ -177,7 +181,7 @@ class TestController extends Controller
                 // Increment $incrementUrutan only once before the loop
             } elseif ($validated['tipe_option'] === 'Jawaban Singkat') {
                 // Simpan jawaban singkat
-                $jawabanBenar = $request->input('jawaban-singkat');
+                $jawabanBenar = strtolower($request->input('jawaban-singkat'));
                 Jawaban_Test::create([
                     'plt_kode' => $plt_kode,
                     'test_id' => $test_id,
@@ -198,7 +202,7 @@ class TestController extends Controller
                         'test_id' => $test_id,
                         'soal_id' => $soal->id,
                         'status' => false,
-                        'title' => $option,
+                        'title' => strtolower($option),
                         'urutan' => ++$optionIncrementUrutan, 
                     ]);
                 }
@@ -209,7 +213,7 @@ class TestController extends Controller
                         'test_id' => $test_id,
                         'soal_id' => $soal->id,
                         'status' => true,
-                        'title' => $option,
+                        'title' => strtolower($option),
                         'urutan' => ++$optionIncrementUrutan,
                     ]);
                 }
@@ -345,8 +349,16 @@ class TestController extends Controller
 
     public function deleteSoal(Request $request, $plt_kode, $test_id, $soal_id)
     {
+        $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->where('id', $soal_id)->first();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->where('soal_id', $soal_id)->get();
+        $cekPeserta = Attempt::where('test_id',$test_id)->exists();
+
+        if($cekPeserta == true){
+            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dikerjakan peserta');
+        }else if($test->start_date <= now()){
+            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dimulai');
+        }
 
         DB::beginTransaction();
 
@@ -406,6 +418,12 @@ class TestController extends Controller
         $soal_test = Soal_Test::where('test_id', $test_id)->where('id',$soal_id)->first();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->where('soal_id',$soal_id)->get();
                                 //dd($test);
+        $cekPeserta = Attempt::where('test_id',$test_id)->exists();
+        if($cekPeserta == true){
+            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dikerjakan peserta');
+        }else if($test->start_date <= now()){
+            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dimulai');
+        }
         if(Auth::user()->role_id == 1){
             return view('admin.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
         }else{
@@ -420,7 +438,7 @@ class TestController extends Controller
         $jawaban_test = Jawaban_Test::where('test_id',$test_id)->where('soal_id',$soal_id)->get();
         //dd($request);
         if (!$soal_test) {
-            return redirect()->route('admin.detailTest')->with('error', 'Tidak dapat menemukan soal yang ingin diedit.');
+            return redirect()->route('test.detail')->with('error', 'Tidak dapat menemukan soal yang ingin diedit.');
         }
         $validated = $request->validate([
             'soal' => ['required', 'max:2000'],
@@ -457,7 +475,7 @@ class TestController extends Controller
 
             if ($validated['tipe_option'] === 'Pilihan Ganda') {
                 // Simpan jawaban pilihan ganda
-                $jawabanBenar = $request->input('ganda_benar');
+                $jawabanBenar = strtolower($request->input('ganda_benar'));
                 Jawaban_Test::create([
                     'plt_kode' => $plt_kode,
                     'test_id' => $test_id,
@@ -478,7 +496,7 @@ class TestController extends Controller
                         'test_id' => $test_id,
                         'soal_id' => $soal_test->id,
                         'status' => false,
-                        'title' => $option,
+                        'title' => strtolower($option),
                         'urutan' => ++$optionIncrementUrutan,
                         
                     ]);
@@ -491,7 +509,7 @@ class TestController extends Controller
                         'test_id' => $test_id,
                         'soal_id' => $soal_test->id,
                         'status' => true,
-                        'title' => $option,
+                        'title' => strtolower($option),
                         'urutan' => ++$optionIncrementUrutan, 
                     ]);
                 }
