@@ -20,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -329,6 +330,57 @@ class AdminController extends Controller
         ]);
 
         return $pdf->stream('daftar_admin'.'.pdf');
+    }
+
+    public function ubahPassword(){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                    ->where('admin.user_id', Auth::user()->id)
+                    ->first();
+    
+        return view('admin.ubah_password', compact('admin'));
+    }
+    
+
+    public function updatePassword(Request $request, $admin_id){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:8|string',
+            'conf_password' => 'required|same:new_password',
+        ]);
+    
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                ->where('admin.user_id', Auth::user()->id)
+                ->where('user_id',$admin_id)
+                ->first();
+    
+        if (!$admin) {
+            return redirect()->back()->with('error' ,'Admin not found');
+        }
+    
+        // Verifikasi password yang dimasukkan dengan password_awal
+        if (!Hash::check($request->input('password'), $admin->password)) {
+            return redirect()->back()->with('error' ,'Current password does not match');
+        }
+    
+        try{
+            DB::beginTransaction();
+    
+            $updateData = [];
+    
+            if ($request->has('new_password')) {
+                $updateData['password'] = Hash::make($request->input('new_password'));
+                $updateData['password_awal'] = $request->input('new_password');
+            }
+    
+            $admin->user()->update($updateData);
+    
+            DB::commit();
+    
+            return redirect()->back()->with('success','Password berhasil diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Gagal update password');
+        }
     }
 
 

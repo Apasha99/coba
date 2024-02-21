@@ -460,12 +460,12 @@ class InstrukturController extends Controller
                 ->first();
     
         if (!$instruktur) {
-            return response()->json(['error' => 'Instruktur not found'], 404);
+            return redirect()->back()->with('error' ,'Instruktur not found');
         }
     
         // Verifikasi password yang dimasukkan dengan password_awal
         if (!Hash::check($request->input('password'), $instruktur->password)) {
-            return response()->json(['error' => 'Current password does not match'], 400);
+            return redirect()->back()->with('error' ,'Current password does not match');
         }
     
         try{

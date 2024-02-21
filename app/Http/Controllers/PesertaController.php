@@ -551,10 +551,61 @@ class PesertaController extends Controller
         $peserta = Peserta::where('id', $peserta_id)->first();
 
         $pdf = app('dompdf.wrapper');
-$pdf->setPaper('A4', 'landscape'); // Set ukuran kertas ke A4 dengan orientasi landscape
-$pdf->loadView('peserta.sertifikat', ['pelatihan' => $pelatihan, 'peserta' => $peserta]);
+        $pdf->setPaper('A4', 'landscape'); // Set ukuran kertas ke A4 dengan orientasi landscape
+        $pdf->loadView('peserta.sertifikat', ['pelatihan' => $pelatihan, 'peserta' => $peserta]);
 
         
         return $pdf->stream('sertifikat.pdf');
+    }
+
+    public function ubahPassword(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+    
+        return view('peserta.ubah_password', compact('peserta'));
+    }
+    
+
+    public function updatePassword(Request $request, $peserta_id){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:8|string',
+            'conf_password' => 'required|same:new_password',
+        ]);
+    
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->where('user_id',$peserta_id)
+                    ->first();
+    
+        if (!$peserta) {
+            return redirect()->back()->with('error', 'Peserta not found');
+        }
+    
+        // Verifikasi password yang dimasukkan dengan password_awal
+        if (!Hash::check($request->input('password'), $peserta->password)) {
+            return redirect()->back()->with('error', 'Current password does not match');
+        }
+    
+        try{
+            DB::beginTransaction();
+    
+            $updateData = [];
+    
+            if ($request->has('new_password')) {
+                $updateData['password'] = Hash::make($request->input('new_password'));
+                $updateData['password_awal'] = $request->input('new_password');
+            }
+    
+            $peserta->user()->update($updateData);
+    
+            DB::commit();
+    
+            return redirect()->back()->with('success','Password berhasil diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Gagal update password');
+        }
     }
 }
