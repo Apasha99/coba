@@ -19,7 +19,11 @@ use App\Imports\PesertaImport;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\PesertaRegistered; 
+use App\Mail\PesertaRegistered;
+use App\Models\Attempt;
+use App\Models\Materi;
+use App\Models\Test;
+use App\Models\Tugas;
 use Barryvdh\DomPDF\PDF;
 
 class PesertaController extends Controller
@@ -56,6 +60,56 @@ class PesertaController extends Controller
         return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
 
+    public function viewDetailPelatihanPeserta(String $plt_kode) {
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $materi = Materi::where('plt_kode', $plt_kode)->get();
+        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
+        $test = Test::where('plt_kode', $plt_kode)->get();
+        $peserta = Peserta::where('user_id', Auth::user()->id)->first();
+        
+        $totalNilaiTes = [];
+
+        $doneTest = 0;
+        foreach ($test as $tes) {
+            $nilaiPeserta = Attempt::where('test_id', $tes->id)
+                ->where('peserta_id', $peserta->id)
+                ->select('totalnilai')
+                ->get();
+
+            foreach ($nilaiPeserta as $nilai) {
+                // Memeriksa apakah nilai peserta lebih besar dari atau sama dengan KKM
+                if ($nilai->totalnilai >= $tes->kkm) {
+                    $doneTest++;
+                    break; // Keluar dari loop karena tes sudah selesai
+                }
+            }
+        
+            $totalNilaiTes[$tes->id] = $nilaiPeserta->toArray();
+        }
+    
+        $doneTugas = 0;
+        foreach ($tugas as $tgs) {
+            if ($tgs->submissions()->where('peserta_id', $peserta->id)->first()) {
+                $doneTugas++;
+            }
+        }
+    
+        $completed = false;
+        if ($doneTugas == count($tugas) && $doneTest == count($test)) {
+            $completed = true;
+        }
+    
+        return view('peserta.detail_pelatihan', [
+            'pelatihan' => $pelatihan,
+            'materi' => $materi, 
+            'tugas' => $tugas, 
+            'test' => $test, 
+            'peserta' => $peserta,
+            'totalNilaiTes' => $totalNilaiTes,
+            'completed' => $completed
+        ]);
+    }
+    
     public function detail_peserta($peserta_id)
     {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')

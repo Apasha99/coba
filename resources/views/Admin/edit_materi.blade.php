@@ -44,7 +44,7 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('admin.updateMateri', ['plt_kode' => $pelatihan->kode, 'id' => $materi->id]) }}" method="post"  enctype="multipart/form-data">
+        <form action="{{ route('materi.update', ['plt_kode' => $pelatihan->kode, 'id' => $materi->id]) }}" method="post"  enctype="multipart/form-data">
             @csrf
         </div>
         <div class="col-span-4">

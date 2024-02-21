@@ -38,6 +38,9 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
     Route::get('admin/dashboard', 'admin')->name('admin.dashboard');
     Route::get('admin/daftar-admin', 'daftar_admin')->name('admin.viewDaftarAdmin');
     Route::get('admin/daftar-admin/detail/{admin_id}', 'detail_admin')->name('admin.viewDetailAdmin');
+    Route::get('admin/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_admin')->name('admin.viewDetailPelatihan');
+    Route::get('admin/pelatihan/{plt_kode}/daftar-partisipan', 'viewDaftarPartisipan')->middleware('only_admin')->name('admin.viewDaftarPartisipan');
+    Route::get('admin/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.viewDaftarPelatihan');
     Route::get('admin/daftar-admin/create', 'create')->name('admin.createAdmin');
     Route::post('admin/daftar-admin/store', 'store')->name('admin.storeAdmin');
     Route::get('admin/daftar-admin/search', 'searchAdmin')->name('admin.searchAdmin');
@@ -49,6 +52,7 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
 });
@@ -99,14 +103,11 @@ Route::controller(InstrukturController::class)->group(function(){
     Route::get('instruktur/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_instruktur')->name('instruktur.viewDaftarSubmissionTugas');
     Route::get('instruktur/ubah-password', 'ubahPassword')->middleware('only_instruktur')->name('instruktur.ubahPassword');
     Route::post('instruktur/ubah-password/{instruktur_id}', 'updatePassword')->middleware('only_instruktur')->name('instruktur.updatePassword');
+    Route::post('instruktur/gabung-pelatihan', 'gabungPelatihan')->middleware('only_instruktur')->name('instruktur.gabungPelatihan');
 });
 
 Route::controller(PelatihanController::class)->group(function(){
-    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::post('joinPelatihan', 'joinPelatihan')->middleware('only_peserta')->name('peserta.joinPelatihan');
-    Route::get('admin/pelatihan/{plt_kode}', 'viewDetailPelatihanAdmin')->middleware('only_admin')->name('admin.viewDetailPelatihan');
-    Route::get('admin/pelatihan/{plt_kode}/daftar-partisipan', 'viewDaftarPartisipan')->middleware('only_admin')->name('admin.viewDaftarPartisipan');
-    Route::get('admin/daftar-pelatihan', 'viewDaftarPelatihan')->middleware('only_admin')->name('admin.viewDaftarPelatihan');
     Route::get('admin/daftar-pelatihan/add', 'create')->middleware('only_admin')->name('admin.addPelatihan');
     Route::post('admin/daftar-pelatihan/store', 'store')->middleware('only_admin')->name('admin.storePelatihan');
     Route::get('admin/daftar-pelatihan/edit/{plt_id}', 'edit')->middleware('only_admin')->name('admin.editPelatihan');

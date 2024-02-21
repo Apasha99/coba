@@ -1,51 +1,97 @@
 @extends('admin.layout.layout')
 
 @section('content')
-    <div class="mb-4 col-span-full xl:mb-2">
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Welcome, {{ $admin->nama }}!</h1>
+    <div class="mb-4 col-span-full xl:mb-2 relative">
+        <img class="mb-4 rounded-lg w-full h-40 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ asset('image/hi2.png') }}">
+        <h1 class="absolute top-12 left-56 right-0 bottom-0 flex text-xl font-bold text-gray-900 sm:text-2xl dark:text-blue-900">Halo, {{ $admin->nama }}!</h1>
+        <p class="absolute top-20 left-56 right-0 bottom-0 flex text-sm font-semibold text-gray-900 sm:text-l dark:text-blue-900">Selamat bekerja!</p>
     </div>
+    <div class="w-full h-full border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-xl">
+    <div class="mt-4 ml-4">
+            <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Overview</h1>
+        </div>
+        <div class="p-4 grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-indigo-500 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
+                <div class="col-span-2">
+                    <img class="w-full h-full" src="{{ asset('image/laptop.png') }}">
+                </div>
+                <div class="p-4 mt-2 col-span-3">
+                    <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                        10
+                    </p>
+                    <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
+                        Pelatihan Aktif
+                    </p>
+                </div>
+            </div>
 
-    <div class="p-4 flex justify-start items-center">
-        <div class="responsive-video">
-            <iframe width="500" height="215" src="https://www.youtube.com/embed/MkmHZAZt_Qc?autoplay=1&playlist=MkmHZAZt_Qc&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-purple-500 border border-gray-200 rounded-lg shadow dark:bg-purple-900 dark:border-gray-700">
+                <div class="col-span-2">
+                    <img class="w-full h-full" src="{{ asset('image/buku.png') }}">
+                </div>
+                <div class="p-4 mt-2 col-span-3">
+                    <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                        10
+                    </p>
+                    <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
+                        Pelatihan Selesai
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-green-500 border border-gray-200 rounded-lg shadow dark:bg-green-900 dark:border-gray-700">
+                <div class="col-span-3">
+                    <img class="w-full h-full" src="{{ asset('image/peserta.png') }}">
+                </div>
+                <div class="p-4 mt-2 col-span-2">
+                    <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                        10
+                    </p>
+                    <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
+                        Peserta
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-yellow-500 border border-gray-200 rounded-lg shadow dark:bg-yellow-800 dark:border-gray-700">
+                <div class="ml-2 col-span-2">
+                    <img class="w-full h-full" src="{{ asset('image/instruktur.png') }}">
+                </div>
+                <div class="p-4 mt-2 col-span-3">
+                    <p class="text-xl font-bold text-white sm:text-4xl dark:text-white">
+                        10
+                    </p>
+                    <p class="text-sm font-regular text-white sm:text-xs dark:text-white">
+                        Instruktur
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="col-span-full xl:col-auto">
-        <div
-            class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ Auth::user()->getImageURL() }}">
-                <div>
-                    <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Diskominfo</h3>
-                    <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                        <p>{{ $admin->id }}</p>
-                         
+    <div class="w-full h-full mt-4 border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-xl">
+        <div class="mt-4 ml-4">
+            <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Pelatihan Aktif</h1>
+        </div>
+        <div class="p-4 grid grid-cols-3 gap-4">
+            @foreach ($pelatihan as $plt)
+            <div class="relative lock w-70 h-50 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 pelatihan-row">
+                <a href="{{ route('admin.viewDetailPelatihan', $plt->kode) }}" >
+                    <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
+                    <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                        <div>
+                            <h3 class="mb-1 ml-2 mt-2 text-l font-bold text-gray-900 dark:text-white searchable">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
+                            <div class="mb-4 ml-2 mt-2 text-sm text-gray-500 dark:text-gray-400 searchable">
+                                <p>
+                                    <span class="searchable">{{ $plt->kode }}</span> - 
+                                    <span class="searchable">{{ $plt->status }}</span> - 
+                                    <span class="searchable">{{ $plt->pesertaPelatihan }} peserta</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
-        </div>
-
-        <div
-            class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0">
-                    <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                        Role
-                    </p>
-                    <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                        {{$role->name}}
-                    </p>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection

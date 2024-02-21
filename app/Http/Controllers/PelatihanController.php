@@ -26,108 +26,6 @@ use Illuminate\Support\Facades\DB;
 
 class PelatihanController extends Controller
 {
-    public function viewDetailPelatihanPeserta(String $plt_kode) {
-        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        $materi = Materi::where('plt_kode', $plt_kode)->get();
-        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        $test = Test::where('plt_kode', $plt_kode)->get();
-        $peserta = Peserta::where('user_id', Auth::user()->id)->first();
-        
-        $totalNilaiTes = [];
-
-        $doneTest = 0;
-        foreach ($test as $tes) {
-            $nilaiPeserta = Attempt::where('test_id', $tes->id)
-                ->where('peserta_id', $peserta->id)
-                ->select('totalnilai')
-                ->get();
-
-            foreach ($nilaiPeserta as $nilai) {
-                // Memeriksa apakah nilai peserta lebih besar dari atau sama dengan KKM
-                if ($nilai->totalnilai >= $tes->kkm) {
-                    $doneTest++;
-                    break; // Keluar dari loop karena tes sudah selesai
-                }
-            }
-        
-            $totalNilaiTes[$tes->id] = $nilaiPeserta->toArray();
-        }
-    
-        $doneTugas = 0;
-        foreach ($tugas as $tgs) {
-            if ($tgs->submissions()->where('peserta_id', $peserta->id)->first()) {
-                $doneTugas++;
-            }
-        }
-    
-        $completed = false;
-        if ($doneTugas == count($tugas) && $doneTest == count($test)) {
-            $completed = true;
-        }
-    
-        return view('peserta.detail_pelatihan', [
-            'pelatihan' => $pelatihan,
-            'materi' => $materi, 
-            'tugas' => $tugas, 
-            'test' => $test, 
-            'peserta' => $peserta,
-            'totalNilaiTes' => $totalNilaiTes,
-            'completed' => $completed
-        ]);
-    }
-    
-
-    public function viewDetailPelatihanAdmin(String $plt_kode) {
-        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        $materi = Materi::where('plt_kode', $plt_kode)->get();
-        $tugas = Tugas::where('plt_kode', $plt_kode)->get();
-        $test = Test::where('plt_kode', $plt_kode)->get();
-        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
-                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
-        return view('admin.detail_pelatihan', ['bidang'=>$bidang,'pelatihan' => $pelatihan, 'materi' => $materi, 'tugas' => $tugas, 'test' => $test]);
-    }
-
-    public function viewDaftarPartisipan(String $plt_kode){
-        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->pluck('peserta_id');
-        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->pluck('instruktur_id');
-        $allPeserta = Peserta::whereNotIn('id', $pesertaTerdaftar)->get();
-        $allInstruktur = Instruktur::whereNotIn('id', $instrukturTerdaftar)->get();
-        $pesertaTerdaftar = Peserta_Pelatihan::where('plt_kode', $plt_kode)->get();
-        $instrukturTerdaftar = Instruktur_Pelatihan::where('plt_kode', $plt_kode)->get();
-        //dd($allPeserta);
-    
-        $bidang = Bidang::join('pelatihan','pelatihan.bidang_id','=','bidang.id')
-                        ->where('kode',$plt_kode)->select('bidang.nama as bidang_nama')->first()->bidang_nama;
-        return view('admin.daftar_partisipan', ['bidang' => $bidang, 'pelatihan' => $pelatihan, 
-                                                'pesertaTerdaftar' => $pesertaTerdaftar, 'instrukturTerdaftar' => $instrukturTerdaftar,
-                                                'allPeserta' => $allPeserta, 'allInstruktur' => $allInstruktur]);
-    }
-
-    public function viewDaftarPelatihan() {
-        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
-                ->where('admin.user_id', Auth::user()->id)
-                ->select('admin.nama', 'admin.id', 'users.username')
-                ->first();
-    
-        if($admin){
-            $pelatihan = Pelatihan::all();
-    
-            // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
-            foreach ($pelatihan as $p) {
-                $kodePelatihan = $p->kode;
-    
-                // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
-                $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
-    
-                // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
-                $p->pesertaPelatihan = $pesertaPelatihan;
-            }
-    
-            return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
-        }
-    }
-
     public function create(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
                 ->where('admin.user_id', Auth::user()->id)
@@ -159,9 +57,6 @@ class PelatihanController extends Controller
             $validated['poster'] = $posterPath;
         }
 
-        //dd($validated);
-       
-       
         // Proses penyimpanan data jika validasi berhasil
         Pelatihan::create($validated);
     
