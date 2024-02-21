@@ -608,4 +608,67 @@ class PesertaController extends Controller
             return redirect()->back()->with('error','Gagal update password');
         }
     }
+
+    public function profil(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+        return view('peserta.profil', compact('peserta'));
+    }
+
+    public function editprofil(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+        return view('peserta.edit_profil', compact('peserta'));
+    }
+
+    public function updateProfil(Request $request, $peserta_id){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->where('user_id',$peserta_id)
+                    ->first();
+
+        $validated = $request->validate([
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'noHP' => ['required', 'numeric'],
+            'alamat' => ['required'],
+            'foto' => [ 'max:10240'],
+        ]);
+        //dd($validated);
+        try {
+            DB::beginTransaction();
+
+            $updateData = [
+                'id' =>$peserta->id,
+                'noHP' => $validated['noHP'] ?? null,
+                'alamat' => $validated['alamat'] ?? null,
+            ];
+            //dd($updateData);
+            $peserta->update(array_filter($updateData));
+            $updateData2 = [
+                'username' => $validated['username'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'foto' => $validated['foto'] ?? null,
+            ];
+
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
+
+            $peserta->user->update(array_filter($updateData2));
+
+            DB::commit();
+
+            return redirect()
+                ->route('peserta.profil')
+                ->with('success', 'Data user berhasil diperbarui');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+        }
+    }
 }

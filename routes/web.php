@@ -62,6 +62,9 @@ Route::controller(PesertaController::class)->middleware('only_peserta')->group(f
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
     Route::get('peserta/ubah-password', 'ubahPassword')->middleware('only_peserta')->name('peserta.ubahPassword');
     Route::post('peserta/ubah-password/{peserta_id}', 'updatePassword')->middleware('only_peserta')->name('peserta.updatePassword');
+    Route::get('peserta/profil', 'profil')->middleware('only_peserta')->name('peserta.profil');
+    Route::get('peserta/profil/edit-profil', 'editProfil')->middleware('only_peserta')->name('peserta.editProfil');
+    Route::post('peserta/profil/edit-profil/{peserta_id}', 'updateProfil')->middleware('only_peserta')->name('peserta.updateProfil');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
