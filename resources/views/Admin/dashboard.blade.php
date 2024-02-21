@@ -7,7 +7,7 @@
         <p class="absolute top-20 left-56 right-0 bottom-0 flex text-sm font-semibold text-gray-900 sm:text-l dark:text-blue-900">Selamat bekerja!</p>
     </div>
     <div class="w-full h-full border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-xl">
-    <div class="mt-4 ml-4">
+        <div class="mt-4 ml-4">
             <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Overview</h1>
         </div>
         <div class="p-4 grid grid-cols-4 gap-4">

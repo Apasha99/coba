@@ -72,7 +72,7 @@
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-800">
-    <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed z-30 w-full">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -91,12 +91,12 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <a href="#" class="flex ml-2 md:mr-24">
+                    <!-- <a href="#" class="flex ml-2 md:mr-24">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Lambang_Kota_Semarang.png" class="h-8 mr-3"
                             alt="FlowBite Logo">
                         <span
-                            class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Sistem Seminar dan Pelatihan</span>
-                    </a>
+                            class="self-center text-xl font-bold sm:text-xl whitespace-nowrap dark:text-white">Sistem Seminar dan Pelatihan</span>
+                    </a> -->
 
                 </div>
                 <div class="flex items-center">
@@ -164,15 +164,15 @@
                             style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
                     </div>
 
-                    <div class="flex items-center ml-3">
+                    <div class="flex items-center ml-2">
                         <div>
                             <button type="button"
-                                class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                class="flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                                 id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
                                 <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full"
-                                    src=""
-                                    alt="user photo">
+                                <svg class="w-6 h-6 text-gray-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+                                </svg>
                             </button>
                         </div>
 
@@ -207,17 +207,50 @@
                 </div>
             </div>
         </div>
-    </nav>
-    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
-
+    </nav> 
+    <div></div>
+    <div class="flex overflow-hidden bg-gray-50 dark:bg-gray-900">
         <aside id="sidebar"
-            class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width"
+            class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full font-normal duration-75 lg:flex transition-width"
             aria-label="Sidebar">
+            
             <div
-                class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+                class="relative flex flex-col flex-1 min-h-0 pt-0 bg-indigo-100 border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                
+                <!-- sistem informasi -->
+                <div class="mt-4 flex">
+                    <a href="#" class="ml-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Lambang_Kota_Semarang.png" class="h-12 mr-3"
+                            alt="FlowBite Logo">
+                    </a>
+                    <h1 class="text-xl font-bold sm:text-sm dark:text-white">
+                        Sistem Seminar dan Pelatihan
+                    </h1>
+                </div>
+                
+                <!-- avatar -->
+                <div class="self-center mt-4">
+                    <div 
+                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                        id="user-menu-button-2" aria-expanded="false">
+                        
+                        <img class="w-28 h-28 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="Rounded avatar">
+                    </div>
+                </div>
+                
+                <div class="self-center mt-2" role="none">
+                    <p class="text-lg font-bold text-gray-900 dark:text-white" role="none">
+                        {{auth()->user()->admin->nama}}
+                    </p>
+                </div>
+                <div class="self-center" role="none">
+                    <p class="text-xs font-semibold text-gray-500 dark:text-white" role="none">
+                        {{auth()->user()->email}}
+                    </p>
+                </div>
+                <div class="flex flex-col flex-1 pt-2 pb-4 overflow-y-auto">
                     <div
-                        class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        class="flex-1 px-3 space-y-1 bg-indigo-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         <ul class="pb-2 space-y-2">
                             <li>
                                 <form action="{{route('admin.dashboard')}}" method="GET" class="lg:hidden">
@@ -302,7 +335,7 @@
         </button>
 
         <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
-
+        <div class="absolute w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900"></div>
         <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
             <main>
                 <div class="absolute w-full flex justify-center top-0">
@@ -345,32 +378,16 @@
                         </script>
                     @endif
                 </div>
+
+                <div class="mt-2"></div>
                 
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+                <div class="grid grid-cols-1 px-4 pt-8 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('content')
                 </div>
 
                 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('head')
                 </div>
-
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-2 dark:bg-gray-900" style="min-height: 100vh;">
-                    @yield('content5')
-                </div>
-
-
-                <div class="px-4 pb-6">
-                    @yield('content3')
-                </div>
-
-                <div class="flex justify-between border-gray-200 border-b dark:border-gray-700 pb-3">
-                    @yield('content4')
-                </div>
-
-                <div class="px-4 pt-2 pb-6" style="min-height: 100vh;">
-                    @yield('content2')
-                </div>
-
             </main>
         </div>
 
