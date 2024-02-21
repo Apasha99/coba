@@ -40,13 +40,6 @@ class SubmissionTestController extends Controller
                                 ->where('test_id',$test_id)->get();
         //dd($existingNilai);
 
-        $existingAttempt = Nilai_Test::where('test_id', $test_id)
-        ->whereHas('peserta', function($query) {
-            $query->where('user_id', Auth::user()->id)
-                ->where('attempt','=', 3);
-        })
-        ->exists();
-
         $existing = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
             $query->where('user_id', Auth::user()->id);
@@ -66,7 +59,7 @@ class SubmissionTestController extends Controller
         $currentQuestion = $soal_test->where('id', $soal_id)->sortBy('urutan')->first();
         
     
-        return view('peserta.detail_test', ['existing'=>$existing,'hitungsoal'=>$hitungsoal,'existingAttempt'=>$existingAttempt,
+        return view('peserta.detail_test', ['existing'=>$existing,'hitungsoal'=>$hitungsoal,
         'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
     }    
 
@@ -101,22 +94,10 @@ class SubmissionTestController extends Controller
             return redirect()->back()->with('error', 'Test telah berakhir.');
         }
 
-        $existingNilai = Nilai_Test::where('test_id', $test_id)
-                                    ->whereHas('peserta', function($query) {
-                                        $query->where('user_id', Auth::user()->id)
-                                            ->where('attempt','=', 3);
-                                    })
-                                    ->exists();
-
-        // Jika sudah ada nilai untuk tes ini, kembalikan pesan error
-        if ($existingNilai) {
-            return redirect()->back()->with('error', 'Anda sudah mencapai batas attempt untuk mengerjakan tes ini.');
-        }
 
         return view('peserta.test_2', [
             'pelatihan' => $pelatihan,
             'test' => $test,
-            'existingNilai' => $existingNilai,
             'nilai' => $nilai,
             'soal_test' => $soal_test,
             'jawaban_test' => $jawaban_test,

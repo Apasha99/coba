@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Rekap Test {{$test->nama}}</title>
+    <title>Daftar Rekap Test</title>
     <!-- Bootstrap CSS (jika menggunakan framework Bootstrap) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- CSS styling -->
     <style>
         /* CSS style untuk membuat tampilan tabel */
@@ -42,11 +43,12 @@
             margin-bottom: 10px; /* Jarak dari bawah tombol */
         }
     </style>
+
 </head>
 <body>
     <div class="container-lg">
         <div class="mb-4 col-span-full xl:mb-2">
-            <h2>Daftar Rekap Test {{$test->nama}} dalam Pelatihan {{$pelatihan->nama}}</h2>
+            <h2>Daftar Rekap Test Pelatihan {{$pelatihan->nama}}</h2>
             <h2>Dinas Kominfo Kota Semarang</h2>
         </div>
 
@@ -59,7 +61,7 @@
                     </th>
                     <th scope="col"
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Nama Peserta
+                        Test
                     </th>
                     <th scope="col"
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -67,78 +69,40 @@
                     </th>
                     <th scope="col"
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Nilai
+                        Tanggal Mulai Test
                     </th>
                     <th scope="col"
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Jumlah Attempt
-                    </th>
-                    <th scope="col"
-                        class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                        Status
+                        Tanggal Berakhir Test
                     </th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
-                @foreach ($highestScores as $nilai)
+                @foreach ($test as $tes)
                 <tr>
                     <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                        <span class="font-semibold">{{$nilai->user_id}}</span>
+                        <span class="font-semibold">{{$tes->id}}</span>
                     </td>
                     <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
-                        {{$nilai->nama}}
+                        {{$tes->nama}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$test->kkm}}
+                        {{$tes->kkm}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$nilai->max_totalnilai}}
+                        {{$tes->start_date}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$nilai->jumlah_attempt}}
-                    </td>
-                    <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        @if ($hitungnilai >= $test->kkm)
-                            <div class="mt-2 p-2 bg-green-200 rounded-lg">
-                                <p class="text-center text-sm font-semibold text-green-800">
-                                    Passed
-                                </p>
-                            </div>
-                        @else
-                            <div class="mt-2 p-2 bg-red-200 rounded-lg">
-                                <p class="text-center text-sm font-semibold text-red-800">
-                                    Failed
-                                </p>
-                            </div>
-                        @endif                                       
+                        {{$tes->end_date}}
                     </td>
                 </tr>
                 @endforeach
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
-                </tr>
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
-                </tr>
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
-                </tr>
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
-                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        @if ($hitungpeserta > 0)
-                            {{ $hitungnilai / $hitungpeserta }}
-                        @else
-                            0
-                        @endif
-                    </td>
-                </tr>
             </tbody>
         </table>
+    
     </div>
 
+    
+    
 </body>
 </html>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelatihan;
 use App\Models\Test;
 use App\Models\Admin;
+use App\Models\Instruktur;
 use App\Models\Soal_Test;
 use App\Models\Jawaban_Test;
 use Carbon\Carbon;
@@ -30,10 +31,16 @@ class TestController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-        if($admin){
-            $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
-            $test = Test::all();
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->select('instruktur.nama', 'instruktur.id', 'users.username')
+                ->first();
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $test = Test::all();
+        if(Auth::user()->role_id == 1){
             return view('admin.tambah_test', ['test'=>$test,'admin' => $admin, 'pelatihan' => $pelatihan]);
+        }else{
+            return view('admin.tambah_test', ['test'=>$test,'instruktur' => $instruktur, 'pelatihan' => $pelatihan]);
         }
     }
 
@@ -64,11 +71,17 @@ class TestController extends Controller
             //dd($test);
     
             $test->save();
-            return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
+            }else{
+                return redirect()->route('instruktur.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
+            }
         } catch (\Exception $e) {
-            // Tampilkan pesan kesalahan atau log jika diperlukan
-            //dd($e);
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data');
+            if (Auth::user()->role_id == 1) {
+                return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
+            }else{
+                return redirect()->route('instruktur.viewDetailPelatihan', $pelatihan->kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
+            }
         }
     }    
 
@@ -83,7 +96,11 @@ class TestController extends Controller
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
         $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
         $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
-        return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+        if(Auth::user()->role_id == 1){
+            return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+        } else{
+            return view('instruktur.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+        }
     }
 
     public function createSoal(String $plt_kode, String $test_id) {
@@ -93,7 +110,11 @@ class TestController extends Controller
                 ->first();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
-        return view('admin.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
+        if(Auth::user()->role_id == 1){
+            return view('admin.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
+        }else{
+            return view('instruktur.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
+        }
     }
 
     public function storeSoal(Request $request, $plt_kode, $test_id)
@@ -194,7 +215,7 @@ class TestController extends Controller
                 }
             }
 
-            return redirect()->route('admin.detailTest', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
+            return redirect()->route('test.detail', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (QueryException $e) {
@@ -208,9 +229,15 @@ class TestController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-        if($admin){
-            $test = Test::where('plt_kode',$plt_kode)->find($test_id);
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->select('instruktur.nama', 'instruktur.id', 'users.username')
+                ->first();
+        $test = Test::where('plt_kode',$plt_kode)->find($test_id);
+        if(Auth::user()->role_id == 1){
             return view('admin.edit_test', ['admin' => $admin, 'test' => $test]);
+        } else{
+            return view('instruktur.edit_test', ['instruktur' => $instruktur, 'test' => $test]);
         }
     }
 
@@ -218,9 +245,7 @@ class TestController extends Controller
     {
         //dd($request);
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
-        if (!$test) {
-            return redirect()->route('admin.viewDetailPelatihan', $test->plt_kode)->with('error', 'Tidak dapat menemukan test yang ingin diedit.');
-        }
+        
         $validated = $request->validate([
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
@@ -247,14 +272,28 @@ class TestController extends Controller
             $test->update(array_filter($updateData));
         
             DB::commit();
-        
-            return redirect()
-                ->route('admin.viewDetailPelatihan', $test->plt_kode)
-                ->with('success', 'Data test berhasil diperbarui');
+            if(Auth::user()->role_id == 1){
+                return redirect()
+                    ->route('admin.viewDetailPelatihan', $test->plt_kode)
+                    ->with('success', 'Data test berhasil diperbarui');
+            }else{
+                return redirect()
+                    ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
+                    ->with('success', 'Data test berhasil diperbarui');
+            }
         } catch (\Exception $e) {
             dd($e->getMessage());
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal memperbarui data test.');
+
+            if(Auth::user()->role_id == 1){
+                return redirect()
+                    ->route('admin.viewDetailPelatihan', $test->plt_kode)
+                    ->with('error', 'Gagal memperbarui data test.');
+            }else{
+                return redirect()
+                    ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
+                    ->with('error', 'Gagal memperbarui data test.');
+            }
         }        
     }
 
@@ -267,10 +306,6 @@ class TestController extends Controller
         DB::beginTransaction();
 
         try {
-            if ($test && $test->status == 1) {
-                return redirect()->back()->with('error', 'Tidak dapat menghapus test yang masih aktif.');
-            }
-
             foreach ($jawaban_test as $jawaban) {
                 $jawaban->delete();
             }
@@ -283,14 +318,28 @@ class TestController extends Controller
 
             // Commit the transaction
             DB::commit();
-
-            return redirect()->back()->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
+            if(Auth::user()->role_id == 1){
+                return redirect()
+                    ->route('admin.viewDetailPelatihan', $test->plt_kode)
+                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
+            }else{
+                return redirect()
+                    ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
+                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
+            }
         } catch (\Exception $e) {
             dd($e->getMessage());
             // Rollback the transaction in case of any error
             DB::rollback();
-
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait.');
+            if(Auth::user()->role_id == 1){
+                return redirect()
+                    ->route('admin.viewDetailPelatihan', $test->plt_kode)
+                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait.');
+            }else{
+                return redirect()
+                    ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
+                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait.');
+            }
         }
     }
 
@@ -310,7 +359,7 @@ class TestController extends Controller
 
             // Commit the transaction
             DB::commit();
-
+            
             return redirect()->back()->with('success', 'Soal dan semua jawaban terkait berhasil dihapus.');
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -348,12 +397,20 @@ class TestController extends Controller
                 ->where('admin.user_id', Auth::user()->id)
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
-                $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->select('instruktur.nama', 'instruktur.id', 'users.username')
+                ->first();
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->where('id',$soal_id)->first();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->where('soal_id',$soal_id)->get();
                                 //dd($test);
-        return view('admin.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+        if(Auth::user()->role_id == 1){
+            return view('admin.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+        }else{
+            return view('instruktur.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+        }
     }
 
     public function updateSoal(Request $request, $plt_kode, $test_id, $soal_id)
@@ -443,7 +500,7 @@ class TestController extends Controller
             DB::commit();
     
             return redirect()
-                ->route('admin.detailTest', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])
+                ->route('test.detail', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])
                 ->with('success', 'Data soal dan jawaban berhasil diperbarui');
         } catch (\Exception $e) {
             dd($e->getMessage());

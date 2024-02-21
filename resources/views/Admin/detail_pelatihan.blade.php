@@ -12,7 +12,7 @@
             <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Partisipan</a>
         </li>
         <li class="me-2">
-            <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Settings</a>
+            <a href="{{ route('test.rekap', ['plt_kode' => $pelatihan->kode]) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Rekap Test</a>
         </li>
     </ul>
 </div>
@@ -237,7 +237,7 @@
         </div>
     </div>
     <div class="mb-2 mt-6 col-span-full xl:mb-2">
-        <a type="button" href = "{{route('admin.addTest', $pelatihan->kode)}}"
+        <a type="button" href = "{{route('test.add', $pelatihan->kode)}}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -245,13 +245,6 @@
                     clip-rule="evenodd"></path>
             </svg>
             Tambah Test
-        </a>
-        <a href="{{ route('admin.rekapTest', ['plt_kode' => $pelatihan->kode]) }}" class="float-right inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 sm:w-auto dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-            <svg class="w-5 h-5 mr-2 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M8 7V2.2a2 2 0 0 0-.5.4l-4 3.9a2 2 0 0 0-.3.5H8Zm2 0V2h7a2 2 0 0 1 2 2v.1a5 5 0 0 0-4.7 1.4l-6.7 6.6a3 3 0 0 0-.8 1.6l-.7 3.7a3 3 0 0 0 3.5 3.5l3.7-.7a3 3 0 0 0 1.5-.9l4.2-4.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
-                <path fill-rule="evenodd" d="M17.4 8a1 1 0 0 1 1.2.3 1 1 0 0 1 0 1.6l-.3.3-1.6-1.5.4-.4.3-.2Zm-2.1 2.1-4.6 4.7-.4 1.9 1.9-.4 4.6-4.7-1.5-1.5ZM17.9 6a3 3 0 0 0-2.2 1L9 13.5a1 1 0 0 0-.2.5L8 17.8a1 1 0 0 0 1.2 1.1l3.7-.7c.2 0 .4-.1.5-.3l6.6-6.6A3 3 0 0 0 18 6Z" clip-rule="evenodd"/>
-            </svg>
-            Rekap Test
         </a>
 
     </div>
@@ -267,9 +260,9 @@
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{route('admin.detailTest', ['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                    <a href="{{route('test.detail', ['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
                     <div>
-                        <a data-popover-target="popover-edit-{{ $tes->id }}" href="{{route('admin.editTest', [$tes->plt_kode, $tes->id])}}" class="text-blue-400 hover:text-blue-100 mx-2">
+                        <a data-popover-target="popover-edit-{{ $tes->id }}" href="{{route('test.edit', [$tes->plt_kode, $tes->id])}}" class="text-blue-400 hover:text-blue-100 mx-2">
                             <i class="material-icons-outlined text-base">edit</i>
                         </a>
                         <div data-popover id="popover-edit-{{ $tes->id }}" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
@@ -299,7 +292,7 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                         </svg>
                                         <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus test ini?</h3>
-                                        <form action="{{route('admin.deleteTest',['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" method="post">
+                                        <form action="{{route('test.delete',['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" method="post">
                                             @csrf
                                             <button data-modal-hide="delete-modal-test-{{ $tes->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
                                                 Ya
