@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{route('instruktur.detailTest', [$pelatihan->kode, $test->id])}}"
+                    <a href="{{route('test.detail', [$pelatihan->kode, $test->id])}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">

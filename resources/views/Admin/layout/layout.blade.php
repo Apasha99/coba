@@ -170,9 +170,9 @@
                                 class="flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                                 id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
                                 <span class="sr-only">Open user menu</span>
-                                <svg class="w-6 h-6 text-gray-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-                                </svg>
+                                <img class="w-8 h-8 rounded-full"
+                                    src="{{ Auth::user()->getImageURL() }}"
+                                    alt="user photo">
                             </button>
                         </div>
 
@@ -187,12 +187,12 @@
                             </div>
                             <ul class="py-1" role="none">
                                 <li>
-                                    <a href="/"
+                                    <a href="{{route('admin.profil')}}"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Profil</a>
                                 </li>
                                 <li>
-                                    <a href="/"
+                                    <a href="{{route('admin.ubahPassword')}}"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Ubah Password</a>
                                 </li>

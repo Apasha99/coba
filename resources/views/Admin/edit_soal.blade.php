@@ -142,14 +142,15 @@
                                             @foreach($jawaban_test as $jawaban)
                                                 <div class="flex items-center mb-1" id="jawaban-container-{{ $jawaban->id }}">
                                                     @if ($soal_test->tipe == "Jawaban Singkat")
-                                                    <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat"
+                                                    <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
                                                         value="{{ $jawaban->title }}"
                                                         class="mt-2 mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </button>
+
                                                     @endif
                                                 </div>
                                             @endforeach
@@ -178,10 +179,10 @@
                                             @foreach($jawaban_test->where('status', false) as $jawaban)
                                                 @if ($soal_test->tipe == "Pilihan Ganda")
                                                 <div class="flex items-center mb-3" id="jawaban-{{ $jawaban->id }}">
-                                                    <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban {{ $jawaban->urutan }}" id="title-ganda"
+                                                    <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban {{ $jawaban->urutan }}" id="title-ganda-{{$jawaban->id}}"
                                                         value="{{ $jawaban->title }}"
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}, 'jawaban-container-{{ $jawaban->id }}')')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
@@ -213,30 +214,29 @@
                                 </script>
 
                                 <script>
-                                    function deleteJawaban(url, jawabanId) {
-                                        fetch(url, {
+                                    function deleteJawaban(route, containerId) {
+                                        // Hapus elemen dari DOM
+                                        const container = document.getElementById(containerId);
+                                        if (container) {
+                                            container.remove();
+                                        }
+
+                                        // Lakukan juga pengiriman permintaan ke server untuk menghapus data jawaban secara permanen
+                                        fetch(route, {
                                             method: 'POST',
                                             headers: {
                                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                             },
                                         }).then(response => {
-                                            if (response.ok) {
-                                                // Remove the deleted element from the DOM
-                                                const deletedElement = document.getElementById('jawaban-container-' + jawabanId);
-                                                if (deletedElement) {
-                                                    deletedElement.remove();
-                                                }
-
-                                            } else {
-                                                // Handle failure, e.g., show an error message
+                                            if (!response.ok) {
                                                 console.error('Failed to delete Jawaban');
                                             }
                                         }).catch(error => {
-                                            // Handle network error or other issues
                                             console.error('Error during delete request:', error);
                                         });
                                     }
                                 </script>
+
 
                                 <script>
                                     function addOption(tipe) {
@@ -286,6 +286,15 @@
                                         const form = document.getElementById('edit-id'); // Replace 'your-form-id' with the actual ID of your form
                                         form.submit();
                                     }
+
+                                    function deleteJawaban(route, containerId) {
+                                        // Hapus elemen dari DOM
+                                        const container = document.getElementById(containerId);
+                                        if (container) {
+                                            container.remove();
+                                        }
+                                    }
+
 
 
                                 </script>

@@ -438,4 +438,110 @@ class InstrukturController extends Controller
         return $pdf->stream('daftar_instruktur'.'.pdf');
     }
 
+    public function ubahPassword(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+    
+        return view('instruktur.ubah_password', compact('instruktur'));
+    }
+    
+
+    public function updatePassword(Request $request, $instruktur_id){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:8|string',
+            'conf_password' => 'required|same:new_password',
+        ]);
+    
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->where('user_id',$instruktur_id)
+                ->first();
+    
+        if (!$instruktur) {
+            return redirect()->back()->with('error' ,'Instruktur not found');
+        }
+    
+        // Verifikasi password yang dimasukkan dengan password_awal
+        if (!Hash::check($request->input('password'), $instruktur->password)) {
+            return redirect()->back()->with('error' ,'Current password does not match');
+        }
+    
+        try{
+            DB::beginTransaction();
+    
+            $updateData = [];
+    
+            if ($request->has('new_password')) {
+                $updateData['password'] = Hash::make($request->input('new_password'));
+                $updateData['password_awal'] = $request->input('new_password');
+            }
+    
+            $instruktur->user()->update($updateData);
+    
+            DB::commit();
+    
+            return redirect()->back()->with('success','Password berhasil diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Gagal update password');
+        }
+    }
+    
+    public function profil(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+        return view('instruktur.profil', compact('instruktur'));
+    }
+
+    public function editprofil(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+        return view('instruktur.edit_profil', compact('instruktur'));
+    }
+
+    public function updateProfil(Request $request, $instruktur_id){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->where('user_id',$instruktur_id)
+                    ->first();
+
+        $validated = $request->validate([
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'foto' => [ 'max:10240'],
+        ]);
+        //dd($validated);
+        try {
+            DB::beginTransaction();
+
+            $updateData2 = [
+                'username' => $validated['username'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'foto' => $validated['foto'] ?? null,
+            ];
+
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
+
+            $instruktur->user->update(array_filter($updateData2));
+
+            DB::commit();
+
+            return redirect()
+                ->route('instruktur.profil')
+                ->with('success', 'Data user berhasil diperbarui');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+        }
+    }
+    
+
 }

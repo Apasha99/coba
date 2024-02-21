@@ -551,10 +551,124 @@ class PesertaController extends Controller
         $peserta = Peserta::where('id', $peserta_id)->first();
 
         $pdf = app('dompdf.wrapper');
-$pdf->setPaper('A4', 'landscape'); // Set ukuran kertas ke A4 dengan orientasi landscape
-$pdf->loadView('peserta.sertifikat', ['pelatihan' => $pelatihan, 'peserta' => $peserta]);
+        $pdf->setPaper('A4', 'landscape'); // Set ukuran kertas ke A4 dengan orientasi landscape
+        $pdf->loadView('peserta.sertifikat', ['pelatihan' => $pelatihan, 'peserta' => $peserta]);
 
         
         return $pdf->stream('sertifikat.pdf');
+    }
+
+    public function ubahPassword(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+    
+        return view('peserta.ubah_password', compact('peserta'));
+    }
+    
+
+    public function updatePassword(Request $request, $peserta_id){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required|min:8|string',
+            'conf_password' => 'required|same:new_password',
+        ]);
+    
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->where('user_id',$peserta_id)
+                    ->first();
+    
+        if (!$peserta) {
+            return redirect()->back()->with('error', 'Peserta not found');
+        }
+    
+        // Verifikasi password yang dimasukkan dengan password_awal
+        if (!Hash::check($request->input('password'), $peserta->password)) {
+            return redirect()->back()->with('error', 'Current password does not match');
+        }
+    
+        try{
+            DB::beginTransaction();
+    
+            $updateData = [];
+    
+            if ($request->has('new_password')) {
+                $updateData['password'] = Hash::make($request->input('new_password'));
+                $updateData['password_awal'] = $request->input('new_password');
+            }
+    
+            $peserta->user()->update($updateData);
+    
+            DB::commit();
+    
+            return redirect()->back()->with('success','Password berhasil diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error','Gagal update password');
+        }
+    }
+
+    public function profil(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+        return view('peserta.profil', compact('peserta'));
+    }
+
+    public function editprofil(){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->first();
+        return view('peserta.edit_profil', compact('peserta'));
+    }
+
+    public function updateProfil(Request $request, $peserta_id){
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                    ->where('peserta.user_id', Auth::user()->id)
+                    ->where('user_id',$peserta_id)
+                    ->first();
+
+        $validated = $request->validate([
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'noHP' => ['required', 'numeric'],
+            'alamat' => ['required'],
+            'foto' => [ 'max:10240'],
+        ]);
+        //dd($validated);
+        try {
+            DB::beginTransaction();
+
+            $updateData = [
+                'id' =>$peserta->id,
+                'noHP' => $validated['noHP'] ?? null,
+                'alamat' => $validated['alamat'] ?? null,
+            ];
+            //dd($updateData);
+            $peserta->update(array_filter($updateData));
+            $updateData2 = [
+                'username' => $validated['username'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'foto' => $validated['foto'] ?? null,
+            ];
+
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
+
+            $peserta->user->update(array_filter($updateData2));
+
+            DB::commit();
+
+            return redirect()
+                ->route('peserta.profil')
+                ->with('success', 'Data user berhasil diperbarui');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+        }
     }
 }
