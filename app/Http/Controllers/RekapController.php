@@ -33,8 +33,11 @@ class RekapController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $peserta = Peserta::get();
-
-        return view('admin.rekap_test', ['pelatihan' => $pelatihan,  'test' => $test, 'peserta' => $peserta]);
+        if(Auth::user()->role_id == 1){
+            return view('admin.rekap_test', ['pelatihan' => $pelatihan,  'test' => $test, 'peserta' => $peserta]);
+        }else{
+            return view('instruktur.rekap_test', ['pelatihan' => $pelatihan,  'test' => $test, 'peserta' => $peserta]);
+        }
     }
 
     public function detailRekapTest(String $plt_kode, $test_id) {
@@ -100,18 +103,31 @@ class RekapController extends Controller
             }
         }
         //dd($jumlahPesertaPerRentang);
-    
-        return view('admin.detail_rekap_test', [
-            'test2' => $test2,
-            'nilaiPeserta' => $nilaiPeserta,
-            'hitungpeserta' => $hitungpeserta,
-            'hitungnilai' => $hitungnilai,
-            'pelatihan' => $pelatihan,
-            'test' => $test,
-            'admin' => $admin,
-            'totalpeserta' => $totalpeserta,
-            'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
-        ]);
+        if(Auth::user()->role_id == 1){
+            return view('admin.detail_rekap_test', [
+                'test2' => $test2,
+                'nilaiPeserta' => $nilaiPeserta,
+                'hitungpeserta' => $hitungpeserta,
+                'hitungnilai' => $hitungnilai,
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'admin' => $admin,
+                'totalpeserta' => $totalpeserta,
+                'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
+            ]);
+        }else{
+            return view('instruktur.detail_rekap_test', [
+                'test2' => $test2,
+                'nilaiPeserta' => $nilaiPeserta,
+                'hitungpeserta' => $hitungpeserta,
+                'hitungnilai' => $hitungnilai,
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'admin' => $admin,
+                'totalpeserta' => $totalpeserta,
+                'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
+            ]);
+        }
     }    
 
     public function downloadRekap($plt_kode, $test_id)
@@ -175,19 +191,35 @@ class RekapController extends Controller
         }
         $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
                 ->where('test.id', $test_id)->count();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.download_detail_rekap_test', [
-            'hitungpeserta' => $hitungpeserta,
-            'hitungnilai' => $hitungnilai,
-            'pelatihan' => $pelatihan,
-            'test' => $test,
-            'peserta' => $peserta,
-            'nilaiPeserta' => $nilaiPeserta,
-            'totalpeserta'=>$totalpeserta,
-            'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
-        ]);
+        if(Auth::user()->role_id == 1){
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('admin.download_detail_rekap_test', [
+                'hitungpeserta' => $hitungpeserta,
+                'hitungnilai' => $hitungnilai,
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'peserta' => $peserta,
+                'nilaiPeserta' => $nilaiPeserta,
+                'totalpeserta'=>$totalpeserta,
+                'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
+            ]);
 
-        return $pdf->stream($plt_kode . '_rekap_test_' . $test_id . '.pdf');
+            return $pdf->stream($plt_kode . '_rekap_test_' . $test_id . '.pdf');
+        }else{
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('instruktur.download_detail_rekap_test', [
+                'hitungpeserta' => $hitungpeserta,
+                'hitungnilai' => $hitungnilai,
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'peserta' => $peserta,
+                'nilaiPeserta' => $nilaiPeserta,
+                'totalpeserta'=>$totalpeserta,
+                'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
+            ]);
+
+            return $pdf->stream($plt_kode . '_rekap_test_' . $test_id . '.pdf');
+        }
     }
 
 
@@ -200,15 +232,25 @@ class RekapController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $peserta = Peserta::get();
+        if(Auth::user()->role_id == 1){
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('admin.download_rekap_test', [
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'peserta' => $peserta,
+            ]);
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('admin.download_rekap_test', [
-            'pelatihan' => $pelatihan,
-            'test' => $test,
-            'peserta' => $peserta,
-        ]);
+            return $pdf->stream('rekap_test_'.$plt_kode.'.pdf');
+        }else{
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('instruktur.download_rekap_test', [
+                'pelatihan' => $pelatihan,
+                'test' => $test,
+                'peserta' => $peserta,
+            ]);
 
-        return $pdf->stream('rekap_test_'.$plt_kode.'.pdf');
+            return $pdf->stream('rekap_test_'.$plt_kode.'.pdf');
+        }
     }
 
     public function searchTest(Request $request, $plt_kode)

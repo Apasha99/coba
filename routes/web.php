@@ -136,18 +136,18 @@ Route::controller(TugasController::class)->group(function(){
 });
 
 Route::controller(TestController::class)->group(function(){
-    Route::get('admin/pelatihan/{plt_kode}/create/test', 'create')->middleware('only_admin')->name('admin.addTest');
-    Route::post('admin/pelatihan/{plt_kode}/test', 'store')->middleware('only_admin')->name('admin.storeTest');
-    Route::post('admin/pelatihan/{plt_kode}/delete/{test_id}', 'delete')->middleware('only_admin')->name('admin.deleteTest');
-    Route::get('admin/pelatihan/{plt_kode}/edit/{test_id}', 'edit')->middleware('only_admin')->name('admin.editTest');
-    Route::post('admin/pelatihan/{plt_kode}/edit/{test_id}/update', 'update')->middleware('only_admin')->name('admin.updateTest');
-    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->middleware('only_admin')->name('admin.detailTest');
-    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/createSoal', 'createSoal')->middleware('only_admin')->name('admin.addSoal');
-    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/storeSoal', 'storeSoal')->middleware('only_admin')->name('admin.storeSoal');
-    Route::get('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit', 'editSoal')->middleware('only_admin')->name('admin.editSoal');
-    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/update', 'updateSoal')->middleware('only_admin')->name('admin.updateSoal');
-    Route::delete('admin/pelatihan/{plt_kode}/test/{test_id}/delete/{soal_id}', 'deleteSoal')->middleware('only_admin')->name('admin.deleteSoal');
-    Route::post('admin/pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit/{jawaban_id}/delete', 'deleteJawaban')->middleware('only_admin')->name('admin.deleteJawaban');
+    Route::get('/pelatihan/{plt_kode}/create/test', 'create')->withoutMiddleware('only_peserta')->name('test.add');
+    Route::post('/pelatihan/{plt_kode}/test', 'store')->withoutMiddleware('only_peserta')->name('test.store');
+    Route::post('pelatihan/{plt_kode}/delete/{test_id}', 'delete')->withoutMiddleware('only_peserta')->name('test.delete');
+    Route::get('pelatihan/{plt_kode}/edit/{test_id}', 'edit')->withoutMiddleware('only_peserta')->name('test.edit');
+    Route::post('pelatihan/{plt_kode}/edit/{test_id}/update', 'update')->withoutMiddleware('only_peserta')->name('test.update');
+    Route::get('pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->withoutMiddleware('only_peserta')->name('test.detail');
+    Route::get('pelatihan/{plt_kode}/test/{test_id}/createSoal', 'createSoal')->withoutMiddleware('only_peserta')->name('soal.add');
+    Route::post('pelatihan/{plt_kode}/test/{test_id}/storeSoal', 'storeSoal')->withoutMiddleware('only_peserta')->name('soal.store');
+    Route::get('pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit', 'editSoal')->withoutMiddleware('only_peserta')->name('soal.edit');
+    Route::post('pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/update', 'updateSoal')->withoutMiddleware('only_peserta')->name('soal.update');
+    Route::delete('pelatihan/{plt_kode}/test/{test_id}/delete/{soal_id}', 'deleteSoal')->withoutMiddleware('only_peserta')->name('soal.delete');
+    Route::post('pelatihan/{plt_kode}/test/{test_id}/detail/{soal_id}/edit/{jawaban_id}/delete', 'deleteJawaban')->withoutMiddleware('only_peserta')->name('jawaban.delete');
 });
 
 Route::controller(SubmissionController::class)->group(function(){
@@ -171,10 +171,8 @@ Route::controller(SubmissionTestController::class)->group(function(){
 });
 
 Route::controller(RekapController::class)->group(function(){
-    Route::get('admin/pelatihan/{plt_kode}/rekap', 'rekapTest')->middleware('only_admin')->name('admin.rekapTest');
-    Route::get('admin/pelatihan/{plt_kode}/rekap/download', 'download')->middleware('only_admin')->name('admin.downloadRekap');
-    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail/download', 'downloadRekap')->middleware('only_admin')->name('admin.downloadDetailRekap');
-    Route::get('admin/pelatihan/{plt_kode}/rekap/search', 'searchTest')->middleware('only_admin')->name('admin.searchTest');
-    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail/search', 'searchDetailTest')->middleware('only_admin')->name('admin.searchDetailTest');
-    Route::get('admin/pelatihan/{plt_kode}/rekap/{test_id}/detail', 'detailRekapTest')->middleware('only_admin')->name('admin.detailRekapTest');
+    Route::get('pelatihan/{plt_kode}/rekap', 'rekapTest')->withoutMiddleware('only_peserta')->name('test.rekap');
+    Route::get('pelatihan/{plt_kode}/rekap/download', 'download')->withoutMiddleware('only_peserta')->name('rekap.download');
+    Route::get('pelatihan/{plt_kode}/rekap/{test_id}/detail/download', 'downloadRekap')->withoutMiddleware('only_peserta')->name('rekap.downloadDetail');
+    Route::get('pelatihan/{plt_kode}/rekap/{test_id}/detail', 'detailRekapTest')->withoutMiddleware('only_peserta')->name('rekap.detailRekap');
 });

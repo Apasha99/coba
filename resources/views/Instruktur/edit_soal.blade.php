@@ -1,11 +1,11 @@
-@extends('admin.layout.layout')
+@extends('instruktur.layout.layout')
 
 @section('content')
     <div class="mb-4 col-span-full xl:mb-2">
         <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                 <li class="inline-flex items-center">
-                    <a href="/admin/dashboard"
+                    <a href="/instruktur/dashboard"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{route('admin.viewDaftarPelatihan')}}"
+                    <a href="{{route('instruktur.viewDaftarPelatihan')}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{route('admin.viewDetailPelatihan', ['plt_kode'=>$test->plt_kode])}}"
+                    <a href="{{route('instruktur.viewDetailPelatihan', ['plt_kode'=>$test->plt_kode])}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li class="flex items-center">
-                    <a href="{{route('admin.detailTest', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])}}"
+                    <a href="{{route('instruktur.detailTest', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])}}"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
