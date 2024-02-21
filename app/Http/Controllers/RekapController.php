@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelatihan;
 use App\Models\Test;
 use App\Models\Admin;
+use App\Models\Attempt;
 use App\Models\Peserta;
 use App\Models\Soal_Test;
 use App\Models\Nilai_Test;
@@ -50,19 +51,17 @@ class RekapController extends Controller
                 ->first();
         $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
                         ->where('test.id', $test_id)->count();
-        // Hitung nilai untuk setiap peserta pada tes tertentu
-        $nilaiPeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->selectRaw('peserta.id as peserta_id, peserta.user_id, peserta.nama, SUM(nilai) as total_nilai')
-            ->where('test_id', $test_id)
-            ->groupBy('peserta.id', 'peserta.user_id', 'peserta.nama')
-            ->get();
 
-        //dd($nilaiPeserta);
-        // Hitung jumlah peserta pada tes tertentu
-        $hitungpeserta = count($nilaiPeserta);
-    
-        // Hitung total nilai pada tes tertentu
-        $hitungnilai = Nilai_Test::where('test_id', $test_id)->sum('nilai');
+        $highestScores = Attempt::join('peserta', 'peserta.id', '=', 'attempt.peserta_id')
+                        ->join('test', 'test.id', '=', 'attempt.test_id')
+                        ->where('test_id', $test_id)
+                        ->groupBy('attempt.peserta_id', 'user_id', 'kkm', 'peserta.nama')
+                        ->select('attempt.peserta_id', DB::raw('MAX(totalnilai) as max_totalnilai'), 'user_id', 'kkm', 'peserta.nama', DB::raw('COUNT(attempt.id) as jumlah_attempt'))
+                        ->get();
+        
+        $hitungpeserta = $highestScores->count();
+        
+        $hitungnilai = $highestScores->sum('max_totalnilai');
 
         $jumlahPesertaPerRentang = [
             '0-10' => 0,
@@ -75,11 +74,13 @@ class RekapController extends Controller
             '71-80' => 0,
             '81-90' => 0,
             '91-100' => 0,
+            '>= 101' => 0
+
         ];
         
         // Loop melalui nilaiPeserta dan menghitung jumlah peserta dalam setiap rentang
-        foreach ($nilaiPeserta as $score) {
-            $total_nilai = $score->total_nilai;
+        foreach ($highestScores as $score) {
+            $total_nilai = $score->max_totalnilai;
             if ($total_nilai >= 0 && $total_nilai <= 10) {
                 $jumlahPesertaPerRentang['0-10']++;
             } elseif ($total_nilai >= 11 && $total_nilai <= 20) {
@@ -100,13 +101,16 @@ class RekapController extends Controller
                 $jumlahPesertaPerRentang['81-90']++;
             } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
                 $jumlahPesertaPerRentang['91-100']++;
+            }elseif ($total_nilai >= 101) {
+                $jumlahPesertaPerRentang['>= 101']++;
             }
+
         }
         //dd($jumlahPesertaPerRentang);
         if(Auth::user()->role_id == 1){
             return view('admin.detail_rekap_test', [
                 'test2' => $test2,
-                'nilaiPeserta' => $nilaiPeserta,
+                'highestScores' => $highestScores,
                 'hitungpeserta' => $hitungpeserta,
                 'hitungnilai' => $hitungnilai,
                 'pelatihan' => $pelatihan,
@@ -118,7 +122,7 @@ class RekapController extends Controller
         }else{
             return view('instruktur.detail_rekap_test', [
                 'test2' => $test2,
-                'nilaiPeserta' => $nilaiPeserta,
+                'highestScores' => $highestScores,
                 'hitungpeserta' => $hitungpeserta,
                 'hitungnilai' => $hitungnilai,
                 'pelatihan' => $pelatihan,
@@ -139,17 +143,16 @@ class RekapController extends Controller
                 ->select('admin.nama', 'admin.id', 'users.username')
                 ->first();
         $peserta = Peserta::get();
-        $nilaiPeserta = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-            ->selectRaw('peserta.id as peserta_id, peserta.user_id, peserta.nama, SUM(nilai) as total_nilai')
-            ->where('test_id', $test_id)
-            ->groupBy('peserta.id', 'peserta.user_id', 'peserta.nama')
-            ->get();
-
-        // Hitung jumlah peserta pada tes tertentu
-        $hitungpeserta = count($nilaiPeserta);
-
-        // Hitung total nilai pada tes tertentu
-        $hitungnilai = Nilai_Test::where('test_id', $test_id)->sum('nilai');
+        $highestScores = Attempt::join('peserta', 'peserta.id', '=', 'attempt.peserta_id')
+                        ->join('test', 'test.id', '=', 'attempt.test_id')
+                        ->where('test_id', $test_id)
+                        ->groupBy('attempt.peserta_id', 'user_id', 'kkm', 'peserta.nama')
+                        ->select('attempt.peserta_id', DB::raw('MAX(totalnilai) as max_totalnilai'), 'user_id', 'kkm', 'peserta.nama', DB::raw('COUNT(attempt.id) as jumlah_attempt'))
+                        ->get();
+        
+        $hitungpeserta = $highestScores->count();
+        
+        $hitungnilai = $highestScores->sum('max_totalnilai');
 
         $jumlahPesertaPerRentang = [
             '0-10' => 0,
@@ -162,11 +165,13 @@ class RekapController extends Controller
             '71-80' => 0,
             '81-90' => 0,
             '91-100' => 0,
+            '>= 101' => 0
+
         ];
         
         // Loop melalui nilaiPeserta dan menghitung jumlah peserta dalam setiap rentang
-        foreach ($nilaiPeserta as $score) {
-            $total_nilai = $score->total_nilai;
+        foreach ($highestScores as $score) {
+            $total_nilai = $score->max_totalnilai;
             if ($total_nilai >= 0 && $total_nilai <= 10) {
                 $jumlahPesertaPerRentang['0-10']++;
             } elseif ($total_nilai >= 11 && $total_nilai <= 20) {
@@ -187,7 +192,10 @@ class RekapController extends Controller
                 $jumlahPesertaPerRentang['81-90']++;
             } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
                 $jumlahPesertaPerRentang['91-100']++;
+            }elseif ($total_nilai >= 101) {
+                $jumlahPesertaPerRentang['>= 101']++;
             }
+
         }
         $totalpeserta = Peserta_Pelatihan::join('test','test.plt_kode','=','peserta_pelatihan.plt_kode')
                 ->where('test.id', $test_id)->count();
@@ -199,7 +207,7 @@ class RekapController extends Controller
                 'pelatihan' => $pelatihan,
                 'test' => $test,
                 'peserta' => $peserta,
-                'nilaiPeserta' => $nilaiPeserta,
+                'highestScores' => $highestScores,
                 'totalpeserta'=>$totalpeserta,
                 'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
             ]);
@@ -213,7 +221,7 @@ class RekapController extends Controller
                 'pelatihan' => $pelatihan,
                 'test' => $test,
                 'peserta' => $peserta,
-                'nilaiPeserta' => $nilaiPeserta,
+                'highestScores' => $highestScores,
                 'totalpeserta'=>$totalpeserta,
                 'jumlahPesertaPerRentang'=>$jumlahPesertaPerRentang
             ]);

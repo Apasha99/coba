@@ -71,12 +71,16 @@
                     </th>
                     <th scope="col"
                         class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                        Jumlah Attempt
+                    </th>
+                    <th scope="col"
+                        class="p-4 text-xs font-large tracking-wider text-left text-gray-500 uppercase dark:text-white">
                         Status
                     </th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
-                @foreach ($nilaiPeserta as $nilai)
+                @foreach ($highestScores as $nilai)
                 <tr>
                     <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
                         <span class="font-semibold">{{$nilai->user_id}}</span>
@@ -88,7 +92,10 @@
                         {{$test->kkm}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                        {{$nilai->total_nilai}}
+                        {{$nilai->max_totalnilai}}
+                    </td>
+                    <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                        {{$nilai->jumlah_attempt}}
                     </td>
                     <td class="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                         @if ($hitungnilai >= $test->kkm)
@@ -108,19 +115,19 @@
                 </tr>
                 @endforeach
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
+                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
                 </tr>
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
+                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
                 </tr>
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
+                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
                 </tr>
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
+                    <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         @if ($hitungpeserta > 0)
                             {{ $hitungnilai / $hitungpeserta }}

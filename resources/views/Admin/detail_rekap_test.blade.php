@@ -159,6 +159,11 @@
                                                 Nilai
                                             </span>
                                         </th>
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white" data-column="nilai" data-type="number">
+                                            <span class="flex items-center">
+                                                Jumlah Attempt
+                                            </span>
+                                        </th>
                                         <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white" data-column="status" data-type="string">
                                             <span class="flex items-center">
                                                 Status
@@ -168,28 +173,14 @@
                                 </thead>
 
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    @php
-                                        // Mengonversi koleksi ke dalam array
-                                        $nilaiPesertaArray = $nilaiPeserta->toArray();
-
-                                        // Mengurutkan array
-                                        usort($nilaiPesertaArray, function($a, $b) {
-                                            // Bandingkan user_id terlebih dahulu
-                                            if ($a['user_id'] != $b['user_id']) {
-                                                return $a['user_id'] - $b['user_id'];
-                                            }
-
-                                            // Jika user_id sama, bandingkan kolom lain
-                                            // Misalnya, kolom nama
-                                            return strcmp($a['nama'], $b['nama']);
-                                        });
-                                    @endphp
-                                    @foreach ($nilaiPeserta as $score)
+                                    
+                                    @foreach ($highestScores as $score)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->user_id }} </td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->nama }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $test2->kkm }}</td>
-                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->total_nilai }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->max_totalnilai }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->jumlah_attempt }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white" >
                                             @if ($hitungnilai >= $test2->kkm)
                                             <div class="mt-2 p-2 bg-green-200 rounded-lg">
@@ -204,19 +195,19 @@
                                     </tr>
                                     @endforeach
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
+                                        <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Nilai</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungnilai }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
+                                        <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Peserta</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $totalpeserta }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
+                                        <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Peserta yang Mengerjakan Test</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">{{ $hitungpeserta }}</td>
                                     </tr>
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="4" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
+                                        <td colspan="5" class="text-center p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">Rata-rata</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
                                             @if ($hitungpeserta > 0)
                                                 {{ $hitungnilai / $hitungpeserta }}
@@ -272,6 +263,7 @@
                                     }
                                 });
                             </script>
+
                         </div>
                     </div>
                 </div>
