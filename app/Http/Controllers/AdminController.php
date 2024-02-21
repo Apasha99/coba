@@ -383,5 +383,67 @@ class AdminController extends Controller
         }
     }
 
+    public function profil(){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                    ->where('admin.user_id', Auth::user()->id)
+                    ->first();
+        return view('admin.profil', compact('admin'));
+    }
+
+    public function editprofil(){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                    ->where('admin.user_id', Auth::user()->id)
+                    ->first();
+        return view('admin.edit_profil', compact('admin'));
+    }
+
+    public function updateProfil(Request $request, $admin_id){
+        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+                    ->where('admin.user_id', Auth::user()->id)
+                    ->where('user_id',$admin_id)
+                    ->first();
+
+        $validated = $request->validate([
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'noHP' => ['required', 'numeric'],
+            'alamat' => ['required'],
+            'foto' => [ 'max:10240'],
+        ]);
+        //dd($validated);
+        try {
+            DB::beginTransaction();
+
+            $updateData = [
+                'id' =>$admin->id,
+                'noHP' => $validated['noHP'] ?? null,
+                'alamat' => $validated['alamat'] ?? null,
+            ];
+            //dd($updateData);
+            $admin->update(array_filter($updateData));
+            $updateData2 = [
+                'username' => $validated['username'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'foto' => $validated['foto'] ?? null,
+            ];
+
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
+
+            $admin->user->update(array_filter($updateData2));
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.profil')
+                ->with('success', 'Data user berhasil diperbarui');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+        }
+    }
 
 }

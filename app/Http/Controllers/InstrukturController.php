@@ -489,6 +489,59 @@ class InstrukturController extends Controller
         }
     }
     
+    public function profil(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+        return view('instruktur.profil', compact('instruktur'));
+    }
+
+    public function editprofil(){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->first();
+        return view('instruktur.edit_profil', compact('instruktur'));
+    }
+
+    public function updateProfil(Request $request, $instruktur_id){
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                    ->where('instruktur.user_id', Auth::user()->id)
+                    ->where('user_id',$instruktur_id)
+                    ->first();
+
+        $validated = $request->validate([
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'foto' => [ 'max:10240'],
+        ]);
+        //dd($validated);
+        try {
+            DB::beginTransaction();
+
+            $updateData2 = [
+                'username' => $validated['username'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'foto' => $validated['foto'] ?? null,
+            ];
+
+            if ($request->has('foto')) {
+                $fotoPath = $request->file('foto')->store('foto', 'public');
+                $updateData2['foto'] = $fotoPath;
+            }
+
+            $instruktur->user->update(array_filter($updateData2));
+
+            DB::commit();
+
+            return redirect()
+                ->route('instruktur.profil')
+                ->with('success', 'Data user berhasil diperbarui');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+        }
+    }
     
 
 }

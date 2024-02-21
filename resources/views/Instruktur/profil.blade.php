@@ -1,11 +1,11 @@
-@extends('admin.layout.layout')
+@extends('instruktur.layout.layout')
 
 @section('content')
     <div class="mb-4 col-span-full xl:mb-2">
         <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                 <li class="inline-flex items-center">
-                    <a href="/admin/dashboard"
+                    <a href="/instruktur/dashboard"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -34,13 +34,13 @@
     <div class="col-span-full xl:col-auto">
         <div
             class="p-4 mb-4 bg-violet-200 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-violet-200">
-            <form action="{{route('admin.editProfil')}}" method="get">
+            <form action="{{route('instruktur.editProfil')}}" method="get">
                 @csrf
                 @method('GET')
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <img src="{{ Auth::user()->getImageURL() }}" class="mb-4 rounded-lg w-36 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" alt="foto-profil" />
                     <div>
-                        <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-gray-900">{{$admin -> nama}}
+                        <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-gray-900">{{$instruktur -> nama}}
                         </h3>
                         <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">Your photo profile</div>
                         <div class="flex items-center space-x-4">
@@ -63,42 +63,28 @@
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
                         <input type="text" name="user_id" id="user_id"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->user_id }}" required="" wfd-id="id2" readonly disabled>
+                            value="{{ $instruktur->user_id }}" required="" wfd-id="id2" readonly disabled>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
                         <label for="nama"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
                         <input type="text" name="nama" id="nama"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->nama }}" required="" wfd-id="id1" readonly disabled>
+                            value="{{ $instruktur->nama }}" required="" wfd-id="id1" readonly disabled>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
                         <label for="username"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
                         <input type="text" name="username" id="username"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->username }}" required="" wfd-id="id6" disabled>
+                            value="{{ $instruktur->username }}" required="" wfd-id="id6" disabled>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
                         <label for="email"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                         <input type="text" name="email" id="email"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->email }}" required="" wfd-id="id6" disabled>
-                    </div>
-                    <div class="col-span-6 sm:col-span-3">
-                        <label for="alamat"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
-                        <input type="text" name="alamat" id="alamat"
-                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->alamat }}" wfd-id="id3" disabled>
-                    </div>
-                    <div class="col-span-6 sm:col-span-3">
-                        <label for="noHP"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor HP</label>
-                        <input type="text" name="noHP" id="noHP"
-                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $admin->noHP}}" required="" wfd-id="id7" disabled>
+                            value="{{ $instruktur->email }}" required="" wfd-id="id6" disabled>
                     </div>
                 </div>
         </div>

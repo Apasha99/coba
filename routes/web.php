@@ -50,6 +50,9 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
     Route::get('admin/daftar-admin/download', 'download')->name('admin.downloadAdmin');
     Route::get('admin/ubah-password', 'ubahPassword')->middleware('only_admin')->name('admin.ubahPassword');
     Route::post('admin/ubah-password/{admin_id}', 'updatePassword')->middleware('only_admin')->name('admin.updatePassword');
+    Route::get('admin/profil', 'profil')->middleware('only_admin')->name('admin.profil');
+    Route::get('admin/profil/edit-profil', 'editProfil')->middleware('only_admin')->name('admin.editProfil');
+    Route::post('admin/profil/edit-profil/{admin_id}', 'updateProfil')->middleware('only_admin')->name('admin.updateProfil');
 });
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
@@ -108,6 +111,9 @@ Route::controller(InstrukturController::class)->group(function(){
     Route::get('instruktur/ubah-password', 'ubahPassword')->middleware('only_instruktur')->name('instruktur.ubahPassword');
     Route::post('instruktur/ubah-password/{instruktur_id}', 'updatePassword')->middleware('only_instruktur')->name('instruktur.updatePassword');
     Route::post('instruktur/gabung-pelatihan', 'gabungPelatihan')->middleware('only_instruktur')->name('instruktur.gabungPelatihan');
+    Route::get('instruktur/profil', 'profil')->middleware('only_instruktur')->name('instruktur.profil');
+    Route::get('instruktur/profil/edit-profil', 'editProfil')->middleware('only_instruktur')->name('instruktur.editProfil');
+    Route::post('instruktur/profil/edit-profil/{instruktur_id}', 'updateProfil')->middleware('only_instruktur')->name('instruktur.updateProfil');
 });
 
 Route::controller(PelatihanController::class)->group(function(){
