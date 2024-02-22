@@ -38,6 +38,18 @@ class AdminController extends Controller
             $jmlPltSelesai = Pelatihan::where('status', 'Completed')->count();
             $jmlPeserta = Peserta::count();
             $jmlInstruktur = Instruktur::count();
+
+            // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
+            foreach ($pelatihan as $p) {
+                $kodePelatihan = $p->kode;
+    
+                // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
+                $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
+    
+                // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
+                $p->pesertaPelatihan = $pesertaPelatihan;
+            }
+            //dd($pesertaPelatihan);
             return view('admin.dashboard',['jmlPltAktif'=>$jmlPltAktif,'jmlPltSelesai'=>$jmlPltSelesai,'jmlPeserta'=>$jmlPeserta,'jmlInstruktur'=>$jmlInstruktur,'admin' => $admin,'role' => $role, 'pelatihan' => $pelatihan]);
         }
     }
