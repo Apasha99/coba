@@ -17,7 +17,7 @@
                 </div>
                 <div class="p-4 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
-                        10
+                        {{$jmlPltAktif}}
                     </p>
                     <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
                         Pelatihan Aktif
@@ -31,7 +31,7 @@
                 </div>
                 <div class="p-4 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
-                        10
+                        {{$jmlPltSelesai}}
                     </p>
                     <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
                         Pelatihan Selesai
@@ -45,7 +45,7 @@
                 </div>
                 <div class="p-4 mt-2 col-span-2">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
-                        10
+                        {{$jmlPeserta}}
                     </p>
                     <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
                         Peserta
@@ -59,7 +59,7 @@
                 </div>
                 <div class="p-4 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-white">
-                        10
+                        {{$jmlInstruktur}}
                     </p>
                     <p class="text-sm font-regular text-white sm:text-xs dark:text-white">
                         Instruktur

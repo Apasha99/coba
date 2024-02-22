@@ -34,7 +34,11 @@ class AdminController extends Controller
                         ->where('roles.id', Auth::user()->role_id)
                         ->first();
             $pelatihan = Pelatihan::where('status', 'On going')->get();
-            return view('admin.dashboard',['admin' => $admin,'role' => $role, 'pelatihan' => $pelatihan]);
+            $jmlPltAktif = Pelatihan::where('status', 'On going')->count();
+            $jmlPltSelesai = Pelatihan::where('status', 'Completed')->count();
+            $jmlPeserta = Peserta::count();
+            $jmlInstruktur = Instruktur::count();
+            return view('admin.dashboard',['jmlPltAktif'=>$jmlPltAktif,'jmlPltSelesai'=>$jmlPltSelesai,'jmlPeserta'=>$jmlPeserta,'jmlInstruktur'=>$jmlInstruktur,'admin' => $admin,'role' => $role, 'pelatihan' => $pelatihan]);
         }
     }
 
