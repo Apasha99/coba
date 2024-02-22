@@ -73,20 +73,20 @@
 
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
+                            <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID <span class="text-red-500">*</span></label>
                             <input type="text" name="user_id" id="user_id"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 value="{{ $peserta->user_id }}" required="" wfd-id="id2" readonly disabled>
                         </div>
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                            <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" id="nama"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 value="{{ $peserta->nama }}" required="" wfd-id="id1" readonly disabled>
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="username"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username <span class="text-red-500">*</span></label>
                             <input type="text" name="username" id="username"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 value="{{ $peserta->username }}" wfd-id="id6">
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email <span class="text-red-500">*</span></label>
                             <input type="text" name="email" id="email"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 value="{{ $peserta->email }}" wfd-id="id6">
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="alamat"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat <span class="text-red-500">*</span></label>
                             <input type="text" name="alamat" id="alamat"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="e.g. Gading Blok C" wfd-id="id3" value="{{ $peserta->alamat }}">
@@ -115,7 +115,7 @@
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="noHP" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor HP</label>
+                            <label for="noHP" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor HP <span class="text-red-500">*</span></label>
                             <input type="text" name="noHP" id="noHP"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="e.g. 083456789" wfd-id="id7" value="{{ $peserta->noHP }}">

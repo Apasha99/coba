@@ -54,7 +54,7 @@
                             <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="nama"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                                         <input type="text" name="nama" placeholder="nama" id="nama" value="{{ $instruktur->nama }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('nama')
@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="username"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username <span class="text-red-500">*</span></label>
                                         <input type="text" name="username" placeholder="username" id="username" value="{{ $instruktur->user->username }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('username')
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="email"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email <span class="text-red-500">*</span></label>
                                         <input type="text" name="email" placeholder="email" id="email" value="{{$instruktur->user->email}}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('email')
@@ -86,7 +86,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="bidang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang</label>
+                                        <label for="bidang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang <span class="text-red-500">*</span></label>
                                         <select id="bidang" name="bidang" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             <option value="" selected disabled>Pilih Bidang</option>
                                             @foreach($bidang as $bid)

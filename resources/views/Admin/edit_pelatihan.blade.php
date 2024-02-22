@@ -54,7 +54,7 @@
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
                                     <label for="kode"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode <span class="text-red-500">*</span></label>
                                     <input type="text" name="kode" placeholder="kode" id="kode" value="{{ $plt->kode }}" disabled
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     @error('kode')
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nama"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                                     <input type="text" name="nama" placeholder="nama" id="nama" value="{{ $plt->nama }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     @error('nama')
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="start_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai Pelatihan <span class="text-red-500">*</span></label>
                                     <input type="date" name="start_date" placeholder="start_date" id="start_date" value="{{ $plt->start_date }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     @error('start_date')
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="end_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai Pelatihan <span class="text-red-500">*</span></label>
                                     <input type="date" name="end_date" placeholder="end_date" id="end_date" value="{{ $plt->end_date }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     @error('end_date')
@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="status"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status <span class="text-red-500">*</span></label>
                                     <select name="status" id="status"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option disabled>Pilih Status</option>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="bidang_id"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang Penyelenggara</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang Penyelenggara <span class="text-red-500">*</span></label>
                                         <select name="bidang_id" id="bidang_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
                                             <option value="" disabled selected>Pilih Bidang</option>
                                             
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="tempat"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tempat</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tempat <span class="text-red-500">*</span></label>
                                     <select name="tempat" id="tempat"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         <option selected disabled>Pilih Tempat</option>
@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="deskripsi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                     <input type="text" name="deskripsi" placeholder="deskripsi" id="deskripsi" value="{{$plt->deskripsi}}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     @error('deskripsi')

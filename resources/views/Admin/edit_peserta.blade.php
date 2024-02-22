@@ -54,7 +54,7 @@
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                         <label for="id"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID <span class="text-red-500">*</span></label>
                                         <input type="text" name="id" placeholder="id" id="id" value="{{ $peserta->user_id }}" disabled
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('id')
@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="nama"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                                         <input type="text" name="nama" placeholder="nama" id="nama" value="{{ $peserta->nama }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('nama')
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="noHP"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Handphone</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Handphone <span class="text-red-500">*</span></label>
                                         <input type="text" name="noHP" placeholder="noHP" id="noHP" value="{{ $peserta->noHP }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('noHP')
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="alamat"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat <span class="text-red-500">*</span></label>
                                         <input type="text" name="alamat" placeholder="alamat" id="alamat" value="{{ $peserta->alamat }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('alamat')
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="username"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username <span class="text-red-500">*</span></label>
                                         <input type="text" name="username" placeholder="username" id="username" value="{{ $peserta->username }}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('username')
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="email"
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email <span class="text-red-500">*</span></label>
                                         <input type="text" name="email" placeholder="email" id="email" value="{{$peserta->email}}"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                         @error('email')

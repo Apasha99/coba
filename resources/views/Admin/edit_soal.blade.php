@@ -78,7 +78,7 @@
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-full">
                                 <label for="urutan"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Urutan</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Urutan <span class="text-red-500">*</span></label>
                                 <input type="number" name="urutan" placeholder="urutan" id="urutan" value="{{ $soal_test->urutan }}" disabled
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('urutan')
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-span-full">
                                 <label for="soal"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Soal</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Soal <span class="text-red-500">*</span></label>
                                 <input type="text" name="soal" placeholder="soal" id="soal" value="{{ $soal_test->title }}" 
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('soal')
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="nilai"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai <span class="text-red-500">*</span></label>
                                 <input type="number" name="nilai" placeholder="nilai" id="nilai" value="{{ $soal_test->nilai }}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('nilai')
@@ -121,8 +121,8 @@
                             </div>
                                 
                             <div class="col-span-full">
-                                <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe</label>
-                                <select required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onchange="handleTipeSoalChange()">
+                                <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe <span class="text-red-500">*</span></label>
+                                <select disabled required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onchange="handleTipeSoalChange()">
                                     <option value="" selected disabled>Pilih tipe soal</option>
                                     <option value="Pilihan Ganda" {{ $soal_test->tipe == 'Pilihan Ganda' ? 'selected' : '' }}>Pilihan Ganda</option>
                                     <option value="Jawaban Singkat" {{ $soal_test->tipe == 'Jawaban Singkat' ? 'selected' : '' }}>Jawaban Singkat</option>
@@ -136,7 +136,7 @@
                                 <div id="tipe-Jawaban Singkat" class="hidden mt-2">
                                     <!-- Opsi Jawaban Jawaban Singkat -->
                                     <div class="flex-col items-center mb-4">
-                                        <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban</label>
+                                        <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban <span class="text-red-500">*</span></label>
                                         <div id="options-container-singkat">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test as $jawaban)
@@ -166,7 +166,7 @@
                                 <div id="tipe-Pilihan Ganda" class="hidden mt-2">
                                     <!-- Opsi Jawaban Pilihan Ganda -->
                                     <div class="flex-col items-center mb-4">
-                                        <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban</label>
+                                        <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban <span class="text-red-500">*</span></label>
                                         <div id="options-container-ganda1">
                                             <!-- Default input opsi jawaban -->
                                             <div >

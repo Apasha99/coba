@@ -31,7 +31,7 @@
         <form action="{{ route('peserta.updateSubmission', [$pelatihan->kode, $tugas->id, $submission->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="col-span-full">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload File</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload File </label>
                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     aria-describedby="file_input_help" id="submission_files" name="submission_files[]" type="file" accept=".pdf, .doc, .docx, .xls, .xlsx, image/*" multiple>
                 @error('submission_files')

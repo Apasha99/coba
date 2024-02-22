@@ -66,7 +66,7 @@
                         <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-full">
                                 <label for="nama"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
                                 <input type="text" name="nama" placeholder="Masukkan judul" id="nama" value="{{$test->nama}}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
@@ -77,7 +77,7 @@
                                 @enderror
                             </div>
                             <div class="col-span-full">
-                                <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                 <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ $test->deskripsi }}</textarea>
                                 @error('deskripsi')
@@ -88,7 +88,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="kkm"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM <span class="text-red-500">*</span></label>
                                 <input type="number" name="kkm" placeholder="Masukkan KKM" id="kkm" value="{{$test->kkm}}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required max="100">
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="durasi"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi <span class="text-red-500">*</span></label>
                                 <input type="timezone" name="durasi" placeholder="Durasi" id="durasi" value="{{$test->durasi}}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="start_date"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai <span class="text-red-500">*</span></label>
                                 <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date" value="{{$test->start_date}}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
@@ -124,7 +124,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="end_date"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai <span class="text-red-500">*</span></label>
                                 <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date" value="{{$test->end_date}}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     required>
@@ -136,7 +136,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="tampil_hasil"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test <span class="text-red-500">*</span></label>
                                 <select name="tampil_hasil" id="tampil_hasil" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                     <option value="true" {{ $test->tampil_hasil == 'true' ? 'selected' : '' }} >Ya</option>
                                     <option value="false" {{ $test->tampil_hasil == 'false' ? 'selected' : '' }}>Tidak</option>
