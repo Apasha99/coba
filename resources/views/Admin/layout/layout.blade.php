@@ -234,7 +234,7 @@
                         class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                         id="user-menu-button-2" aria-expanded="false">
                         
-                        <img class="w-28 h-28 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="Rounded avatar">
+                        <img class="w-28 h-28 rounded-full" src="{{ Auth::user()->getImageURL() }}" alt="Rounded avatar">
                     </div>
                 </div>
                 
