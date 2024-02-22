@@ -59,10 +59,18 @@
                                     <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $materi->judul }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 </div>
+                                @php 
+                                    $nama_file = basename($materi->file_materi)
+                                @endphp
                                 <div class="col-span-full">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_materi">Upload File Materi</label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         aria-describedby="file_input_help" id="file_materi" name="file_materi" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
+                                    @if($materi->file_materi)
+                                        <div class="mt-1 text-sm text-gray-500">
+                                            File sebelumnya: {{ $nama_file }}
+                                        </div>
+                                    @endif
                                     @error('file_materi')
                                     <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                             {{ $message }}

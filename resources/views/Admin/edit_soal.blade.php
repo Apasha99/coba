@@ -72,10 +72,10 @@
             @csrf
             <div class="col-span-4">
                 <div
-                    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    class="p-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
                     
-                        <div class="grid grid-cols-6 gap-6">
+                        <div class="grid grid-cols-6 gap-3">
                             <div class="col-span-full">
                                 <label for="urutan"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Urutan <span class="text-red-500">*</span></label>
@@ -109,17 +109,26 @@
                                     </div>
                                 @enderror
                             </div>
+                            @php
+                                $nama_file = basename($soal_test->file_soal)
+                            @endphp
+
                             <div class="col-span-6 sm:col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto Soal</label>
                                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                     aria-describedby="file_input_help" id="file_soal" name="file_soal" type="file" accept="image/*">
+                                @if($soal_test->file_soal)
+                                    <div class="mt-1 text-sm text-gray-500">
+                                        File sebelumnya: {{ $nama_file }}
+                                    </div>
+                                @endif
                                 @error('file_soal')
-                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <div class="p-1 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
-                                </div>
+                                    </div>
                                 @enderror
                             </div>
-                                
+     
                             <div class="col-span-full">
                                 <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe <span class="text-red-500">*</span></label>
                                 <select disabled required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onchange="handleTipeSoalChange()">

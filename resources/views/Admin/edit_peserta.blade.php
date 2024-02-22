@@ -140,10 +140,18 @@
                                             </div>
                                         @enderror
                                     </div>
+                                    @php
+                                        $nama_file = basename($peserta->foto)
+                                    @endphp
                                     <div class="col-span-full">
                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="foto">Upload Foto</label>
                                         <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                             aria-describedby="file_input_help" id="foto" name="foto" type="file" accept="image/*">
+                                        @if($peserta->foto)
+                                            <div class="mt-1 text-sm text-gray-500">
+                                                File sebelumnya: {{ $nama_file }}
+                                            </div>
+                                        @endif
                                         @error('foto')
                                         <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                             {{ $message }}

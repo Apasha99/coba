@@ -49,17 +49,17 @@
         </div>
         <div class="col-span-4">
                 <div
-                    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    class="p-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Tugas</h3>
                     
-                        <div class="grid grid-cols-6 gap-6">
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label for="judul"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
-                                    <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $tugas->judul }}"
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                </div>
-                                <div class="col-span-full">
+                        <div class="grid grid-cols-6 gap-3">
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="judul"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
+                                <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $tugas->judul }}"
+                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            </div>
+                            <div class="col-span-full">
                                 <label for="deskripsi"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                 <textarea name="deskripsi" rows="5" cols="50" placeholder="Deskripsi (max:255 kata)" id="deskripsi"
@@ -95,16 +95,23 @@
                                     </div>
                                 @enderror
                             </div>
-                                <div class="col-span-full">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_tugas">Upload File tugas</label>
-                                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                        aria-describedby="file_input_help" id="file_tugas" name="file_tugas" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
-                                    @error('file_tugas')
-                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
+                            @php
+                                $nama_file = basename($tugas->file_tugas)
+                            @endphp
+                            <div class="col-span-full">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_tugas">Upload File tugas</label>
+                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    aria-describedby="file_input_help" id="file_tugas" name="file_tugas" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
+                                @if($tugas->file_tugas)
+                                    <div class="mt-1 text-sm text-gray-500">
+                                        File sebelumnya: {{ $nama_file }}
+                                    </div>
+                                @endif
+                                @error('file_tugas')
+                                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="col-span-6 sm:col-full mt-4">
                                 <button
