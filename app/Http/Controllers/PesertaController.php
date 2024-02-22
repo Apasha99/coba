@@ -156,7 +156,7 @@ class PesertaController extends Controller
             'email' => ['required', 'unique:users,email','email'],
             'noHP' => ['required', 'numeric'],
             'alamat' => ['required'],
-            'foto' => ['required', 'max:10240','mimes:jpeg,png,jpg']
+            'foto' => ['nullable', 'max:10240','mimes:jpeg,png,jpg']
         ]);        
         //dd($validated);
 

@@ -67,7 +67,7 @@
                         <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nama"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
                                     <input type="text" name="nama" placeholder="Masukkan judul" id="nama"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="deskripsi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                     <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi" 
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         ></textarea>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="kkm"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">KKM <span class="text-red-500">*</span></label>
                                     <input type="number" name="kkm" placeholder="Masukkan KKM" id="kkm"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required max="100">
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="durasi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi <span class="text-red-500">*</span></label>
                                         <input type="text" name="durasi" placeholder="Durasi (HH:MM:SS)" id="durasi"
                                             pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"
                                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="start_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai <span class="text-red-500">*</span></label>
                                     <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -144,7 +144,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="end_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai <span class="text-red-500">*</span></label>
                                     <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="tampil_hasil"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tampilkan Review Test <span class="text-red-500">*</span></label>
                                     <select name="tampil_hasil" id="tampil_hasil" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                         <option value="Ya" >Ya</option>
                                         <option value="Tidak" >Tidak</option>

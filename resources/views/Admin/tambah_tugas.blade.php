@@ -54,7 +54,7 @@
                         <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-full">
                                 <label for="judul"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul Tugas</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul Tugas <span class="text-red-500">*</span></label>
                                 <input type="text" name="judul" placeholder="Masukkan judul" id="judul"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('judul')
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-span-full">
                                 <label for="deskripsi"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                 <textarea name="deskripsi" placeholder="Deskripsi (max:255 kata)" id="deskripsi"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
                                 @error('deskripsi')
@@ -76,7 +76,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="start_date"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai <span class="text-red-500">*</span></label>
                                 <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('start_date')
@@ -87,7 +87,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="end_date"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai <span class="text-red-500">*</span></label>
                                 <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('end_date')

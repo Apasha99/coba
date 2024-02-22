@@ -77,7 +77,7 @@
                         <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-full">
                                     <label for="soal"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Soal</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Soal <span class="text-red-500">*</span></label>
                                     <input type="text" name="soal" placeholder="Soal" id="soal"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required max="2000">
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nilai"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai <span class="text-red-500">*</span></label>
                                     <input type="number" name="nilai" placeholder="Number" id="nilai"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required max="100" min="0">
@@ -119,7 +119,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-full">
-                                    <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe</label>
+                                    <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe <span class="text-red-500">*</span></label>
                                     <select required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onchange="handleTipeSoalChange()">
                                         <option value="" selected disabled>Pilih tipe soal</option>
                                         <option value="Pilihan Ganda">Pilihan Ganda</option>
@@ -135,7 +135,7 @@
                                     @enderror
                                     <div id="tipe-Jawaban Singkat" class="hidden mt-2">
                                         <div class="flex-col items-center mb-4">
-                                            <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban</label>
+                                            <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban <span class="text-red-500">*</span></label>
                                             <div id="options-container-singkat">
                                                 <!-- Default input opsi jawaban -->
                                                 <div>
@@ -150,7 +150,7 @@
                                     <div id="tipe-Pilihan Ganda" class="hidden mt-2">
                                         <!-- Opsi Jawaban Pilihan Ganda -->
                                         <div class="flex-col items-center mb-4">
-                                            <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban</label>
+                                            <label for="options" class="text-sm font-medium text-gray-900 dark:text-white">Opsi Jawaban <span class="text-red-500">*</span></label>
                                             <div id="options-container-ganda1">
                                                 <!-- Default input opsi jawaban -->
                                                 <div>
@@ -200,7 +200,7 @@
                                                     <div class="flex items-center mb-3">
                                                         <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban ${optionCounterGanda1}" 
                                                             class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                        <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                             </svg>
@@ -215,7 +215,7 @@
                                                     <div class="flex items-center mb-3">
                                                         <input type="text" name="title_singkat[]" placeholder="Jawaban Benar ${optionCounterSingkat}" 
                                                             class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                        <button type="button" onclick="removeOption(this)" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                             </svg>

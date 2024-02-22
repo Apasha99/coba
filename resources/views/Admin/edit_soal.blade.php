@@ -140,20 +140,23 @@
                                         <div id="options-container-singkat">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test as $jawaban)
-                                                <div class="flex items-center mb-1" id="jawaban-container-{{ $jawaban->id }}">
+                                                <div class="flex items-center" id="jawaban-container-{{ $jawaban->id }}">
                                                     @if ($soal_test->tipe == "Jawaban Singkat")
-                                                    <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
-                                                        value="{{ $jawaban->title }}"
-                                                        class="mt-2 mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-
+                                                        <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
+                                                            value="{{ $jawaban->title }}"
+                                                            class="mt-2 mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        @if (!$loop->first) <!-- Cek apakah bukan jawaban pertama -->
+                                                            <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </div>
+                                                <p class="mt-1 mb-1 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar</p>
                                             @endforeach
+
                                             <!-- Default input opsi jawaban -->
                                         </div>
                                         <button type="button" onclick="addOption('singkat')" class="block w-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">+</button>
@@ -170,24 +173,30 @@
                                                 @if ($soal_test->tipe == "Pilihan Ganda")
                                                 <input type="text" name="ganda_benar" placeholder="Jawaban Benar" id="title-benar"
                                                     value="{{ $jawaban_test->where('status', true)->first()->title }}"
-                                                    class="mt-2 mb-3 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    class="mt-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 @endif
+                                                <p class="mt-1 mb-3 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar
+                                                </p>
                                             </div>
                                         </div>
                                         <div id="options-container-ganda2">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test->where('status', false) as $jawaban)
                                                 @if ($soal_test->tipe == "Pilihan Ganda")
-                                                <div class="flex items-center mb-3" id="jawaban-{{ $jawaban->id }}">
+                                                <div class="flex items-center" id="jawaban-container-{{ $jawaban->id }}">
                                                     <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban {{ $jawaban->urutan }}" id="title-ganda-{{$jawaban->id}}"
                                                         value="{{ $jawaban->title }}"
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}, 'jawaban-container-{{ $jawaban->id }}')')" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    @if (!$loop->first)
+                                                    <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </button>
+                                                    @endif
                                                 </div>
+                                                <p class="mt-1 mb-2 text-sm text-gray-500 dark:text-gray-300">Jawaban Salah
+                                                </p>
                                                 @endif
                                             @endforeach
                                             <!-- Default input opsi jawaban -->
@@ -247,30 +256,34 @@
                                             const jumlahJawaban = document.querySelectorAll('[id^="jawaban-"]').length;
                                             const newOptionInput = document.createElement('div');
                                             newOptionInput.innerHTML = `
-                                                <div class="flex items-center mb-3" id="jawaban-${jumlahJawaban}">
+                                                <div class="flex items-center" id="jawaban-${jumlahJawaban}">
                                                     <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban" 
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </button>
                                                 </div>
+                                                <p class="mt-1 mb-2 text-sm text-gray-500 dark:text-gray-300">Jawaban Salah
+                                                </p>
                                             `;
                                             document.getElementById('options-container-ganda2').appendChild(newOptionInput);
                                         } else if (tipe === 'singkat') {
                                             const jumlahJawaban = document.querySelectorAll('[id^="jawaban-"]').length;
                                             const newOptionInput = document.createElement('div');
                                             newOptionInput.innerHTML = `
-                                                <div class="flex items-center mb-3" id="jawaban-${jumlahJawaban}">
+                                                <div class="flex items-center" id="jawaban-${jumlahJawaban}">
                                                     <input type="text" name="title_singkat[]" placeholder="Jawaban Benar" 
                                                         class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                    <button type="button" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', ${jumlahJawaban})" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </button>
                                                 </div>
+                                                <p class="mt-1 mb-1 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar
+                                                </p>
                                             `;
                                             document.getElementById('options-container-singkat').appendChild(newOptionInput);
                                         }

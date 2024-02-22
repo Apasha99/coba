@@ -55,7 +55,7 @@
                         <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="kode"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode <span class="text-red-500">*</span></label>
                                     <input type="text" name="kode" placeholder="Kode (panjang: 6 huruf/angka)" id="kode"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="nama"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Pelatihan <span class="text-red-500">*</span></label>
                                     <input type="text" name="nama" placeholder="Nama Pelatihan" id="nama"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="start_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai Pelatihan <span class="text-red-500">*</span></label>
                                     <input type="date" name="start_date" placeholder="Tanggal Mulai Pelatihan" id="start_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="end_date"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai Pelatihan <span class="text-red-500">*</span></label>
                                     <input type="date" name="end_date" placeholder="Tanggal Selesai Pelatihan" id="end_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="status"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status <span class="text-red-500">*</span></label>
                                     <select name="status" id="status"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="bidang_id"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang Penyelenggara</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bidang Penyelenggara <span class="text-red-500">*</span></label>
                                         <select name="bidang_id" id="bidang_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
                                             <option value="" disabled selected>Pilih Bidang</option>
                                             @foreach ($bidang as $bidangItem)
@@ -153,7 +153,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="tempat"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tempat Pelatihan</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tempat Pelatihan <span class="text-red-500">*</span></label>
                                     <select name="tempat" id="tempat"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -179,7 +179,7 @@
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="deskripsi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                     <input type="text" name="deskripsi" placeholder="Deskripsi (max:255 kata)" id="deskripsi"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
@@ -193,7 +193,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-full">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster:</label>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster <span class="text-red-500">*</span></label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         aria-describedby="file_input_help" id="poster" name="poster" type="file" accept="image/*">
                                     @error('poster')
