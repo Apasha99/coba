@@ -1,7 +1,7 @@
 @extends('admin.layout.layout')
 
 @section('content')
-    <div class="mb-4 col-span-full xl:mb-2 relative">
+    <div class="top-0 mb-4 col-span-full xl:mb-2 relative">
         <img class="mb-4 rounded-lg w-full h-40 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ asset('image/hi2.png') }}">
         <h1 class="absolute top-12 left-56 right-0 bottom-0 flex text-xl font-bold text-gray-900 sm:text-2xl dark:text-blue-900">Halo, {{ $admin->nama }}!</h1>
         <p class="absolute top-20 left-56 right-0 bottom-0 flex text-sm font-semibold text-gray-900 sm:text-l dark:text-blue-900">Selamat bekerja!</p>
@@ -11,11 +11,11 @@
             <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Overview</h1>
         </div>
         <div class="p-4 grid grid-cols-4 gap-4">
-            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-indigo-500 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
+            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-indigo-500 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
                 <div class="col-span-2">
-                    <img class="w-full h-full" src="{{ asset('image/laptop.png') }}">
+                    <img class="w-32 h-full" src="{{ asset('image/laptop.png') }}">
                 </div>
-                <div class="p-4 mt-2 col-span-3">
+                <div class="p-1 mt-2 col-span-3 ">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
                         {{$jmlPltAktif}}
                     </p>
@@ -25,11 +25,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-purple-500 border border-gray-200 rounded-lg shadow dark:bg-purple-900 dark:border-gray-700">
+            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-purple-500 border border-gray-200 rounded-lg shadow dark:bg-purple-900 dark:border-gray-700">
                 <div class="col-span-2">
-                    <img class="w-full h-full" src="{{ asset('image/buku.png') }}">
+                    <img class="w-32 h-full" src="{{ asset('image/buku.png') }}">
                 </div>
-                <div class="p-4 mt-2 col-span-3">
+                <div class="p-1 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
                         {{$jmlPltSelesai}}
                     </p>
@@ -39,11 +39,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-green-500 border border-gray-200 rounded-lg shadow dark:bg-green-900 dark:border-gray-700">
-                <div class="col-span-3">
-                    <img class="w-full h-full" src="{{ asset('image/peserta.png') }}">
+            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-green-500 border border-gray-200 rounded-lg shadow dark:bg-green-900 dark:border-gray-700">
+                <div class="col-span-2">
+                    <img class="w-24 h-full" src="{{ asset('image/peserta.png') }}">
                 </div>
-                <div class="p-4 mt-2 col-span-2">
+                <div class="p-1 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
                         {{$jmlPeserta}}
                     </p>
@@ -53,11 +53,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-yellow-500 border border-gray-200 rounded-lg shadow dark:bg-yellow-800 dark:border-gray-700">
-                <div class="ml-2 col-span-2">
+            <div class="items-center grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-yellow-500 border border-gray-200 rounded-lg shadow dark:bg-yellow-800 dark:border-gray-700">
+                <div class="col-span-2">
                     <img class="w-full h-full" src="{{ asset('image/instruktur.png') }}">
                 </div>
-                <div class="p-4 mt-2 col-span-3">
+                <div class="p-1 mt-2 col-span-3">
                     <p class="text-xl font-bold text-white sm:text-4xl dark:text-white">
                         {{$jmlInstruktur}}
                     </p>
