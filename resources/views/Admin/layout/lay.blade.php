@@ -19,6 +19,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="https://flowbite-admin-dashboard.vercel.app//app.css">
     <link rel="apple-touch-icon" sizes="180x180"
         href="https://flowbite-admin-dashboard.vercel.app/apple-touch-icon.png">
@@ -26,6 +30,8 @@
         href="https://flowbite-admin-dashboard.vercel.app/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16"
         href="https://flowbite-admin-dashboard.vercel.app/favicon-16x16.png">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <link rel="icon" type="image/png" href="https://flowbite-admin-dashboard.vercel.app/favicon.ico">
     <link rel="manifest" href="https://flowbite-admin-dashboard.vercel.app/site.webmanifest">
     <link rel="mask-icon" href="https://flowbite-admin-dashboard.vercel.app/safari-pinned-tab.svg" color="#5bbad5">
@@ -49,6 +55,9 @@
     <meta property="og:image" content="https://flowbite-admin-dashboard.vercel.app/images/og-image.png">
     <meta property="og:image:type" content="image/png">
 
+    <style>
+        
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -63,98 +72,8 @@
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-800">
-    <!-- <div class="top-0 left-64 right-0"> -->
-    <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-indigo-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-        <div class="px-3 py-2 lg:px-5 lg:pl-3">
-            <div class="flex items-center justify-between">
-                <div class="dark:bg-gray-900">
-                    @yield('tabs')
-                </div>
-                <div class="flex items-center">
-                    <div class="hidden mr-3 -mb-1 sm:block">
-                        <span></span>
-                    </div>
-
-                    <button id="toggleSidebarMobileSearch" type="button"
-                        class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span class="sr-only">Search</span>
-
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    
-                    <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                        </svg>
-                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    <div id="tooltip-toggle" role="tooltip"
-                        class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip opacity-0 invisible"
-                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1107.33px, 60px, 0px);"
-                        data-popper-placement="bottom">
-                        Toggle dark mode
-                        <div class="tooltip-arrow" data-popper-arrow=""
-                            style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
-                    </div>
-
-                    <div class="flex items-center">
-                        <div>
-                        <button type="button"
-                            class="hidden lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-3">
-                            <span class="sr-only">Open user menu</span>
-                            <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>  
-                        </div>
-
-                        <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
-                            id="dropdown-3"
-                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
-                            data-popper-placement="bottom">
-                            <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->admin->nama}}
-                                </p>
-                            </div>
-                            <ul class="py-1" role="none">
-                                <li>
-                                    <a  href="{{route('admin.profil')}}"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Profil</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('admin.ubahPassword')}}"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Ubah Password</a>
-                                </li>
-                                <li>
-
-                                </li>
-                                <li>
-                                    <a href="/logout"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Keluar</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-        <!-- nav split -->
-        <nav class="lg:hidden fixed top-0 w-full z-30 bg-indigo-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-        <div class="px-3 py-2 lg:px-5 lg:pl-3">
+    <!-- <nav class="fixed z-30 w-full">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
                     <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar"
@@ -173,13 +92,19 @@
                         </svg>
                     </button>
                 </div>
-                <div class="dark:bg-gray-900">
-                    @yield('tabs')
-                </div>
-                <!-- <div class="flex items-center">
-                    <div class="hidden mr-3 -mb-1 sm:block">
-                        <span></span>
-                    </div>
+                <div class="flex items-center">
+                    <button id="toggleSidebarMobileSearch" type="button"
+                        class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span class="sr-only">Search</span>
+
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+
                     <div class="z-20 z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg dark:bg-gray-700 dark:divide-gray-600"
                         id="apps-dropdown"
                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1139.33px, 64.6667px, 0px);"
@@ -210,8 +135,8 @@
                                 <div class="text-sm font-medium text-gray-900 dark:text-white">Logout</div>
                             </a>
                         </div>
-                    </div> -->
-                    <!-- <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    </div>
+                    <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                         </svg>
@@ -226,29 +151,32 @@
                         Toggle dark mode
                         <div class="tooltip-arrow" data-popper-arrow=""
                             style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
-                    </div> -->
+                    </div>
 
-                    <div class="flex items-center">
-                        <button type="button"
-                            class="lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
-                            <span class="sr-only">Open user menu</span>
-                            <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>  
-                        <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
+                    <div class="flex items-center ml-2">
+                        <div>
+                            <button type="button"
+                                class="flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full"
+                                    src="{{ Auth::user()->getImageURL() }}"
+                                    alt="user photo">
+                            </button>
+                        </div>
+
+                        <div class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
                             id="dropdown-2"
                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->admin->nama}}
+                                    {{auth()->user()->username}}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
                                 <li>
-                                    <a  href="{{route('admin.profil')}}"
+                                    <a href="{{route('admin.profil')}}"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Profil</a>
                                 </li>
@@ -256,9 +184,6 @@
                                     <a href="{{route('admin.ubahPassword')}}"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Ubah Password</a>
-                                </li>
-                                <li>
-
                                 </li>
                                 <li>
                                     <a href="/logout"
@@ -271,12 +196,10 @@
                 </div>
             </div>
         </div>
-    </nav>
-    
-    <!-- </div> -->
-    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
-
-    <aside id="sidebar"
+    </nav>  -->
+    <div></div>
+    <div class="flex overflow-hidden bg-gray-50 dark:bg-gray-900">
+        <aside id="sidebar"
             class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full font-normal duration-75 lg:flex transition-width"
             aria-label="Sidebar">
             
@@ -375,8 +298,15 @@
 
             </div>
         </aside>
-        <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
 
+        <!-- Sidebar toggle button -->
+        <!-- <button id="sidebarToggle"
+            class="absolute top-0 left-0 z-30 lg:hidden p-4 text-gray-700 focus:outline-none dark:text-gray-200">
+            <i class="fas fa-bars"></i>
+        </button> -->
+
+        <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
+        <div class="absolute w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900"></div>
         <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
             <main>
                 <div class="absolute w-full flex justify-center top-0">
@@ -419,10 +349,123 @@
                         </script>
                     @endif
                 </div>
+                <div class="flex justify-between lg:hidden">
+                    <button id="toggleSidebarMobile" aria-expanded="true" aria-controls="sidebar"
+                        class="ml-2 mt-2 text-gray-600 rounded cursor-pointer  hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <svg id="toggleSidebarMobileHamburgerr" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="toggleSidebarMobileClose" class="hidden w-6 h-6" fill="currentColor"
+                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                        <div class="flex items-center ml-2">  
+                            <button type="button"
+                                class="mr-2 mt-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
+                                <span class="sr-only">Open user menu</span>
+                                <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>    
+                            <div class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                                id="dropdown-2"
+                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
+                                data-popper-placement="bottom">
+                                <ul class="py-1" role="none">
+                                    <li>
+                                        <a href="{{route('admin.profil')}}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            role="menuitem">Profil</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('admin.ubahPassword')}}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            role="menuitem">Ubah Password</a>
+                                    </li>
+                                    <li>
+                                        <a href="/logout"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            role="menuitem">Keluar</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
 
+                <div class="flex justify-end mt-2">
+                    <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="hidden lg:block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="tooltip-toggle" role="tooltip"
+                        class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip opacity-0 invisible"
+                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1107.33px, 60px, 0px);"
+                        data-popper-placement="bottom">
+                        Toggle dark mode
+                        <div class="tooltip-arrow" data-popper-arrow=""
+                            style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
+                    </div>
+                    <div class="flex items-center ml-2">  
+                        <button type="button"
+                            class="hidden lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
+                            <span class="sr-only">Open user menu</span>
+                            <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>    
+                        <div class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                            id="dropdown-2"
+                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
+                            data-popper-placement="bottom">
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="{{route('admin.profil')}}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Profil</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('admin.ubahPassword')}}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Ubah Password</a>
+                                </li>
+                                <li>
+                                    <a href="/logout"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem">Keluar</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button id="toggleSidebarMobileSearch" type="button"
+                        class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span class="sr-only">Search</span>
+
+                        <!-- <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                        </svg> -->
+                    </button>
+                </div>
+                    
+                    
+                <!-- <div class="mt-2"></div> -->
                 
-                
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+                <div class="grid grid-cols-1 px-4 pt-2 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('content')
                 </div>
 
@@ -449,6 +492,25 @@
         <polyline id="SvgjsPolyline1003" points="0,0"></polyline>
         <path id="SvgjsPath1004" d="M0 0 "></path>
     </svg>
+    <script>
+        // Mendapatkan elemen-elemen yang diperlukan
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        // Menambahkan event listener untuk tombol toggle sidebar
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden'); // Toggle kelas 'hidden' untuk sidebar
+            sidebarBackdrop.classList.toggle('hidden'); // Toggle kelas 'hidden' untuk sidebar backdrop
+        });
+
+        // Menambahkan event listener untuk klik di luar sidebar untuk menutupnya
+        sidebarBackdrop.addEventListener('click', () => {
+            sidebar.classList.add('hidden'); // Menambah kelas 'hidden' untuk menyembunyikan sidebar
+            sidebarBackdrop.classList.add('hidden'); // Menambah kelas 'hidden' untuk menyembunyikan sidebar backdrop
+        });
+    </script>
 </body>
 
 </html>
+

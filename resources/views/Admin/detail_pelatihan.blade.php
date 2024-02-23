@@ -3,7 +3,7 @@
 	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
 	rel="stylesheet">
 @section('tabs')
-<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+<div class="text-sm font-medium text-center text-gray-500 border-gray-200 dark:text-gray-400 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px">
         <li class="me-2">
             <a href="{{ route('admin.viewDetailPelatihan', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pelatihan</a>
@@ -56,9 +56,6 @@
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
-    </div>
-    <div class="mb-4 col-span-full xl:mb-2">
         <div class="mb-2">
             @if ($pelatihan->status == 'On going')
             <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ $pelatihan->status }}</span>
@@ -68,6 +65,9 @@
             <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ $pelatihan->status }}</span>
             @endif
         </div>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>
+    </div>
+    <div class="mb-4 col-span-full xl:mb-2">
         <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             Bidang Penyelanggara: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
