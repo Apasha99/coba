@@ -64,7 +64,7 @@
 
 <body class="bg-gray-50 dark:bg-gray-800">
     <!-- <div class="top-0 left-64 right-0"> -->
-    <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-indigo-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+    <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div class="px-3 py-2 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="dark:bg-gray-900">
@@ -153,7 +153,7 @@
     </nav>
 
         <!-- nav split -->
-        <nav class="lg:hidden fixed top-0 w-full z-30 bg-indigo-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        <nav class="lg:hidden fixed top-0 w-full z-30 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div class="px-3 py-2 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
