@@ -21,9 +21,9 @@ class Kernel extends ConsoleKernel
     
             // Update status to 'Completed' for pelatihan that has ended
             DB::table('pelatihan')
-                ->whereDate('end_date', '=', now())
-                ->where('status', 'On going')
-                ->update(['status' => 'Completed']);
+            ->whereDate('end_date', '<=', now()) 
+            ->where('status', 'On going')
+            ->update(['status' => 'Completed']);
         })->everyMinute();
     }
 
