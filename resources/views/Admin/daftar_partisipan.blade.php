@@ -12,7 +12,7 @@
             <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Partisipan</a>
         </li>
         <li class="me-2">
-            <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Settings</a>
+            <a href="{{ route('test.rekap', ['plt_kode' => $pelatihan->kode]) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Rekap Test</a>
         </li>
     </ul>
 </div>
@@ -61,18 +61,18 @@
     <h1 class="mb-3 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Partisipan</h1>
         <button data-modal-toggle="modal-inv-ins"
             class="inline-flex items-center justify-center mb-2 w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
             </svg>
-            Invite Instruktur
+            Undang Instruktur
         </button>
         
         <button data-modal-toggle="modal-inv-peserta"
             class="inline-flex items-center justify-center mb-2 w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1c0 .6-.4 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
             </svg>
-            Invite Peserta
+            Undang Peserta
         </button>
     </div>
     <div
@@ -81,28 +81,28 @@
             <div class="flex flex-col">
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                                <thead class="bg-indigo-600 dark:bg-indigo-700">
                                     <tr>
-                                        <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                        <th scope="col" class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             No
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             Nama
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             Role
                                         </th>
                                         <th scope="col"
-                                            class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                            class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             Aksi
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                 @php
                                     $counter = 1;
                                 @endphp
