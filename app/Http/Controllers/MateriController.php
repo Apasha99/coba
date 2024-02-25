@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
+use App\Models\Notifikasi;
 use App\Models\Pelatihan;
+use App\Models\Peserta_Pelatihan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +18,13 @@ class MateriController extends Controller
         return view('admin.tambah_materi', ['pelatihan' => $pelatihan]);
     }
 
+    
     public function store(Request $request, String $kode): RedirectResponse {
         $validated = $request->validate([
             'judul' => ['required'],
             'file_materi' => ['required', 'max:10240']
         ]);
-       
+    
         if ($request->has('file_materi')) {
             $fileMateriPath = $request->file('file_materi')->store('file_materi', 'public');
             $filename = $request->file('file_materi')->getClientOriginalName();
@@ -31,10 +34,23 @@ class MateriController extends Controller
         }
 
         $validated['plt_kode'] = $kode;
+        $pelatihan = Pelatihan::where('kode', $kode)->first();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
+        //dd($peserta_ids);
 
         try {
             Materi::create($validated);
-            
+
+            // Buat notifikasi untuk setiap peserta yang terkait dengan pelatihan ini
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Ada materi baru: ' . $validated['judul'],
+                    'plt_kode' => $kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
+            //dd($peserta_ids);
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.viewDetailPelatihan', $kode)->with('success', 'Data materi berhasil disimpan');
             } else {

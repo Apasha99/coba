@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pelatihan', function (Blueprint $table) {
-            $table->string('penyelenggara')->default('Diskominfo Semarang')->change();
+            $table->string('penyelenggara')->default('Diskominfo Semarang');
         });
         
     }
