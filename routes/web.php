@@ -57,9 +57,10 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/pelatihan/{plt_kode}/{notif_id}', 'detailPelatihan')->middleware('only_peserta')->name('peserta.detailPelatihan');
     Route::get('peserta/daftar-pelatihan', 'viewDaftarPelatihan')->name('peserta.viewDaftarPelatihan');
     Route::get('peserta/history-pelatihan', 'viewHistoryPelatihan')->name('peserta.viewHistoryPelatihan');
-    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
+    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
     Route::get('peserta/ubah-password', 'ubahPassword')->middleware('only_peserta')->name('peserta.ubahPassword');
@@ -151,6 +152,7 @@ Route::controller(TugasController::class)->group(function(){
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}', 'update')->withoutMiddleware('only_peserta')->name('tugas.update');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{id}/delete', 'delete')->withoutMiddleware('only_peserta')->name('tugas.delete');
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}', 'viewDetailTugas')->middleware('only_peserta')->name('peserta.viewDetailTugas');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{id}/{notif_id}', 'detailTugas')->middleware('only_peserta')->name('peserta.detailTugas');
 });
 
 Route::controller(TestController::class)->group(function(){
@@ -181,6 +183,7 @@ Route::controller(SubmissionController::class)->group(function(){
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}/{notif_id}', 'detailTest')->middleware('only_peserta')->name('peserta.detailTest');
     Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/soal', 'test')->middleware('only_peserta')->name('peserta.test');
     Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');

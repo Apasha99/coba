@@ -16,5 +16,6 @@ class Notifikasi extends Model
         'peserta_id',
         'isChecked',
         'plt_kode',
+        'subjudul'
     ];
 }

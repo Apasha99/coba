@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Pelatihan;
 use App\Models\Test;
+use App\Models\Peserta;
 use App\Models\Admin;
+use App\Models\Notifikasi;
 use App\Models\Attempt;
 use App\Models\Instruktur;
 use App\Models\Soal_Test;
@@ -24,7 +26,41 @@ class TestController extends Controller
     public function viewDetailTest(String $plt_kode, String $test_id) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
-        return view('peserta.detail_test', ['pelatihan' => $pelatihan, 'test' => $test]);
+        $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+        ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+        ->where('peserta.id', '=', Auth::user()->peserta->id)
+        ->where('status','=','On going')
+        ->get();
+        foreach ($kode as $kd){
+            $pltkode = $kd->kode;
+            $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+            $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
+                                ->where('notifikasi.judul', '=', 'Tugas')
+                                ->where('isChecked', '=', 0)
+                                ->where('notifikasi.plt_kode', $pltkode)
+                                ->where('peserta_id', '=', Auth::user()->peserta->id)
+                                ->select('notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                ->where(function($query) {
+                                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
+                                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
+                                })
+                                ->get();
+            $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
+                ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
+                ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
+                ->get();
+        }
+        $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
+                ->first();
+        return view('peserta.detail_test', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'pelatihan' => $pelatihan, 'test' => $test]);
     }
 
     public function create($plt_kode){
@@ -56,7 +92,8 @@ class TestController extends Controller
             'durasi' => ['required','date_format:H:i:s'],
             'kkm' => ['required', 'max:100','min:0']
         ]);
-        //dd($validated);
+        $pelatihan2 = Pelatihan::where('kode', $kode)->first();
+        $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
     
         try {
             $test = new Test([
@@ -72,6 +109,15 @@ class TestController extends Controller
             //dd($test);
     
             $test->save();
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Test',
+                    'subjudul' => 'Ada test baru: ' . $validated['nama'],
+                    'plt_kode' => $kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
             }else{
@@ -249,7 +295,8 @@ class TestController extends Controller
     {
         //dd($request);
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
-        
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
         $validated = $request->validate([
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
@@ -274,6 +321,16 @@ class TestController extends Controller
             ];
         
             $test->update(array_filter($updateData));
+
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Test',
+                    'subjudul' => 'Ada pembaharuan test: ' . $validated['nama'],
+                    'plt_kode' => $plt_kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
         
             DB::commit();
             if(Auth::user()->role_id == 1){

@@ -44,7 +44,8 @@ class MateriController extends Controller
             // Buat notifikasi untuk setiap peserta yang terkait dengan pelatihan ini
             foreach ($peserta_ids as $peserta_id) {
                 Notifikasi::create([
-                    'judul' => 'Ada materi baru: ' . $validated['judul'],
+                    'judul' => 'Materi',
+                    'subjudul' => 'Ada materi baru: ' . $validated['judul'],
                     'plt_kode' => $kode,
                     'peserta_id' => $peserta_id,
                     'isChecked' => 0,
@@ -75,7 +76,8 @@ class MateriController extends Controller
     {
         $materi = Materi::find($id);
         $pelatihan = Pelatihan::find($plt_kode);
-       
+        $pelatihan2 = Pelatihan::where('kode', $plt_kode)->first();
+        $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
         $validated = $request->validate([
             'judul' => ['required'],
             'file_materi' => ['max:10240']
@@ -94,7 +96,15 @@ class MateriController extends Controller
             }
     
             $materi->update(array_filter($updateData));
-    
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Materi',
+                    'subjudul' => 'Ada pembaharuan pada materi : ' . $validated['judul'],
+                    'plt_kode' => $plt_kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
             DB::commit();
 
             if (Auth::user()->role_id == 1) {

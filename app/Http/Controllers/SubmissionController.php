@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelatihan;
 use App\Models\Peserta;
+use App\Models\Notifikasi;
 use App\Models\Peserta_Pelatihan;
 use App\Models\Submission;
 use App\Models\SubmissionFile;
@@ -24,14 +25,82 @@ class SubmissionController extends Controller
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
-        return view('peserta.submit_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas]);
+        $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+        ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+        ->where('peserta.id', '=', Auth::user()->peserta->id)
+        ->where('status','=','On going')
+        ->get();
+        foreach ($kode as $kd){
+            $pltkode = $kd->kode;
+            $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+            $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
+                                ->where('notifikasi.judul', '=', 'Tugas')
+                                ->where('isChecked', '=', 0)
+                                ->where('notifikasi.plt_kode', $pltkode)
+                                ->where('peserta_id', '=', Auth::user()->peserta->id)
+                                ->select('notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                ->where(function($query) {
+                                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
+                                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
+                                })
+                                ->get();
+            $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
+                ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
+                ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
+                ->get();
+        }
+        $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
+                ->first();
+        return view('peserta.submit_tugas', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'pelatihan' => $pelatihan, 'tugas' => $tugas]);
     }
 
     public function viewEditSubmission(String $plt_kode, String $tugas_id, String $submission_id){
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $tugas = Tugas::where('plt_kode', $plt_kode)->where('id', $tugas_id)->first();
         $submission = Submission::where('id', $submission_id)->first();
-        return view('peserta.edit_tugas', ['pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
+        $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+        ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+        ->where('peserta.id', '=', Auth::user()->peserta->id)
+        ->where('status','=','On going')
+        ->get();
+        foreach ($kode as $kd){
+            $pltkode = $kd->kode;
+            $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+            $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
+                                ->where('notifikasi.judul', '=', 'Tugas')
+                                ->where('isChecked', '=', 0)
+                                ->where('notifikasi.plt_kode', $pltkode)
+                                ->where('peserta_id', '=', Auth::user()->peserta->id)
+                                ->select('notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                ->where(function($query) {
+                                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
+                                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
+                                })
+                                ->get();
+            $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
+                ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
+                ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
+                ->get();
+        }
+        $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
+                ->first();
+        return view('peserta.edit_tugas', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
 
     public function viewDaftarSubmissionTugas(String $plt_kode, String $tugas_id){
