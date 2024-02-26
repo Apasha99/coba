@@ -47,6 +47,10 @@ class SubmissionController extends Controller
             $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
                 ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
                 ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
                 ->get();
         }
         $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
@@ -84,6 +88,10 @@ class SubmissionController extends Controller
             $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
                 ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
                 ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
                 ->get();
         }
         $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
