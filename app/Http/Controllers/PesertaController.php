@@ -7,6 +7,7 @@ use App\Models\Peserta_Pelatihan;
 use App\Models\Peserta;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Notifikasi;
 use App\Models\Nilai_Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,17 @@ class PesertaController extends Controller
             $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->where('peserta_pelatihan.peserta_id', $peserta->id)
                 ->get();
-      
-            return view('peserta.dashboard',['peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
+            $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+                ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+                ->where('peserta.id', '=', Auth::user()->peserta->id)
+                ->where('status','=','On going')
+                ->get();
+            foreach ($kode as $kd){
+                $pltkode = $kd->kode;
+                $notif = Notifikasi::where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+            }
+            //dd($kode,$notif);
+            return view('peserta.dashboard',['notif'=>$notif,'peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
         }
     }
 

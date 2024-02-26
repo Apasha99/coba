@@ -41,7 +41,8 @@ class MateriController extends Controller
             // Buat notifikasi untuk setiap peserta yang terkait dengan pelatihan ini
             foreach ($peserta_ids as $peserta_id) {
                 Notifikasi::create([
-                    'judul' => 'Ada materi baru: ' . $validated['judul'],
+                    'judul' => 'Materi',
+                    'subjudul' => 'Ada materi baru: ' . $validated['judul'],
                     'plt_kode' => $kode,
                     'peserta_id' => $peserta_id,
                     'isChecked' => 0,
