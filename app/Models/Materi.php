@@ -15,5 +15,6 @@ class Materi extends Model
         'judul',
         'file_materi',
         'plt_kode',
+        'nama_file'
     ];
 }

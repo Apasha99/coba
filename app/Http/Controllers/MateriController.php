@@ -27,7 +27,10 @@ class MateriController extends Controller
     
         if ($request->has('file_materi')) {
             $fileMateriPath = $request->file('file_materi')->store('file_materi', 'public');
+            $filename = $request->file('file_materi')->getClientOriginalName();
             $validated['file_materi'] = $fileMateriPath;
+            $validated['nama_file'] = $filename;
+            // dd($validated['nama_file']);
         }
 
         $validated['plt_kode'] = $kode;

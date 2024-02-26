@@ -63,9 +63,9 @@
             <div class="flex flex-col">
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full align-middle">
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
+                        <div class="overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                                <thead class="bg-indigo-600 dark:bg-indigo-600">
                                     <tr>
                                         <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                             No

@@ -64,7 +64,7 @@
 
 <body class="bg-gray-50 dark:bg-gray-800">
     <!-- <div class="top-0 left-64 right-0"> -->
-    <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+    <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-zinc-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div class="px-3 py-2 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="dark:bg-gray-900">
@@ -376,7 +376,7 @@
             </div>
         </aside>
         <div class="fixed inset-0 z-10 hidden bg-gray-900/50 dark:bg-gray-900/90" id="sidebarBackdrop"></div>
-
+        <div class="fixed left-0 w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900"></div>
         <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
             <main>
                 <div class="absolute w-full flex justify-center top-0">
@@ -420,9 +420,7 @@
                     @endif
                 </div>
 
-                
-                
-                <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
+                <div class="grid grid-cols-1 px-4 pt-2 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
                     @yield('content')
                 </div>
 
