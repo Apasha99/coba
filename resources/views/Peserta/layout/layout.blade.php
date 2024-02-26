@@ -197,6 +197,19 @@
                                 </ul>
                                 
                             @endforeach
+
+                            @foreach($notif_test as $nt)
+                                <ul class="py-1" role="none">
+                                    <!-- Dummy notification items -->
+                                    <li class="ms-3 text-sm font-normal">
+                                        <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                            @endforeach
                         </div>
                     </div>
 

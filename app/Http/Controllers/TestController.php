@@ -48,6 +48,10 @@ class TestController extends Controller
             $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')
                 ->where('notifikasi.judul','=','Test')->where('isChecked','=',0)->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
                 ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->where(function($query) {
+                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                })
                 ->get();
         }
         $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
@@ -88,7 +92,8 @@ class TestController extends Controller
             'durasi' => ['required','date_format:H:i:s'],
             'kkm' => ['required', 'max:100','min:0']
         ]);
-        //dd($validated);
+        $pelatihan2 = Pelatihan::where('kode', $kode)->first();
+        $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
     
         try {
             $test = new Test([
@@ -104,6 +109,15 @@ class TestController extends Controller
             //dd($test);
     
             $test->save();
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Test',
+                    'subjudul' => 'Ada test baru: ' . $validated['nama'],
+                    'plt_kode' => $kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
             }else{
@@ -281,7 +295,8 @@ class TestController extends Controller
     {
         //dd($request);
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
-        
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
         $validated = $request->validate([
             'nama' => ['required'],
             'start_date' => ['required', 'date'],
@@ -306,6 +321,16 @@ class TestController extends Controller
             ];
         
             $test->update(array_filter($updateData));
+
+            foreach ($peserta_ids as $peserta_id) {
+                Notifikasi::create([
+                    'judul' => 'Test',
+                    'subjudul' => 'Ada pembaharuan test: ' . $validated['nama'],
+                    'plt_kode' => $plt_kode,
+                    'peserta_id' => $peserta_id,
+                    'isChecked' => 0,
+                ]);
+            }
         
             DB::commit();
             if(Auth::user()->role_id == 1){

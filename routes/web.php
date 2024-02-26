@@ -181,6 +181,7 @@ Route::controller(SubmissionController::class)->group(function(){
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){
+    Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}/{notif_id}', 'detailTest')->middleware('only_peserta')->name('peserta.detailTest');
     Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/soal', 'test')->middleware('only_peserta')->name('peserta.test');
     Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
