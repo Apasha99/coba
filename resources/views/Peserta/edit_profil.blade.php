@@ -46,7 +46,6 @@
     <div class="col-span-full xl:col-auto">
         <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-
             <form action="{{route('peserta.updateProfil', $peserta->user_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
@@ -54,7 +53,7 @@
                     <img src="{{ Auth::user()->getImageURL() }}" class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
                         alt="foto-profil" />
                     <div>
-                        <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Profile picture</h3>
+                        <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Foto Profil</h3>
                         <input type="file"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             id="foto" name="foto" accept=".jpg, .jpeg, .png" />
@@ -69,15 +68,13 @@
                 <div class="col-span-2">
                 <div
                     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
-
                     <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-6 sm:col-span-3">
+                        <!-- <div class="col-span-6 sm:col-span-3">
                             <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID <span class="text-red-500">*</span></label>
                             <input type="text" name="user_id" id="user_id"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 value="{{ $peserta->user_id }}" required="" wfd-id="id2" readonly disabled>
-                        </div>
+                        </div> -->
                         <div class="col-span-6 sm:col-span-3">
                             <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" id="nama"
@@ -105,16 +102,6 @@
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="alamat"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat <span class="text-red-500">*</span></label>
-                            <input type="text" name="alamat" id="alamat"
-                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="e.g. Gading Blok C" wfd-id="id3" value="{{ $peserta->alamat }}">
-                            @error('alamat')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="col-span-6 sm:col-span-3">
                             <label for="noHP" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor HP <span class="text-red-500">*</span></label>
                             <input type="text" name="noHP" id="noHP"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -123,12 +110,21 @@
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat <span class="text-red-500">*</span></label>
+                            <textarea name="alamat" id="alamat" rows="3" 
+                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                placeholder="e.g. Gading Blok C" wfd-id="id3">{{ $peserta->alamat }}</textarea>
+                            @error('alamat')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </div>
                 <button
                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                     type="submit">
-                    Save all
+                    Simpan
                 </button>
             </form>
         </div>

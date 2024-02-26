@@ -39,8 +39,23 @@ class PesertaController extends Controller
             $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->where('peserta_pelatihan.peserta_id', $peserta->id)
                 ->get();
-      
-            return view('peserta.dashboard',['peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
+
+            $last_accessed = DB::table('peserta_pelatihan')
+            ->where('peserta_id', $peserta->id)
+            ->orderBy('last_accessed', 'desc')
+            ->take(3)
+            ->get();
+
+            $last_accessed_pelatihan = [];
+
+            foreach ($last_accessed as $item) {
+                $pelatihan = Pelatihan::where('kode', $item->plt_kode)->first();
+                if ($pelatihan) {
+                    $last_accessed_pelatihan[] = $pelatihan;
+                }
+            }
+
+            return view('peserta.dashboard', ['peserta' => $peserta, 'pelatihan' => $pelatihan, 'last_accessed_pelatihan' => $last_accessed_pelatihan]);
         }
     }
 
@@ -59,14 +74,51 @@ class PesertaController extends Controller
         $pelatihan = Pelatihan::select('kode','nama')->get();
         return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
+    
+    public function viewDaftarPelatihan() {
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
+                ->first();
 
-    public function viewDetailPelatihanPeserta(String $plt_kode) {
+        $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+                ->where('peserta_pelatihan.peserta_id', $peserta->id)
+                ->where('status', "On going")
+                ->get();
+        
+        return view('peserta.daftar_pelatihan', ['peserta' => $peserta, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewHistoryPelatihan() {
+        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
+                ->where('peserta.user_id', Auth::user()->id)
+                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
+                ->first();
+
+        $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
+                ->where('peserta_pelatihan.peserta_id', $peserta->id)
+                ->where('status', "Completed")
+                ->get();
+        
+        return view('peserta.history_pelatihan', ['peserta' => $peserta, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewDetailPelatihan(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        // $peserta_pelatihan = Peserta_Pelatihan::where('plt_kode', $plt_kode)->where('peserta_id', Auth::user()->peserta->id)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->get();
         $peserta = Peserta::where('user_id', Auth::user()->id)->first();
-        
+        // dd($peserta_pelatihan);
+        DB::table('peserta_pelatihan')
+        ->where('peserta_id', Auth::user()->peserta->id)
+        ->where('plt_kode', $plt_kode)
+        ->update(['last_accessed' => now()]);
+
+
         $totalNilaiTes = [];
 
         $doneTest = 0;
@@ -585,7 +637,7 @@ class PesertaController extends Controller
     
         // Verifikasi password yang dimasukkan dengan password_awal
         if (!Hash::check($request->input('password'), $peserta->password)) {
-            return redirect()->back()->with('error', 'Current password does not match');
+            return redirect()->back()->with('error', 'Password tidak cocok');
         }
     
         try{
@@ -602,10 +654,10 @@ class PesertaController extends Controller
     
             DB::commit();
     
-            return redirect()->back()->with('success','Password berhasil diupdate');
+            return redirect()->back()->with('success','Password berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error','Gagal update password');
+            return redirect()->back()->with('error','Gagal memperbarui password');
         }
     }
 
@@ -624,11 +676,12 @@ class PesertaController extends Controller
     }
 
     public function updateProfil(Request $request, $peserta_id){
+        // dd($peserta_id);
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
                     ->where('peserta.user_id', Auth::user()->id)
                     ->where('user_id',$peserta_id)
                     ->first();
-
+        // dd($peserta->nama);
         $validated = $request->validate([
             'username' => ['required'],
             'email' => ['required', 'email'],
@@ -641,12 +694,12 @@ class PesertaController extends Controller
             DB::beginTransaction();
 
             $updateData = [
-                'id' =>$peserta->id,
                 'noHP' => $validated['noHP'] ?? null,
                 'alamat' => $validated['alamat'] ?? null,
             ];
             //dd($updateData);
             $peserta->update(array_filter($updateData));
+            dd($peserta);
             $updateData2 = [
                 'username' => $validated['username'] ?? null,
                 'email' => $validated['email'] ?? null,

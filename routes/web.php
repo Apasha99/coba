@@ -57,6 +57,8 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
+    Route::get('peserta/daftar-pelatihan', 'viewDaftarPelatihan')->name('peserta.viewDaftarPelatihan');
+    Route::get('peserta/history-pelatihan', 'viewHistoryPelatihan')->name('peserta.viewHistoryPelatihan');
     Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
