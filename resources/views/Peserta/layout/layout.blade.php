@@ -82,11 +82,97 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <button class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm">
-                        <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM6 6a1 1 0 0 1-.7-.3l-1-1a1 1 0 0 1 1.4-1.4l1 1A1 1 0 0 1 6 6Zm-2 4H3a1 1 0 0 1 0-2h1a1 1 0 1 1 0 2Zm14-4a1 1 0 0 1-.7-1.7l1-1a1 1 0 1 1 1.4 1.4l-1 1a1 1 0 0 1-.7.3Zm3 4h-1a1 1 0 1 1 0-2h1a1 1 0 1 1 0 2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z"/>
-                        </svg>
-                    </button>
+                    <div class="flex items-center">
+                        <button id="user-menu-button-3" aria-expanded="false" data-dropdown-toggle="dropdown-3" data-tooltip-target="tooltip-toggle-notif" class="dropdown-button text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm">
+                            <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM6 6a1 1 0 0 1-.7-.3l-1-1a1 1 0 0 1 1.4-1.4l1 1A1 1 0 0 1 6 6Zm-2 4H3a1 1 0 0 1 0-2h1a1 1 0 1 1 0 2Zm14-4a1 1 0 0 1-.7-1.7l1-1a1 1 0 1 1 1.4 1.4l-1 1a1 1 0 0 1-.7.3Zm3 4h-1a1 1 0 1 1 0-2h1a1 1 0 1 1 0 2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z"/>
+                            </svg>
+                            @if ($total_notif == 0)
+                            <div></div>
+                            @else
+                            <div style="
+                                position: absolute;
+                                margin-top:10px;
+                                top: 2px; /* Atur jarak ke atas */
+                                right: 84px; /* Sesuaikan jarak ke kanan */
+                                width: 20px;
+                                height: 20px;
+                                background-color: red;
+                                border-radius: 50%;
+                                color: white;
+                                text-align: center;
+                                line-height: 20px;
+                                font-size: 12px;
+                            ">
+                                {{ $total_notif }}
+                            </div>
+                            @endif
+                        </button>
+
+                        <div class="text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
+                            id="dropdown-3"
+                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px); width: 250px; max-height: 200px; overflow-y: auto;"
+                            data-popper-placement="bottom">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                    Daftar Notifikasi
+                                </p>
+                            </div>
+                            <!-- Notifikasi Materi -->
+                            @foreach ($notif_materi as $nt)
+                                <ul class="py-1" role="none">
+                                    <!-- Dummy notification items -->
+                                    <li class="ms-3 text-sm font-normal">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <a href="{{ route('peserta.detailPelatihan', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                                    <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            @endforeach
+
+                            <!-- Notifikasi Tugas -->
+                            @foreach($notif_tugas as $nt)
+                                <ul class="py-1" role="none">
+                                    <!-- Dummy notification items -->
+                                    <li class="ms-3 text-sm font-normal">
+                                        <a href="{{ route('peserta.detailTugas', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'id'=>$nt->tugas_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                            @endforeach
+
+                            <!-- Notifikasi Test -->
+                            @foreach($notif_test as $nt)
+                                <ul class="py-1" role="none">
+                                    <!-- Dummy notification items -->
+                                    <li class="ms-3 text-sm font-normal">
+                                        <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                            @endforeach
+                        </div>
+                        
+                        <div id="tooltip-toggle-notif" role="tooltip"
+                            class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip opacity-0 invisible"
+                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1107.33px, 60px, 0px);"
+                            data-popper-placement="bottom">
+                            Notifikasi
+                            <div class="tooltip-arrow" data-popper-arrow=""
+                                style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
+                        </div>
+                    </div>
                     <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 dark:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
