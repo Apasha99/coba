@@ -947,7 +947,7 @@ class PesertaController extends Controller
             ];
             //dd($updateData);
             $peserta->update(array_filter($updateData));
-            dd($peserta);
+            //dd($peserta);
             $updateData2 = [
                 'username' => $validated['username'] ?? null,
                 'email' => $validated['email'] ?? null,

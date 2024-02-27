@@ -73,7 +73,7 @@ class TugasController extends Controller
                 ->where('peserta.user_id', Auth::user()->id)
                 ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
                 ->first();
-        return view('peserta.detail_tugas', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
+        return view('peserta.detail_tugas_copy', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'pelatihan' => $pelatihan, 'tugas' => $tugas, 'submission' => $submission]);
     }
 
     public function viewDetailTugas(String $plt_kode, String $tugas_id) {

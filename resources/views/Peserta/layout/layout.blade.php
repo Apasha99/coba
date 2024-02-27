@@ -240,7 +240,7 @@
                         <div>
                         <button type="button"
                             class="hidden lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-3">
+                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
                             <span class="sr-only">Open user menu</span>
                             <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
@@ -249,7 +249,7 @@
                         </div>
 
                         <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
-                            id="dropdown-3"
+                            id="dropdown-2"
                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">

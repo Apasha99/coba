@@ -101,7 +101,7 @@ class SubmissionTestController extends Controller
             $notification->isChecked = 1;
             $notification->save();
         }
-        return view('peserta.detail_test', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'existing'=>$existing,'hitungsoal'=>$hitungsoal,
+        return view('peserta.detail_test_copy', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'existing'=>$existing,'hitungsoal'=>$hitungsoal,
         'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
     }   
 
