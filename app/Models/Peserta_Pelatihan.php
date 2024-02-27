@@ -13,10 +13,16 @@ class Peserta_Pelatihan extends Model
     protected $fillable = [
         'peserta_id',
         'plt_kode',
+        'last_accessed'
     ];
 
     public function peserta()
     {
         return $this->belongsTo(Peserta::class);
+    }
+
+    public function pelatihan()
+    {
+        return $this->belongsTo(Pelatihan::class);
     }
 }

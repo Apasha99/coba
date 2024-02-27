@@ -48,7 +48,7 @@
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Submission Form</span>
+                        <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Pengumpulan Tugas</span>
                     </div>
                 </li>
             </ol>
@@ -57,13 +57,13 @@
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
         <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-            Start date: 
+            Tanggal mulai: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{ \Carbon\Carbon::parse($tugas->start_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
         <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-            End date: 
+            Tanggal selesai: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
                 {{ \Carbon\Carbon::parse($tugas->end_date)->format('l, j F Y, h:i A') }}
             </span> 
@@ -76,7 +76,7 @@
         </p>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Add Submission</h3>
+        <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Tambah pengumpulan</h3>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
         <form action="{{ route('peserta.storeSubmission', [$pelatihan->kode, $tugas->id]) }}" method="POST" enctype="multipart/form-data">

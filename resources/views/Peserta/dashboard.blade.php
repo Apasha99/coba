@@ -1,9 +1,23 @@
 @extends('peserta.layout.layout')
 
 @section('content')
-    <div class="flex justify-between items-center mb-4 col-span-full xl:mb-2">
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Welcome, {{ $peserta->nama }}!</h1>
-
+    <div class="mt-2">
+        <div class="items-center flex block h-40 p-2 bg-indigo-400 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
+            <div class="p-4 w-full">
+                <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                    Halo, {{$peserta->nama}}
+                </p>
+                <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
+                    Selamat belajar!
+                </p>
+            </div>
+            <div class="w-full">
+                <img class="ml-24 w-72 h-52 mt-1" src="{{ asset('image/dashboardpeserta.png') }}">
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex justify-between items-center col-span-full xl:mb-2">
         <div class="relative lock mt-2 w-50 h-50 mb-2 mr-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <button type="button" data-modal-toggle="join-pelatihan-modal">
                 <div class="flex items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
@@ -22,22 +36,36 @@
     </div>
 
     
-    <div class="flex flex-wrap">
-        @foreach($pelatihan as $plt)
-        <div class="relative lock mt-2 w-60 h-50 mb-4 mr-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-            <a href="{{route('peserta.viewDetailPelatihan', $plt->plt_kode)}}">
-                <img src="{{ $plt->getPosterURL() }}" alt="poster pelatihan" class="w-full mb-2 h-40 object-cover rounded-t-lg" />
-                <div class="items-center p-2 sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                    <div>
-                        <h3 class="mb-1 text-l font-bold text-gray-900 dark:text-white">{{ $plt->nama }}</h3>
-                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                            <p>{{ $plt->kode }} - {{ $plt->status }}</p> 
+    <div class="w-full h-full mt-2 border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-xl">
+        <div class="mt-4 ml-4">
+            <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Terakhir Diakses</h1>
+        </div>
+        <div class="p-4 grid grid-cols-3 gap-4">
+            @foreach ($last_accessed_pelatihan as $last_accessed)
+            <div class="relative lock w-70 h-50 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800 pelatihan-row">
+                <a href="{{ route('peserta.viewDetailPelatihan', $last_accessed->kode) }}" >
+                    <img src="{{ $last_accessed->getPosterURL() }}" alt="poster pelatihan" class="sm:w-60 md:w-80 mb-2 h-40 object-cover rounded-t-lg " />
+                    <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                        <div>
+                            <h3 class="mb-1 ml-2 mt-2 text-l font-bold text-gray-900 dark:text-white searchable">{{ Illuminate\Support\Str::limit($last_accessed->nama, 50, '...') }}</h3>
+                            <div class="mb-4 ml-2 mt-2 text-sm text-gray-500 dark:text-gray-400 searchable">
+                                <p>
+                                    <span class="searchable bg-blue-200 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">{{ $last_accessed->kode }}</span>
+                                    @if ($last_accessed->status == 'On going')
+                                    <span class="searchable bg-green-200 text-green-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
+                                    @elseif ($last_accessed->status == 'Completed')
+                                    <span class="searchable dark:bg-red-900 bg-red-300 text-red-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
+                                    @elseif ($last_accessed->status == 'Not started yet')
+                                    <span class="searchable bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+                                    @endif
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+            @endforeach
         </div>
-        @endforeach
     </div>
 
 

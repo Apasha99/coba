@@ -70,7 +70,25 @@ class PesertaController extends Controller
             }
             $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
             //dd($notif_tugas);
-            return view('peserta.dashboard',['total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
+            // return view('peserta.dashboard',['total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
+
+            $last_accessed = DB::table('peserta_pelatihan')
+            ->where('peserta_id', $peserta->id)
+            ->orderBy('last_accessed', 'desc')
+            ->take(3)
+            ->get();
+
+            $last_accessed_pelatihan = [];
+
+            foreach ($last_accessed as $item) {
+                $pelatihan = Pelatihan::where('kode', $item->plt_kode)->first();
+                if ($pelatihan) {
+                    $last_accessed_pelatihan[] = $pelatihan;
+                }
+            }
+
+            return view('peserta.dashboard', ['peserta' => $peserta, 'pelatihan' => $pelatihan, 'last_accessed_pelatihan' => $last_accessed_pelatihan,
+            'total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test]);
         }
     }
 
@@ -190,11 +208,18 @@ class PesertaController extends Controller
 
     public function viewDetailPelatihanPeserta(String $plt_kode) {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
+        // $peserta_pelatihan = Peserta_Pelatihan::where('plt_kode', $plt_kode)->where('peserta_id', Auth::user()->peserta->id)->first();
         $materi = Materi::where('plt_kode', $plt_kode)->get();
         $tugas = Tugas::where('plt_kode', $plt_kode)->get();
         $test = Test::where('plt_kode', $plt_kode)->get();
         $peserta = Peserta::where('user_id', Auth::user()->id)->first();
-        
+        // dd($peserta_pelatihan);
+        DB::table('peserta_pelatihan')
+        ->where('peserta_id', Auth::user()->peserta->id)
+        ->where('plt_kode', $plt_kode)
+        ->update(['last_accessed' => now()]);
+
+
         $totalNilaiTes = [];
         $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
@@ -782,7 +807,7 @@ class PesertaController extends Controller
     
         // Verifikasi password yang dimasukkan dengan password_awal
         if (!Hash::check($request->input('password'), $peserta->password)) {
-            return redirect()->back()->with('error', 'Current password does not match');
+            return redirect()->back()->with('error', 'Password tidak cocok');
         }
     
         try{
@@ -799,10 +824,10 @@ class PesertaController extends Controller
     
             DB::commit();
     
-            return redirect()->back()->with('success','Password berhasil diupdate');
+            return redirect()->back()->with('success','Password berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error','Gagal update password');
+            return redirect()->back()->with('error','Gagal memperbarui password');
         }
     }
 
@@ -880,11 +905,12 @@ class PesertaController extends Controller
     }
 
     public function updateProfil(Request $request, $peserta_id){
+        // dd($peserta_id);
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
                     ->where('peserta.user_id', Auth::user()->id)
                     ->where('user_id',$peserta_id)
                     ->first();
-
+        // dd($peserta->nama);
         $validated = $request->validate([
             'username' => ['required'],
             'email' => ['required', 'email'],
@@ -897,12 +923,12 @@ class PesertaController extends Controller
             DB::beginTransaction();
 
             $updateData = [
-                'id' =>$peserta->id,
                 'noHP' => $validated['noHP'] ?? null,
                 'alamat' => $validated['alamat'] ?? null,
             ];
             //dd($updateData);
             $peserta->update(array_filter($updateData));
+            dd($peserta);
             $updateData2 = [
                 'username' => $validated['username'] ?? null,
                 'email' => $validated['email'] ?? null,
