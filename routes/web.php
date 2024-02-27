@@ -60,7 +60,7 @@ Route::controller(PesertaController::class)->middleware('only_peserta')->group(f
     Route::get('peserta/pelatihan/{plt_kode}/{notif_id}', 'detailPelatihan')->middleware('only_peserta')->name('peserta.detailPelatihan');
     Route::get('peserta/daftar-pelatihan', 'viewDaftarPelatihan')->name('peserta.viewDaftarPelatihan');
     Route::get('peserta/history-pelatihan', 'viewHistoryPelatihan')->name('peserta.viewHistoryPelatihan');
-    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
+    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihan')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
     Route::get('peserta/ubah-password', 'ubahPassword')->middleware('only_peserta')->name('peserta.ubahPassword');
