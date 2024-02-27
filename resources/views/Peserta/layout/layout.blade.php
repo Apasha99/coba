@@ -126,7 +126,23 @@
                                         <div class="flex justify-between items-center">
                                             <div>
                                                 <a href="{{ route('peserta.detailPelatihan', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                                    <div class="flex">
+                                                        @if ($nt->isChecked == 0)
+                                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                                        @else
+                                                            <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                        @endif
+                                                        <form action="{{ route('hapus.notifikasi', $nt->id) }}" method="POST" class="ml-auto">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="w-5 h-5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
                                                     <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
                                                 </a>
                                             </div>
@@ -141,7 +157,22 @@
                                     <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTugas', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'id'=>$nt->tugas_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                            <div class="flex">
+                                                @if ($nt->isChecked == 0)
+                                                    <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                                @else
+                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                @endif
+                                                <form action="{{ route('hapus.notifikasi', $nt->notif_id) }}" method="POST" class="ml-auto">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="w-5 h-5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
                                             <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>
@@ -155,7 +186,22 @@
                                     <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                            <div class="flex">
+                                                @if ($nt->isChecked == 0)
+                                                    <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
+                                                @else
+                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                @endif
+                                                <form action="{{ route('hapus.notifikasi', $nt->notif_id) }}" method="POST" class="ml-auto">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="w-5 h-5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg cursor-pointer focus:outline-none">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
                                             <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>

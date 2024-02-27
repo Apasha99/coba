@@ -57,17 +57,18 @@ Route::controller(AdminController::class)->middleware('only_admin')->group(funct
 
 Route::controller(PesertaController::class)->middleware('only_peserta')->group(function(){
     Route::get('peserta/dashboard', 'peserta')->name('peserta.dashboard');
-    Route::get('peserta/pelatihan/{plt_kode}/{notif_id}', 'detailPelatihan')->middleware('only_peserta')->name('peserta.detailPelatihan');
+    Route::get('peserta/pelatihan/{plt_kode}/{notif_id}', 'detailPelatihan')->name('peserta.detailPelatihan');
     Route::get('peserta/daftar-pelatihan', 'viewDaftarPelatihan')->name('peserta.viewDaftarPelatihan');
     Route::get('peserta/history-pelatihan', 'viewHistoryPelatihan')->name('peserta.viewHistoryPelatihan');
-    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->middleware('only_peserta')->name('peserta.viewDetailPelatihan');
+    Route::get('peserta/pelatihan/{plt_kode}', 'viewDetailPelatihanPeserta')->name('peserta.viewDetailPelatihan');
     Route::get('peserta/sertifikat', 'generateSertifikat')->name('peserta.generateSertifikat');
     Route::get('peserta/cetak-sertifikat/{pelatihan}/{peserta}', 'cetakSertifikat')->name('peserta.cetakSertifikat');
-    Route::get('peserta/ubah-password', 'ubahPassword')->middleware('only_peserta')->name('peserta.ubahPassword');
-    Route::post('peserta/ubah-password/{peserta_id}', 'updatePassword')->middleware('only_peserta')->name('peserta.updatePassword');
-    Route::get('peserta/profil', 'profil')->middleware('only_peserta')->name('peserta.profil');
-    Route::get('peserta/profil/edit-profil', 'editProfil')->middleware('only_peserta')->name('peserta.editProfil');
-    Route::post('peserta/profil/edit-profil/{peserta_id}', 'updateProfil')->middleware('only_peserta')->name('peserta.updateProfil');
+    Route::get('peserta/ubah-password', 'ubahPassword')->name('peserta.ubahPassword');
+    Route::post('peserta/ubah-password/{peserta_id}', 'updatePassword')->name('peserta.updatePassword');
+    Route::get('peserta/profil', 'profil')->name('peserta.profil');
+    Route::get('peserta/profil/edit-profil', 'editProfil')->name('peserta.editProfil');
+    Route::post('peserta/profil/edit-profil/{peserta_id}', 'updateProfil')->name('peserta.updateProfil');
+    Route::delete('/hapus-notifikasi/{notif_id}','hapusNotif')->name('hapus.notifikasi');
 });
 
 Route::controller(PesertaController::class)->middleware('only_admin')->group(function(){
