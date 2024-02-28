@@ -179,7 +179,7 @@ class TugasController extends Controller
         $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
         $validated = $request->validate([
             'judul' => ['required'],
-            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'deskripsi' => ['required', 'max:2000'],
             'file_tugas' => ['max:10240']
@@ -190,6 +190,32 @@ class TugasController extends Controller
             DB::beginTransaction();
     
             $tugas = Tugas::find($id);
+
+            foreach ($peserta_ids as $peserta_id) {
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Tugas')
+                    ->where(function($query) use ($tugas) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = ?", [$tugas->judul])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = ?", [$tugas->judul]);
+                    })->first();
+            
+                if ($notifikasi) {
+                    // Perbarui subjudul notifikasi
+                    $notifikasi->subjudul = 'Ada pembaharuan tugas: ' . $validated['judul'];
+                    $notifikasi->isChecked = 0;
+                    $notifikasi->save();
+                } else {
+                    // Buat notifikasi baru karena tidak ada notifikasi sebelumnya
+                    $notifikasiBaru = new Notifikasi();
+                    $notifikasiBaru->plt_kode = $plt_kode;
+                    $notifikasiBaru->peserta_id = $peserta_id;
+                    $notifikasiBaru->judul = 'Tugas';
+                    $notifikasiBaru->subjudul = 'Ada pembaharuan tugas: ' . $validated['judul'];
+                    $notifikasiBaru->isChecked = 0;
+                    $notifikasiBaru->save();
+                }
+            }
     
             $fileTugasPathLama = $tugas->file_tugas;
     
@@ -198,7 +224,7 @@ class TugasController extends Controller
                 'start_date' => $validated['start_date'] ?? null,
                 'end_date' => $validated['end_date'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null
-            ];
+            ];   
     
             if ($request->hasFile('file_tugas')) {
                 $fileTugasPathBaru = $request->file('file_tugas')->store('file_tugas', 'public');
@@ -213,16 +239,6 @@ class TugasController extends Controller
     
             $tugas->update(array_filter($updateData));
 
-            foreach ($peserta_ids as $peserta_id) {
-                Notifikasi::create([
-                    'judul' => 'Tugas',
-                    'subjudul' => 'Ada pembaharuan tugas: ' . $validated['judul'],
-                    'plt_kode' => $plt_kode,
-                    'peserta_id' => $peserta_id,
-                    'isChecked' => 0,
-                ]);
-            }
-    
             DB::commit();
     
             if (Auth::user()->role_id == 1) {
@@ -245,10 +261,20 @@ class TugasController extends Controller
     public function delete($plt_kode, $id)
     {
         $tugas = Tugas::where('id', $id)->first();
-        
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->firstOrFail();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
         DB::beginTransaction();
 
         try {
+            foreach ($peserta_ids as $peserta_id) {
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Tugas')
+                    ->where(function($query) use ($tugas) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = ?", [$tugas->judul])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = ?", [$tugas->judul]);
+                    })->delete();
+            }
             $tugas->delete();
 
             DB::commit();

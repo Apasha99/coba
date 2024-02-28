@@ -89,6 +89,32 @@ class MateriController extends Controller
             $updateData = [
                 'judul' => $validated['judul'] ?? null
             ];
+
+            foreach ($peserta_ids as $peserta_id) {
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Materi')
+                    ->where(function($query) use ($materi) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada materi baru: ', -1) = ?", [$materi->judul])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan materi: ', -1) = ?", [$materi->judul]);
+                    })->first();
+            
+                if ($notifikasi) {
+                    // Perbarui subjudul notifikasi
+                    $notifikasi->subjudul = 'Ada pembaharuan materi: ' . $validated['judul'];
+                    $notifikasi->isChecked = 0;
+                    $notifikasi->save();
+                } else {
+                    // Buat notifikasi baru karena tidak ada notifikasi sebelumnya
+                    $notifikasiBaru = new Notifikasi();
+                    $notifikasiBaru->plt_kode = $plt_kode;
+                    $notifikasiBaru->peserta_id = $peserta_id;
+                    $notifikasiBaru->judul = 'Materi';
+                    $notifikasiBaru->subjudul = 'Ada pembaharuan materi: ' . $validated['judul'];
+                    $notifikasiBaru->isChecked = 0;
+                    $notifikasiBaru->save();
+                }
+            }                        
     
             if ($request->hasFile('file_materi')) {
                 $fileMateriPath = $request->file('file_materi')->store('file_materi', 'public');
@@ -96,15 +122,7 @@ class MateriController extends Controller
             }
     
             $materi->update(array_filter($updateData));
-            foreach ($peserta_ids as $peserta_id) {
-                Notifikasi::create([
-                    'judul' => 'Materi',
-                    'subjudul' => 'Ada pembaharuan pada materi : ' . $validated['judul'],
-                    'plt_kode' => $plt_kode,
-                    'peserta_id' => $peserta_id,
-                    'isChecked' => 0,
-                ]);
-            }
+            
             DB::commit();
 
             if (Auth::user()->role_id == 1) {
@@ -125,11 +143,23 @@ class MateriController extends Controller
 
     public function delete($plt_kode, $id)
     {
-        $materi = Materi::where('id', $id)->first();
-        
+        $materi = Materi::findOrFail($id);
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->firstOrFail();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
+
         DB::beginTransaction();
 
         try {
+            foreach ($peserta_ids as $peserta_id) {
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Materi')
+                    ->where(function($query) use ($materi) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada materi baru: ', -1) = ?", [$materi->judul])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan materi: ', -1) = ?", [$materi->judul]);
+                    })->delete();
+            }
+
             $materi->delete();
 
             DB::commit();
@@ -142,4 +172,5 @@ class MateriController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus materi');
         }
     }
+
 }

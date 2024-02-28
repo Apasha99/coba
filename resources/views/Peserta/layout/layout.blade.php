@@ -119,7 +119,7 @@
                                 </p>
                             </div>
                             <!-- Notifikasi Materi -->
-                            @foreach ($notif_materi as $nt)
+                            @foreach ($notif_materi->sortByDesc('id') as $nt)
                                 <ul class="py-1" role="none">
                                     <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
@@ -152,7 +152,7 @@
                             @endforeach
 
                             <!-- Notifikasi Tugas -->
-                            @foreach($notif_tugas as $nt)
+                            @foreach($notif_tugas->sortByDesc('notif_id') as $nt)
                                 <ul class="py-1" role="none">
                                     <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
@@ -181,7 +181,7 @@
                             @endforeach
 
                             <!-- Notifikasi Test -->
-                            @foreach($notif_test as $nt)
+                            @foreach($notif_test->sortByDesc('notif_id') as $nt)
                                 <ul class="py-1" role="none">
                                     <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">

@@ -320,18 +320,34 @@ class TestController extends Controller
                 'durasi' => $validated['durasi'] ?? null,
                 'tampil_hasil' => $validated['tampil_hasil'],
             ];
-        
-            $test->update(array_filter($updateData));
 
             foreach ($peserta_ids as $peserta_id) {
-                Notifikasi::create([
-                    'judul' => 'Test',
-                    'subjudul' => 'Ada pembaharuan test: ' . $validated['nama'],
-                    'plt_kode' => $plt_kode,
-                    'peserta_id' => $peserta_id,
-                    'isChecked' => 0,
-                ]);
-            }
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Test')
+                    ->where(function($query) use ($test) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = ?", [$test->nama])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = ?", [$test->nama]);
+                    })->first();
+            
+                if ($notifikasi) {
+                    // Perbarui subjudul notifikasi
+                    $notifikasi->subjudul = 'Ada pembaharuan test: ' . $validated['nama'];
+                    $notifikasi->isChecked = 0;
+                    $notifikasi->save();
+                } else {
+                    // Buat notifikasi baru karena tidak ada notifikasi sebelumnya
+                    $notifikasiBaru = new Notifikasi();
+                    $notifikasiBaru->plt_kode = $plt_kode;
+                    $notifikasiBaru->peserta_id = $peserta_id;
+                    $notifikasiBaru->judul = 'Test';
+                    $notifikasiBaru->subjudul = 'Ada pembaharuan test: ' . $validated['nama'];
+                    $notifikasiBaru->isChecked = 0;
+                    $notifikasiBaru->save();
+                }
+            }   
+        
+            $test->update(array_filter($updateData));
         
             DB::commit();
             if(Auth::user()->role_id == 1){
@@ -365,6 +381,8 @@ class TestController extends Controller
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
         //dd($test);
+        $pelatihan = Pelatihan::where('kode', $plt_kode)->firstOrFail();
+        $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
         DB::beginTransaction();
 
         try {
@@ -374,6 +392,16 @@ class TestController extends Controller
 
             foreach ($soal_test as $soal) {
                 $soal->delete();
+            }
+
+            foreach ($peserta_ids as $peserta_id) {
+                $notifikasi = Notifikasi::where('plt_kode', $plt_kode)
+                    ->where('peserta_id', $peserta_id)
+                    ->where('judul', '=', 'Test')
+                    ->where(function($query) use ($test) {
+                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = ?", [$test->nama])
+                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = ?", [$test->nama]);
+                    })->delete();
             }
 
             $test->delete();
