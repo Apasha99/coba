@@ -190,6 +190,12 @@
     // Ambil durasi tes dari PHP ke JavaScript
     var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
 
+    // Cek apakah ada durasi tersisa di localStorage
+    var remainingDuration = localStorage.getItem('remainingDuration');
+    if (remainingDuration) {
+        duration = remainingDuration;
+    }
+
     // Split durasi menjadi jam, menit, dan detik
     var timeArray = duration.split(':');
     var hours = parseInt(timeArray[0], 10); // Parse sebagai angka desimal
@@ -215,13 +221,19 @@
         // Kurangi total detik dengan 1 setiap detik
         totalSeconds--;
 
+        // Simpan durasi tersisa ke localStorage
+        localStorage.setItem('remainingDuration', formattedTime);
+
         // Jika waktu sudah habis, hentikan hitungan mundur
         if (totalSeconds < 0) {
             clearInterval(countdown);
             // Otomatis submit form
             document.getElementById('answerForm').submit();
+            // Hapus durasi tersisa dari localStorage
+            localStorage.removeItem('remainingDuration');
         }
     }, 1000);
+
 
 </script>
 

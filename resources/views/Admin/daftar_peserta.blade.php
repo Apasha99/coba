@@ -37,7 +37,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
             </svg>
             </div>
-            <input type="text" name="search" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari pelatihan" required>
+            <input type="text" name="search" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari peserta" required>
         </div>
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
             <a type="button" href ="{{route('admin.createPeserta')}}"
@@ -142,7 +142,7 @@
                                                         <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder jika tidak ada gambar -->
                                                     @endif
                                                     <div class="text-sm font-small text-gray-500 dark:text-gray-400">
-                                                        <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailPeserta', $plt->peserta_id)}}">{{ $plt->peserta_nama }}</a>
+                                                        <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailPeserta', $plt->peserta_id)}}">{{ Illuminate\Support\Str::limit($plt->peserta_nama, 30, '...') }}</a>
                                                     </div>
                                                 </td>
                                                 <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
