@@ -131,13 +131,15 @@
      
                             <div class="col-span-full">
                                 <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe <span class="text-red-500">*</span></label>
-                                <select disabled required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onchange="handleTipeSoalChange()">
+                                <select disabled required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600">
                                     <option value="" selected disabled>Pilih tipe soal</option>
                                     <option value="Pilihan Ganda" {{ $soal_test->tipe == 'Pilihan Ganda' ? 'selected' : '' }}>Pilihan Ganda</option>
                                     <option value="Jawaban Singkat" {{ $soal_test->tipe == 'Jawaban Singkat' ? 'selected' : '' }}>Jawaban Singkat</option>
                                 </select>
+                                <input type="hidden" name="tipe_option" value="{{ $soal_test->tipe }}">
+
                                 @error('tipe_option')
-                                    <div class="invalid-feedback">
+                                    <div class="p-1 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
                                     </div>
                                 @enderror
@@ -149,7 +151,8 @@
                                         <div id="options-container-singkat">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test as $jawaban)
-                                                <div class="flex items-center" id="jawaban-container-{{ $jawaban->id }}">
+                                            <div id="jawaban-container-{{ $jawaban->id }}">
+                                                <div class="flex items-center">
                                                     @if ($soal_test->tipe == "Jawaban Singkat")
                                                         <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
                                                             value="{{ $jawaban->title }}"
@@ -164,6 +167,7 @@
                                                     @endif
                                                 </div>
                                                 <p class="mt-1 mb-1 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar</p>
+                                            </div>
                                             @endforeach
 
                                             <!-- Default input opsi jawaban -->
@@ -192,20 +196,22 @@
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test->where('status', false) as $jawaban)
                                                 @if ($soal_test->tipe == "Pilihan Ganda")
-                                                <div class="flex items-center" id="jawaban-container-{{ $jawaban->id }}">
-                                                    <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban {{ $jawaban->urutan }}" id="title-ganda-{{$jawaban->id}}"
-                                                        value="{{ $jawaban->title }}"
-                                                        class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    @if (!$loop->first)
-                                                    <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-                                                    @endif
+                                                <div id="jawaban-container-{{ $jawaban->id }}">
+                                                    <div class="flex items-center">
+                                                        <input type="text" name="title_ganda[]" placeholder="Opsi Jawaban {{ $jawaban->urutan }}" id="title-ganda-{{$jawaban->id}}"
+                                                            value="{{ $jawaban->title }}"
+                                                            class="flex-grow shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        @if (!$loop->first)
+                                                        <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                        @endif
+                                                    </div>
+                                                    <p class="mt-1 mb-2 text-sm text-gray-500 dark:text-gray-300">Jawaban Salah
+                                                    </p>
                                                 </div>
-                                                <p class="mt-1 mb-2 text-sm text-gray-500 dark:text-gray-300">Jawaban Salah
-                                                </p>
                                                 @endif
                                             @endforeach
                                             <!-- Default input opsi jawaban -->

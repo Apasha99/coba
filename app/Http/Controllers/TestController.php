@@ -526,11 +526,12 @@ class TestController extends Controller
         if (!$soal_test) {
             return redirect()->route('test.detail')->with('error', 'Tidak dapat menemukan soal yang ingin diedit.');
         }
+        
         $validated = $request->validate([
             'soal' => ['required', 'max:2000'],
             'nilai' => ['required', 'numeric', 'max:100', 'min:0'],
             'file_soal' => ['nullable', 'image'],
-            'tipe_option' => ['required', Rule::in(['Pilihan Ganda', 'Jawaban Singkat'])],
+            'tipe_option' => ['required'],
         ]);
         
         //dd($validated);
