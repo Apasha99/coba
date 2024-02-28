@@ -173,6 +173,10 @@ class TestController extends Controller
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+        $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
+        if($hitung_nilai > 100 ){
+            return redirect()->back()->with('error','Total nilai tidak boleh lebih dari 100');
+        }
         try {
             //dd($request);
             $validated = $request->validate([
@@ -527,6 +531,10 @@ class TestController extends Controller
         //dd($request);
         if (!$soal_test) {
             return redirect()->route('test.detail')->with('error', 'Tidak dapat menemukan soal yang ingin diedit.');
+        }
+        $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
+        if($hitung_nilai > 100 ){
+            return redirect()->back()->with('error','Total nilai tidak boleh lebih dari 100');
         }
         
         $validated = $request->validate([
