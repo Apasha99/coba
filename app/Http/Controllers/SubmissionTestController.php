@@ -359,7 +359,7 @@ class SubmissionTestController extends Controller
             ]
         );
 
-        return redirect()->route('peserta.hasil', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id])->with('success', 'Jawaban berhasil disubmit');
+        return redirect()->route('peserta.hasiltest', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id])->with('success', 'Jawaban berhasil disubmit');
     }
 
 

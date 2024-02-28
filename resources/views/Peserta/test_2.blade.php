@@ -145,37 +145,42 @@
     <!-- JavaScript untuk menghitung mundur durasi tes -->
 </div>
 <script>
-    // JavaScript for countdown timer
+    // Ambil durasi tes dari PHP ke JavaScript
     var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
+
+    // Split durasi menjadi jam, menit, dan detik
     var timeArray = duration.split(':');
-    var hours = parseInt(timeArray[0], 10);
+    var hours = parseInt(timeArray[0], 10); // Parse sebagai angka desimal
     var minutes = parseInt(timeArray[1], 10);
     var seconds = parseInt(timeArray[2], 10);
+
+    // Hitung total detik
     var totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
-    var remainingTime = localStorage.getItem('remainingTime');
-    if (remainingTime) {
-        totalSeconds = parseInt(remainingTime, 10);
-    }
-
+    // Hitung mundur durasi tes
     var countdown = setInterval(function() {
+        // Hitung jam, menit, dan detik yang tersisa
         var hours = Math.floor(totalSeconds / 3600);
         var minutes = Math.floor((totalSeconds % 3600) / 60);
         var seconds = totalSeconds % 60;
 
+        // Format ulang waktu menjadi HH:MM:SS
         var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 
+        // Tampilkan waktu mundur di dalam elemen dengan id "countdownTimer"
         document.getElementById('countdownTimer').innerText = formattedTime;
 
+        // Kurangi total detik dengan 1 setiap detik
         totalSeconds--;
 
-        localStorage.setItem('remainingTime', totalSeconds);
-
+        // Jika waktu sudah habis, hentikan hitungan mundur
         if (totalSeconds < 0) {
             clearInterval(countdown);
+            // Otomatis submit form
             document.getElementById('answerForm').submit();
         }
     }, 1000);
+
 </script>
 
 @endsection

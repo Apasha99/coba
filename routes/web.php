@@ -192,7 +192,7 @@ Route::controller(SubmissionTestController::class)->group(function(){
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/notif/soal', 'test')->middleware('only_peserta')->name('peserta.testNotif');
     Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
     Route::post('/save-answer', 'Answer')->middleware('only_peserta')->name('peserta.saveAnswer');
-    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/hasil', 'hasil')->middleware('only_peserta')->name('peserta.hasil');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/hasil', 'hasil')->middleware('only_peserta')->name('peserta.hasiltest');
 });
 
 Route::controller(RekapController::class)->group(function(){
