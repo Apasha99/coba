@@ -178,7 +178,7 @@
                 @if($submission)
                 <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        File submissions
+                        File tugas
                     </th>
                     <td class="px-6 py-4">
                         <ul>

@@ -285,11 +285,12 @@ class TestController extends Controller
                 ->where('instruktur.user_id', Auth::user()->id)
                 ->select('instruktur.nama', 'instruktur.id', 'users.username')
                 ->first();
+        $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
         if(Auth::user()->role_id == 1){
-            return view('admin.edit_test', ['admin' => $admin, 'test' => $test]);
+            return view('admin.edit_test', ['admin' => $admin, 'test' => $test, 'pelatihan' => $pelatihan]);
         } else{
-            return view('instruktur.edit_test', ['instruktur' => $instruktur, 'test' => $test]);
+            return view('instruktur.edit_test', ['instruktur' => $instruktur, 'test' => $test, 'pelatihan' => $pelatihan]);
         }
     }
 
