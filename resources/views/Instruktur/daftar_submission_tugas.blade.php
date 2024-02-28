@@ -1,7 +1,21 @@
-@extends('instruktur.layout.layout')
+@extends('instruktur.layout.layout_tabs')
 <link
 	href="https://fonts.googleapis.com/css?family=nilaial+Icons|nilaial+Icons+Outlined|nilaial+Icons+Two+Tone|nilaial+Icons+Round|nilaial+Icons+Sharp"
 	rel="stylesheet">
+@section('tabs')
+<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px">
+        <li class="me-2">
+            <a href="{{ route('instruktur.viewDetailPelatihan', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pelatihan</a>
+        </li>
+        <li class="me-2">
+            <a href="{{ route('instruktur.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Partisipan</a>
+        </li>
+        <li class="me-2">
+            <a href="{{ route('test.rekap', ['plt_kode' => $pelatihan->kode]) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Rekap Test</a>
+        </li>
+    </ul>
+</div>
 @section('content')
     <div class="mb-2 col-span-full xl:mb-2">
         <nav class="flex mb-5" aria-label="Breadcrumb">
@@ -60,7 +74,7 @@
         <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
             
         </p>
-        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $submissions->count() }} jawaban</span>
+        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">{{ $submissions->count() }} jawaban</span>
     </div>
     <!-- <div class="mb-4 col-span-full xl:mb-2">
         <button type="button" data-modal-toggle="add-nilai-modal"
@@ -76,7 +90,7 @@
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="min-w-full w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="myTable">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-white uppercase bg-indigo-600 dark:bg-indigo-700 dark:text-white">
             <tr>
                 <th scope="col" class="px-6 py-3">
                 <span style="float: left;">Nama</span>
@@ -287,6 +301,7 @@
     }
 });
     </script>
+@endsection
 @endsection
 
 

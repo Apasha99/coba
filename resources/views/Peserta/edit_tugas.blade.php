@@ -85,6 +85,13 @@
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload File </label>
                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     aria-describedby="file_input_help" id="submission_files" name="submission_files[]" type="file" accept=".pdf, .doc, .docx, .xls, .xlsx, image/*" multiple>
+                    @if($submission->submission_file)
+                        @foreach ($submission->submission_file as $file)
+                        <div class="mt-1 text-sm text-gray-500">
+                            File sebelumnya: {{ $file->nama_file }}
+                        </div>
+                        @endforeach
+                    @endif
                 @error('submission_files')
                     <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                         <div>
