@@ -278,12 +278,15 @@ class SubmissionTestController extends Controller
 
         foreach ($request->input('soal_id') as $urutan => $soal_id) {
             $currentQuestion = Soal_Test::find($soal_id);
-
+            $request->validate([
+                'singkat.*' => 'required|required_if:soal_id,' . $soal_id . '|string', // Validasi input 'singkat' untuk setiap soal
+                'selected_option.*' => 'required|required_if:soal_id,' . $soal_id, // Validasi input 'selected_option' untuk setiap soal
+            ]);
             if ($currentQuestion->tipe == "Jawaban Singkat") {
                 $jawabanSingkatSoal = strtolower($request->input('singkat')[$urutan] ?? null);
             } else {
-                $selectedOptionId = $request->input('selected_option.' . $urutan);
-            }
+                $selectedOptionId = $request->input('selected_option.' . $urutan) ?? null;
+            }            
 
             $test = Test::find($test_id);
 
