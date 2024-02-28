@@ -58,11 +58,11 @@
         </nav>
         <div class="mb-2">
             @if ($pelatihan->status == 'On going')
-            <span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Aktif</span>
+            <span class="searchable bg-green-200 text-green-900 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
             @elseif ($pelatihan->status == 'Completed')
-            <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Selesai</span>
+            <span class="searchable dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
             @elseif ($pelatihan->status == 'Not started yet')
-            <span class="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+            <span class="searchable bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
             @endif
         </div>
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $pelatihan->nama }}</h1>

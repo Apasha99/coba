@@ -39,16 +39,16 @@
                 @method('GET')
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <img src="{{ Auth::user()->getImageURL() }}" class="mb-4 rounded-lg w-36 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" alt="foto-profil" />
-                    <div>
-                        <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">{{$peserta -> nama}}
-                        </h3>
-                        <div class="mb-4 text-sm text-gray-500 dark:text-white">Your photo profile</div>
-                        <div class="flex items-center space-x-4">
-                            <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
-                                Edit Profil
-                            </button>
-                        </div>
+                <div>
+                    <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">{{$peserta -> nama}}
+                    </h3>
+                    <div class="mb-4 text-sm text-gray-500 dark:text-white">Foto profil</div>
+                    <div class="flex items-center space-x-4">
+                        <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                            Edit Profil
+                        </button>
                     </div>
+                </div>
             </div>
         </div>
     </div>
@@ -78,18 +78,18 @@
                             value="{{ $peserta->email }}" required="" wfd-id="id6" disabled>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
-                        <label for="alamat"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
-                        <input type="text" name="alamat" id="alamat"
-                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $peserta->alamat }}" wfd-id="id3" disabled>
-                    </div>
-                    <div class="col-span-12 sm:col-span-6">
                         <label for="noHP"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor HP</label>
                         <input type="text" name="noHP" id="noHP"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             value="{{ $peserta->noHP}}" required="" wfd-id="id7" disabled>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6">
+                        <label for="alamat"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
+                        <input type="text" name="alamat" id="alamat"
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            value="{{ $peserta->alamat }}" wfd-id="id3" disabled>
                     </div>
                 </div>
         </div>

@@ -250,8 +250,8 @@
                             </div>
                             @foreach ($notif_materi as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
-                                    <li class="ms-3 text-sm font-normal">
+                                    Dummy notification items -->
+                                    <!-- <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailPelatihan', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
                                             <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
@@ -262,7 +262,7 @@
 
                             @foreach($notif_tugas as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
+                                     Dummy notification items
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTugas', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'id'=>$nt->tugas_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
@@ -275,7 +275,7 @@
 
                             @foreach($notif_test as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
+                                    
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
@@ -286,7 +286,7 @@
                                 
                             @endforeach
                         </div>
-                    </div>
+                    </div> -->
 
                     <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -303,7 +303,7 @@
                         Toggle dark mode
                         <div class="tooltip-arrow" data-popper-arrow=""
                             style="position: absolute; left: 0px; transform: translate3d(68.6667px, 0px, 0px);"></div>
-                    </div> -->
+                    </div>
 
                     <div class="flex items-center">
                         <button type="button"
@@ -395,7 +395,7 @@
                         class="flex-1 px-3 space-y-1 bg-indigo-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         <ul class="pb-2 space-y-2">
                      
-                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-lg dark:hover:rounded-lg">
                                 <a href="/peserta/dashboard"
                                     class="flex items-center p-2 text-base hover:text-gray-900 text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('peserta/dashboard') ? 'bg-purple-500 text-white' : '' }}">
                                     <svg class="w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -406,7 +406,7 @@
                                     <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
                                 </a>
                             </li>
-                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-lg dark:hover:rounded-lg">
                                 <a href="{{ route('peserta.viewDaftarPelatihan') }}"
                                 class="flex items-center p-2 text-base text-gray-900 hover:text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('peserta/daftar-pelatihan') ? 'bg-purple-500 text-white' : '' }}">
                                     <svg class="flex-shrink-0 w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -419,7 +419,7 @@
                                     <span class="ml-3" sidebar-toggle-item="">Pelatihan</span>
                                 </a>
                             </li>
-                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-lg dark:hover:rounded-lg">
                                 <a href="{{ route('peserta.viewHistoryPelatihan') }}"
                                 class="flex items-center p-2 text-base text-gray-900 hover:text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('peserta/history-pelatihan') ? 'bg-purple-500 text-white' : '' }}">
                                     <svg class="flex-shrink-0 w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"

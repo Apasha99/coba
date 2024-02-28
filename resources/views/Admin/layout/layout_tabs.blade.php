@@ -319,7 +319,7 @@
                         class="flex-1 px-3 space-y-1 bg-indigo-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         <ul class="pb-2 space-y-2">
                      
-                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-lg dark:hover:rounded-lg">
                                 <a href="/admin/dashboard"
                                     class="flex items-center p-2 text-base hover:text-gray-900 text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('admin/dashboard') ? 'bg-purple-500 text-white' : '' }}">
                                     <svg class="w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -330,7 +330,7 @@
                                     <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
                                 </a>
                             </li>
-                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li class="hover:bg-gray-100 dark:hover:bg-gray-700 hover:rounded-lg dark:hover:rounded-lg">
                                 <a href="{{ route('admin.viewDaftarPelatihan') }}"
                                 class="flex items-center p-2 text-base text-gray-900 hover:text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('admin/daftar-pelatihan') ? 'bg-purple-500 text-white' : '' }}">
                                     <svg class="flex-shrink-0 w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"

@@ -67,8 +67,13 @@
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Test {{$test2->nama}}</h1>
     </div>
     <div class="sm:flex mb-4">
-        <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-            <input type="text" id="searchInput" placeholder="Search for peserta" class="mt-2 mb-2 p-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">  
+        <div class="relative mb-4">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+            </div>
+            <input type="text" name="search" id="searchInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari pelatihan" required>
         </div>
         <script>
             // Ambil input elemen pencarian
@@ -132,9 +137,9 @@
             <div class="flex flex-col">
                 <div class="overflow-x-auto">
                     <div class="inline-block min-w-full  align-middle">
-                        <div class="overflow-hidden shadow">
-                            <table class="min-w-full divide-y-100 divide-gray-200 table-fixed dark:divide-gray-800" id="myTable">
-                                <thead class="bg-purple-600 dark:bg-purple-500" style="width: 100%; margin-left: 0;">
+                        <div class="overflow-hidden shadow sm:rounded-lg rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                                <thead class="bg-indigo-600 dark:bg-indigo-700">
                                     <tr>
                                         <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             <span style="float: left;">ID</span>

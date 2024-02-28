@@ -77,7 +77,7 @@ class TestController extends Controller
         if(Auth::user()->role_id == 1){
             return view('admin.tambah_test', ['test'=>$test,'admin' => $admin, 'pelatihan' => $pelatihan]);
         }else{
-            return view('admin.tambah_test', ['test'=>$test,'instruktur' => $instruktur, 'pelatihan' => $pelatihan]);
+            return view('instruktur.tambah_test', ['test'=>$test,'instruktur' => $instruktur, 'pelatihan' => $pelatihan]);
         }
     }
 

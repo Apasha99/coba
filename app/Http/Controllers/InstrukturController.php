@@ -36,8 +36,23 @@ class InstrukturController extends Controller
             $pelatihan = Pelatihan::join('instruktur_pelatihan', 'pelatihan.kode', '=', 'instruktur_pelatihan.plt_kode')
                 ->where('instruktur_pelatihan.instruktur_id', $instruktur->id)
                 ->get();
+
+            $last_accessed = DB::table('instruktur_pelatihan')
+            ->where('instruktur_id', $instruktur->id)
+            ->orderBy('last_accessed', 'desc')
+            ->take(3)
+            ->get();
+
+            $last_accessed_pelatihan = [];
+
+            foreach ($last_accessed as $item) {
+                $pelatihan = Pelatihan::where('kode', $item->plt_kode)->first();
+                if ($pelatihan) {
+                    $last_accessed_pelatihan[] = $pelatihan;
+                }
+            }
             
-            return view('instruktur.dashboard',['instruktur'=>$instruktur, 'pelatihan'=>$pelatihan]);
+            return view('instruktur.dashboard',['instruktur'=>$instruktur, 'pelatihan'=>$pelatihan, 'last_accessed_pelatihan' => $last_accessed_pelatihan]);
         }
     }
 
@@ -50,9 +65,25 @@ class InstrukturController extends Controller
 
             $pelatihan = Pelatihan::join('instruktur_pelatihan', 'pelatihan.kode', '=', 'instruktur_pelatihan.plt_kode')
                 ->where('instruktur_pelatihan.instruktur_id', $instruktur->id)
+                ->where('status', 'On going')
                 ->get();
     
             return view('instruktur.daftar_pelatihan', ['instruktur'=>$instruktur, 'pelatihan' => $pelatihan]);
+    }
+
+    public function viewHistoryPelatihan() {
+        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+                ->leftJoin('instruktur_pelatihan','instruktur.id','=','instruktur_pelatihan.instruktur_id')
+                ->where('instruktur.user_id', Auth::user()->id)
+                ->select('instruktur.nama', 'instruktur.id', 'users.username','instruktur_pelatihan.plt_kode')
+                ->first();
+
+        $pelatihan = Pelatihan::join('instruktur_pelatihan', 'pelatihan.kode', '=', 'instruktur_pelatihan.plt_kode')
+            ->where('instruktur_pelatihan.instruktur_id', $instruktur->id)
+            ->where('status', 'Completed')
+            ->get();
+
+        return view('instruktur.history_pelatihan', ['instruktur'=>$instruktur, 'pelatihan' => $pelatihan]);
     }
 
     public function viewDetailPelatihan(String $plt_kode) {
@@ -490,8 +521,7 @@ class InstrukturController extends Controller
     }
     
     public function profil(){
-        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
-                    ->where('instruktur.user_id', Auth::user()->id)
+        $instruktur = Instruktur::where('instruktur.user_id', Auth::user()->id)
                     ->first();
         return view('instruktur.profil', compact('instruktur'));
     }

@@ -32,23 +32,23 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <div
-            class="p-4 mb-4 bg-violet-200 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-violet-200">
+    <div
+            class="p-4 mb-4 bg-indigo-200 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-indigo-900">
             <form action="{{route('instruktur.editProfil')}}" method="get">
                 @csrf
                 @method('GET')
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
                 <img src="{{ Auth::user()->getImageURL() }}" class="mb-4 rounded-lg w-36 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" alt="foto-profil" />
-                    <div>
-                        <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-gray-900">{{$instruktur -> nama}}
-                        </h3>
-                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">Your photo profile</div>
-                        <div class="flex items-center space-x-4">
-                            <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
-                                Edit Profil
-                            </button>
-                        </div>
+                <div>
+                    <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">{{$instruktur -> nama}}
+                    </h3>
+                    <div class="mb-4 text-sm text-gray-500 dark:text-white">Foto profil</div>
+                    <div class="flex items-center space-x-4">
+                        <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">
+                            Edit Profil
+                        </button>
                     </div>
+                </div>
             </div>
         </div>
     </div>

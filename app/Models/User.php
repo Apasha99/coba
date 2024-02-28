@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Peserta::class, 'user_id', 'id');
     }
+
+    public function instruktur()
+    {
+        return $this->hasOne(Instruktur::class, 'user_id', 'id');
+    }
 }

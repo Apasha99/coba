@@ -40,11 +40,13 @@ class PesertaController extends Controller
             $pelatihan = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->where('peserta_pelatihan.peserta_id', $peserta->id)
                 ->get();
+
             $kode = Pelatihan::join('peserta_pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->join('peserta', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
                 ->where('peserta.id', '=', Auth::user()->peserta->id)
                 ->where('status','=','On going')
                 ->get();
+
             foreach ($kode as $kd){
                 $pltkode = $kd->kode;
                 $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
@@ -996,13 +998,60 @@ class PesertaController extends Controller
         return view('peserta.edit_profil', compact('total_notif','peserta','notif_materi','notif_tugas','notif_test'));
     }
 
+    // public function updateProfil(Request $request, $peserta_id){
+    //     // dd($peserta_id);
+    //     $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
+    //                 ->where('peserta.user_id', Auth::user()->id)
+    //                 ->where('user_id',$peserta_id)
+    //                 ->first();
+    //     // dd($peserta->nama);
+    //     $validated = $request->validate([
+    //         'username' => ['required'],
+    //         'email' => ['required', 'email'],
+    //         'noHP' => ['required', 'numeric'],
+    //         'alamat' => ['required'],
+    //         'foto' => [ 'max:10240'],
+    //     ]);
+    //     //dd($validated);
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $updateData = [
+    //             'noHP' => $validated['noHP'] ?? null,
+    //             'alamat' => $validated['alamat'] ?? null,
+    //         ];
+    //         //dd($updateData);
+    //         $peserta->update(array_filter($updateData));
+    //         dd($peserta);
+    //         $updateData2 = [
+    //             'username' => $validated['username'] ?? null,
+    //             'email' => $validated['email'] ?? null,
+    //             'foto' => $validated['foto'] ?? null,
+    //         ];
+
+    //         if ($request->has('foto')) {
+    //             $fotoPath = $request->file('foto')->store('foto', 'public');
+    //             $updateData2['foto'] = $fotoPath;
+    //         }
+
+    //         $peserta->user->update(array_filter($updateData2));
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('peserta.profil')
+    //             ->with('success', 'Data user berhasil diperbarui');
+    //     } catch (\Exception $e) {
+    //         dd($e->getMessage());
+    //         DB::rollBack();
+    //         return redirect()->back()->with('error', 'Gagal memperbarui data user');
+    //     }
+    // }
+
     public function updateProfil(Request $request, $peserta_id){
-        // dd($peserta_id);
-        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
-                    ->where('peserta.user_id', Auth::user()->id)
-                    ->where('user_id',$peserta_id)
+        $peserta = Peserta::where('peserta.user_id', Auth::user()->id)
                     ->first();
-        // dd($peserta->nama);
+
         $validated = $request->validate([
             'username' => ['required'],
             'email' => ['required', 'email'],
@@ -1010,17 +1059,16 @@ class PesertaController extends Controller
             'alamat' => ['required'],
             'foto' => [ 'max:10240'],
         ]);
-        //dd($validated);
+    
         try {
             DB::beginTransaction();
 
             $updateData = [
-                'noHP' => $validated['noHP'] ?? null,
-                'alamat' => $validated['alamat'] ?? null,
-            ];
-            //dd($updateData);
+                            'noHP' => $validated['noHP'] ?? null,
+                            'alamat' => $validated['alamat'] ?? null,
+                        ];
             $peserta->update(array_filter($updateData));
-            dd($peserta);
+
             $updateData2 = [
                 'username' => $validated['username'] ?? null,
                 'email' => $validated['email'] ?? null,
@@ -1033,16 +1081,16 @@ class PesertaController extends Controller
             }
 
             $peserta->user->update(array_filter($updateData2));
-
+            // dd($peserta->user);
             DB::commit();
 
             return redirect()
                 ->route('peserta.profil')
-                ->with('success', 'Data user berhasil diperbarui');
+                ->with('success', 'Data peserta berhasil diperbarui');
         } catch (\Exception $e) {
             dd($e->getMessage());
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal memperbarui data user');
+            return redirect()->back()->with('error', 'Gagal memperbarui data peserta');
         }
     }
 }

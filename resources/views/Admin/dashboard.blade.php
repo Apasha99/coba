@@ -82,15 +82,15 @@
                             <h3 class="mb-1 ml-2 mt-2 text-l font-bold text-gray-900 dark:text-white searchable">{{ Illuminate\Support\Str::limit($plt->nama, 50, '...') }}</h3>
                             <div class="mb-4 ml-2 mt-2 text-sm text-gray-500 dark:text-gray-400 searchable">
                                 <p>
-                                    <span class="searchable bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $plt->kode }}</span>
+                                <span class="searchable bg-blue-200 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">{{ $plt->kode }}</span>
                                     @if ($plt->status == 'On going')
-                                    <span class="searchable bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ $plt->status }}</span> 
+                                    <span class="searchable bg-green-200 text-green-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
                                     @elseif ($plt->status == 'Completed')
-                                    <span class="searchable bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ $plt->status }}</span>
+                                    <span class="searchable dark:bg-red-900 bg-red-300 text-red-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
                                     @elseif ($plt->status == 'Not started yet')
-                                    <span class="searchable bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ $plt->status }}</span>
+                                    <span class="searchable bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
                                     @endif
-                                    <span class="searchable bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 rounded ring-inset ring-purple-700/10 dark:bg-purple-500 dark:text-purple-500">{{ $plt->pesertaPelatihan }} peserta</span>
+                                    <span class="searchable bg-purple-300 px-2 py-1 text-xs font-medium text-purple-900 rounded ring-inset ring-purple-700/10 dark:bg-purple-900 dark:text-purple-200">{{ $plt->pesertaPelatihan }} peserta</span>
                                 </p>
                             </div>
                         </div>

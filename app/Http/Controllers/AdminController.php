@@ -400,8 +400,7 @@ class AdminController extends Controller
     }
 
     public function profil(){
-        $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
-                    ->where('admin.user_id', Auth::user()->id)
+        $admin = Admin::where('admin.user_id', Auth::user()->id)
                     ->first();
         return view('admin.profil', compact('admin'));
     }

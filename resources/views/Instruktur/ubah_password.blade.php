@@ -43,7 +43,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="password"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Lama</label>
-                                <input type="password" name="password" placeholder="password" id="password" value="{{$instruktur->password_awal}}"
+                                <input type="password" name="password" placeholder="Masukkan password lama" id="password"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('password')
                                 <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -54,7 +54,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="new_password"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password Baru</label>
-                                <input type="password" name="new_password" placeholder="new_password" id="new_password" value="{{$instruktur->password_awal}}"
+                                <input type="password" name="new_password" placeholder="Masukkan password baru" id="new_password"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('new_password')
                                 <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -65,7 +65,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="conf_password"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Konfirmasi Password</label>
-                                <input type="password" name="conf_password" placeholder="conf_password" id="conf_password" value="{{$instruktur->password_awal}}"
+                                <input type="password" name="conf_password" placeholder="Konfirmasi password" id="conf_password" 
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('conf_password')
                                 <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -73,10 +73,10 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-span-6 sm:col-full mt-4">
+                            <div class="col-span-6 sm:col-full">
                                 <button
                                     class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                    type="submit">Save</button>
+                                    type="submit">Simpan</button>
                             </div>
                         </div>
                 </div>
