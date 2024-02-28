@@ -170,7 +170,7 @@
                                                         <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder jika tidak ada gambar -->
                                                     @endif
                                                     <div class="text-sm font-small text-gray-500 dark:text-gray-400">
-                                                        <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailAdmin', $plt->admin_id)}}">{{ $plt->nama }}</a>
+                                                        <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailAdmin', $plt->admin_id)}}">{{ Illuminate\Support\Str::limit($plt->nama, 30, '...') }}</a>
                                                     </div>
                                                 </td>
                                                 <td

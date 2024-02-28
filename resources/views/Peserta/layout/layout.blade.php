@@ -61,7 +61,7 @@
 
 <body class="bg-gray-50 dark:bg-gray-800">
     <nav class="hidden lg:block fixed top-0 left-64 right-0 z-30 bg-zinc-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
-    <div class="px-3 py-2 lg:px-5 lg:pl-3" style="background-image: url('{{ asset('image/bgnavv.png') }}')">
+        <div class="px-3 py-2 lg:px-5 lg:pl-3" style="background-image: url('{{ asset('image/bgnavv.png') }}')">
             <div class="flex items-center justify-between">
                 <div class="dark:bg-gray-900">
                     @yield('tabs')
@@ -82,36 +82,21 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <div class="flex items-center">
-                        <button id="user-menu-button-3" aria-expanded="false" data-dropdown-toggle="dropdown-3" data-tooltip-target="tooltip-toggle-notif" class="dropdown-button text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm">
+                    <div class="flex items-center ">
+                        <button id="user-menu-button-3" aria-expanded="false" data-dropdown-toggle="dropdown-3" data-tooltip-target="tooltip-toggle-notif" class="dropdown-button text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-0.5">
                             <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2ZM6 6a1 1 0 0 1-.7-.3l-1-1a1 1 0 0 1 1.4-1.4l1 1A1 1 0 0 1 6 6Zm-2 4H3a1 1 0 0 1 0-2h1a1 1 0 1 1 0 2Zm14-4a1 1 0 0 1-.7-1.7l1-1a1 1 0 1 1 1.4 1.4l-1 1a1 1 0 0 1-.7.3Zm3 4h-1a1 1 0 1 1 0-2h1a1 1 0 1 1 0 2ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z"/>
                             </svg>
                             @if ($total_notif == 0)
                             <div></div>
                             @else
-                            <div style="
-                                position: absolute;
-                                margin-top:10px;
-                                top: 2px; /* Atur jarak ke atas */
-                                right: 84px; /* Sesuaikan jarak ke kanan */
-                                width: 20px;
-                                height: 20px;
-                                background-color: red;
-                                border-radius: 50%;
-                                color: white;
-                                text-align: center;
-                                line-height: 20px;
-                                font-size: 12px;
-                            ">
-                                {{ $total_notif }}
-                            </div>
+                            <div class="absolute top-2 right-20 transform translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs">{{ $total_notif }}</div>
                             @endif
                         </button>
 
-                        <div class="text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
+                        <div class="z-50 mt-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
                             id="dropdown-3"
-                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px); width: 250px; max-height: 200px; overflow-y: auto;"
+                            style="right: 0; width: 250px; max-height: 200px; overflow-y: auto;"
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
@@ -121,7 +106,6 @@
                             <!-- Notifikasi Materi -->
                             @foreach ($notif_materi->sortByDesc('id') as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
                                         <div class="flex justify-between items-center">
                                             <div>
@@ -130,7 +114,7 @@
                                                         @if ($nt->isChecked == 0)
                                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
                                                         @else
-                                                            <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                            <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Notifikasi!</span>
                                                         @endif
                                                         <form action="{{ route('hapus.notifikasi', $nt->id) }}" method="POST" class="ml-auto">
                                                             @csrf
@@ -143,7 +127,7 @@
                                                         </form>
                                                     </div>
 
-                                                    <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                                    <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                                 </a>
                                             </div>
                                         </div>
@@ -154,14 +138,13 @@
                             <!-- Notifikasi Tugas -->
                             @foreach($notif_tugas->sortByDesc('notif_id') as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTugas', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'id'=>$nt->tugas_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <div class="flex">
                                                 @if ($nt->isChecked == 0)
                                                     <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
                                                 @else
-                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Notifikasi!</span>
                                                 @endif
                                                 <form action="{{ route('hapus.notifikasi', $nt->notif_id) }}" method="POST" class="ml-auto">
                                                     @csrf
@@ -173,7 +156,7 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                            <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>
                                 </ul>
@@ -183,14 +166,14 @@
                             <!-- Notifikasi Test -->
                             @foreach($notif_test->sortByDesc('notif_id') as $nt)
                                 <ul class="py-1" role="none">
-                                    <!-- Dummy notification items -->
+                                    
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <div class="flex">
                                                 @if ($nt->isChecked == 0)
                                                     <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
                                                 @else
-                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-900">Notifikasi!</span>
+                                                    <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Notifikasi!</span>
                                                 @endif
                                                 <form action="{{ route('hapus.notifikasi', $nt->notif_id) }}" method="POST" class="ml-auto">
                                                     @csrf
@@ -202,7 +185,7 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                            <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>
                                 </ul>
@@ -238,14 +221,14 @@
 
                     <div class="flex items-center">
                         <div>
-                        <button type="button"
-                            class="hidden lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
-                            <span class="sr-only">Open user menu</span>
-                            <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>  
+                            <button type="button"
+                                class="hidden lg:block mr-2 flex text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
+                                <span class="sr-only">Open user menu</span>
+                                <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>  
                         </div>
 
                         <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden"
@@ -254,7 +237,7 @@
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->peserta->nama}}
+                                    {{ Illuminate\Support\Str::limit(auth()->user()->peserta->nama, 25, '...') }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -268,9 +251,7 @@
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Ubah Password</a>
                                 </li>
-                                <li>
 
-                                </li>
                                 <li>
                                     <a href="/logout"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -284,8 +265,8 @@
         </div>
     </nav>
 
-        <!-- nav split -->
-        <nav class="lg:hidden fixed top-0 w-full z-30 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+    <!-- nav split -->
+    <nav class="lg:hidden fixed top-0 w-full z-30 bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div class="px-3 py-2 lg:px-5 lg:pl-3" style="background-image: url('{{ asset('image/bgnavv.png') }}')">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -308,7 +289,7 @@
                 <div class="dark:bg-gray-900">
                     @yield('tabs')
                 </div>
-                <!-- <div class="flex items-center">
+                
                     <div class="hidden mr-3 -mb-1 sm:block">
                         <span></span>
                     </div>
@@ -388,7 +369,7 @@
                                             <div>
                                                 <a href="{{ route('peserta.detailPelatihan', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                                     <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
-                                                    <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                                    <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                                 </a>
                                             </div>
                                         </div>
@@ -403,7 +384,7 @@
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTugas', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'id'=>$nt->tugas_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
-                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                            <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>
                                 </ul>
@@ -417,7 +398,7 @@
                                     <li class="ms-3 text-sm font-normal">
                                         <a href="{{ route('peserta.detailTest', ['plt_kode' => $nt->plt_kode,'notif_id' =>$nt->notif_id, 'test_id'=>$nt->test_id]) }}" class="text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <span class="mb-1 text-sm font-semibold text-blue-500 dark:text-blue-500">Notifikasi Baru!</span>
-                                            <div class="mb-2 text-sm font-normal">Hi {{ $peserta->nama }}, {{ $nt->subjudul }}.</div> 
+                                            <div class="mb-2 text-sm font-normal">Hi {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}, {{ $nt->subjudul }}.</div> 
                                         </a>
                                     </li>
                                 </ul>
@@ -457,7 +438,7 @@
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->peserta->nama}}
+                                    {{ Illuminate\Support\Str::limit(auth()->user()->peserta->nama, 25, '...') }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -489,7 +470,7 @@
 
     <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
 
-    <aside id="sidebar"
+        <aside id="sidebar"
             class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full font-normal duration-75 lg:flex transition-width"
             aria-label="Sidebar">
             
@@ -519,7 +500,7 @@
                 
                 <div class="self-center mt-2" role="none">
                     <p class="text-lg font-bold text-gray-900 dark:text-white" role="none">
-                        {{auth()->user()->peserta->nama}}
+                        {{ Illuminate\Support\Str::limit(auth()->user()->peserta->nama, 25, '...') }}
                     </p>
                 </div>
                 <div class="self-center" role="none">

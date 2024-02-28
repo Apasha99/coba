@@ -166,7 +166,7 @@
                                                 {{ $ins->instruktur_id }}</td>
                                             <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
                                                 <div class="text-sm font-small text-gray-500 dark:text-gray-400">
-                                                    <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailInstruktur', $ins->instruktur_id)}}">{{ $ins->instruktur_nama }}</a>
+                                                    <a class="text-sm font-small text-blue-500 dark:text-blue-500" href="{{route('admin.viewDetailInstruktur', $ins->instruktur_id)}}">{{ Illuminate\Support\Str::limit($plt->instruktur_nama, 30, '...') }}</a>
                                                 </div>
                                             </td>
                                             <td

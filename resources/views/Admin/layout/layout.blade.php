@@ -118,7 +118,7 @@
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->admin->nama}}
+                                    {{ Illuminate\Support\Str::limit(auth()->user()->admin->nama, 25, '...') }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -238,8 +238,7 @@
                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(1227.33px, 58px, 0px);"
                             data-popper-placement="bottom">
                             <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    {{auth()->user()->admin->nama}}
+                                <p class="text-sm text-gray-900 dark:text-white" role="none">{{ Illuminate\Support\Str::limit(auth()->user()->admin->nama, 25, '...') }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -302,7 +301,7 @@
                 
                 <div class="self-center mt-2" role="none">
                     <p class="text-lg font-bold text-gray-900 dark:text-white" role="none">
-                        {{auth()->user()->admin->nama}}
+                        {{ Illuminate\Support\Str::limit(auth()->user()->admin->nama, 25, '...') }}
                     </p>
                 </div>
                 <div class="self-center" role="none">
