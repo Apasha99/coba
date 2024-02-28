@@ -1,16 +1,17 @@
 @extends('peserta.layout.layout2')
 
 @section('content')
-<div class="relative justify-between overflow-x-auto shadow-md sm:rounded-lg">
-    <h3 class="text-center text-lg font-bold text-gray-900 sm:text-lg dark:text-white mb-2">{{$test->nama}}</h3>
-
+<div class="fixed top-0 left-0 w-full bg-white z-50 p-4 shadow-md">
+    <h3 class="text-center justify-between text-lg font-bold text-gray-900 sm:text-lg dark:text-white mb-2">{{$test->nama}}</h3>
+    <p class="dark:text-white justify-between">Durasi Tes: <span id="countdownTimer" class="dark:text-white">{{$test->durasi}}</span></p>
+</div>
+<div class="relative justify-between shadow-md sm:rounded-lg">
     <form id="answerForm" method="post" action="{{ route('peserta.submitAnswer', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id]) }}">
         @csrf
 
         @php
             $shuffledSoalTest = $soal_test->shuffle();
         @endphp
-        <p class="dark:text-white">Durasi Tes: <span id="countdownTimer" class="dark:text-white">{{$test->durasi}}</span></p>
 
         @foreach ($shuffledSoalTest as $index => $soal)
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -124,7 +125,7 @@
                 </tbody>
             </table>
         @endforeach
-        <div class="float-right col-span-6 sm:col-full mt-4">
+        <div class="float-right col-span-6 sm:col-full mt-4 mb-4">
             <button
                 class="mr-4 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                 type="submit">Submit</button>
@@ -142,44 +143,39 @@
         });
     </script>
     <!-- JavaScript untuk menghitung mundur durasi tes -->
-    <script>
-        // Ambil durasi tes dari PHP ke JavaScript
-        var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
-
-        // Split durasi menjadi jam, menit, dan detik
-        var timeArray = duration.split(':');
-        var hours = parseInt(timeArray[0], 10); // Parse sebagai angka desimal
-        var minutes = parseInt(timeArray[1], 10);
-        var seconds = parseInt(timeArray[2], 10);
-
-        // Hitung total detik
-        var totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-        // Hitung mundur durasi tes
-        var countdown = setInterval(function() {
-            // Hitung jam, menit, dan detik yang tersisa
-            var hours = Math.floor(totalSeconds / 3600);
-            var minutes = Math.floor((totalSeconds % 3600) / 60);
-            var seconds = totalSeconds % 60;
-
-            // Format ulang waktu menjadi HH:MM:SS
-            var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-
-            // Tampilkan waktu mundur di dalam elemen dengan id "countdownTimer"
-            document.getElementById('countdownTimer').innerText = formattedTime;
-
-            // Kurangi total detik dengan 1 setiap detik
-            totalSeconds--;
-
-            // Jika waktu sudah habis, hentikan hitungan mundur
-            if (totalSeconds < 0) {
-                clearInterval(countdown);
-                // Otomatis submit form
-                document.getElementById('answerForm').submit();
-            }
-        }, 1000);
-
-    </script>
-
 </div>
+<script>
+    // JavaScript for countdown timer
+    var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
+    var timeArray = duration.split(':');
+    var hours = parseInt(timeArray[0], 10);
+    var minutes = parseInt(timeArray[1], 10);
+    var seconds = parseInt(timeArray[2], 10);
+    var totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+    var remainingTime = localStorage.getItem('remainingTime');
+    if (remainingTime) {
+        totalSeconds = parseInt(remainingTime, 10);
+    }
+
+    var countdown = setInterval(function() {
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+
+        var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+
+        document.getElementById('countdownTimer').innerText = formattedTime;
+
+        totalSeconds--;
+
+        localStorage.setItem('remainingTime', totalSeconds);
+
+        if (totalSeconds < 0) {
+            clearInterval(countdown);
+            document.getElementById('answerForm').submit();
+        }
+    }, 1000);
+</script>
+
 @endsection
