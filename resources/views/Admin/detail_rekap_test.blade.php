@@ -1,5 +1,19 @@
-@extends('admin.layout.layout')
-
+@extends('admin.layout.layout_tabs')
+@section('tabs')
+<div class="text-sm font-medium text-center text-gray-500 border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px">
+        <li class="me-2">
+            <a href="{{ route('admin.viewDetailPelatihan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Pelatihan</a>
+        </li>
+        <li class="me-2">
+            <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Partisipan</a>
+        </li>
+        <li class="me-2">
+            <a href="{{ route('test.rekap', ['plt_kode' => $pelatihan->kode]) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 aria-current="page">Rekap Test</a>
+        </li>
+    </ul>
+</div>
+@endsection
 @section('content')
     <div class="mb-4 col-span-full xl:mb-2">
         <nav class="flex mb-5" aria-label="Breadcrumb">
@@ -188,12 +202,12 @@
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->jumlah_attempt }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white" >
                                             @if ($hitungnilai >= $test2->kkm)
-                                            <div class="mt-2 p-2 bg-green-200 rounded-lg">
-                                                <p class="text-center text-sm font-small text-green-800">Passed</p>
+                                            <div class="mt-2 p-2 bg-green-200 dark:bg-green-800 rounded-lg">
+                                                <p class="text-center text-sm font-small text-green-900 dark:text-green-100">Passed</p>
                                             </div>
                                             @else
-                                            <div class="mt-2 p-2 bg-red-200 rounded-lg">
-                                                <p class="text-center text-sm font-small text-red-800">Failed</p>
+                                            <div class="mt-2 p-2 dark:bg-red-900 bg-red-300 rounded-lg">
+                                                <p class="text-center text-sm font-small text-red-900 dark:text-red-200">Failed</p>
                                             </div>
                                             @endif
                                         </td>

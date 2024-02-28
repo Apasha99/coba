@@ -176,13 +176,22 @@
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->max_totalnilai }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->jumlah_attempt }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white" >
-                                            @if ($score->max_totalnilai >= $test2->kkm)
+                                            <!-- @if ($score->max_totalnilai >= $test2->kkm)
                                             <div class="mt-2 p-2 bg-green-200 rounded-lg">
                                                 <p class="text-center text-sm font-small text-green-800">Passed</p>
                                             </div>
                                             @else
                                             <div class="mt-2 p-2 bg-red-200 rounded-lg">
                                                 <p class="text-center text-sm font-small text-red-800">Failed</p>
+                                            </div>
+                                            @endif -->
+                                            @if ($score->max_totalnilai >= $test2->kkm)
+                                            <div class="mt-2 p-2 bg-green-200 dark:bg-green-800 rounded-lg">
+                                                <p class="text-center text-sm font-small text-green-900 dark:text-green-100">Passed</p>
+                                            </div>
+                                            @else
+                                            <div class="mt-2 p-2 dark:bg-red-900 bg-red-300 rounded-lg">
+                                                <p class="text-center text-sm font-small text-red-900 dark:text-red-200">Failed</p>
                                             </div>
                                             @endif
                                         </td>

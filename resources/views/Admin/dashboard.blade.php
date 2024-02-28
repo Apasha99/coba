@@ -11,7 +11,7 @@
             <h1 class="text-sm font-semibold text-gray-900 sm:text-lg dark:text-white">Overview</h1>
         </div>
         <div class="p-4 grid grid-cols-4 gap-4">
-            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-indigo-500 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
+            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-indigo-400 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
                 <div class="col-span-2">
                     <img class="w-32 h-full" src="{{ asset('image/laptop.png') }}">
                 </div>
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-purple-500 border border-gray-200 rounded-lg shadow dark:bg-purple-900 dark:border-gray-700">
+            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4 grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-purple-400 border border-gray-200 rounded-lg shadow dark:bg-purple-900 dark:border-gray-700">
                 <div class="col-span-2">
                     <img class="w-32 h-full" src="{{ asset('image/buku.png') }}">
                 </div>
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="items-center grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-yellow-500 border border-gray-200 rounded-lg shadow dark:bg-yellow-800 dark:border-gray-700">
+            <div class="items-center grid grid-cols-5 block max-w-full sm:max-w-sm p-2 bg-yellow-400 border border-gray-200 rounded-lg shadow dark:bg-yellow-600 dark:border-gray-700">
                 <div class="col-span-2">
                     <img class="w-full h-full" src="{{ asset('image/instruktur.png') }}">
                 </div>
