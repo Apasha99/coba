@@ -27,12 +27,9 @@ Route::get('/', function () {
     return view('login');
 })->middleware('auth');
 
-Route::get('login', [AuthController::class,'login'])->name('login');
-Route::post('login', [AuthController::class, 'authenticate']);
-
-Route::controller(AuthController::class)->middleware('auth')->group(function(){
-    Route::get('logout', 'logout')->name('logout');
-});
+Route::get('/login', [AuthController::class,'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::get('/logout', [AuthController::class,'logout'])->middleware('auth')->name('logout');
 
 Route::controller(AdminController::class)->middleware('only_admin')->group(function(){
     Route::get('admin/dashboard', 'admin')->name('admin.dashboard');
