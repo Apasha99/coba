@@ -174,6 +174,7 @@ Route::controller(TestController::class)->group(function(){
 Route::controller(SubmissionController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionForm');
     Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/edit', 'viewEditSubmission')->middleware('only_peserta')->name('peserta.viewEditSubmission');
+    Route::get('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/notif/submission', 'viewSubmissionForm')->middleware('only_peserta')->name('peserta.viewSubmissionFormNotif');
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission', 'store')->middleware('only_peserta')->name('peserta.storeSubmission');
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'update')->middleware('only_peserta')->name('peserta.updateSubmission');
     Route::post('peserta/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}/delete', 'delete')->middleware('only_peserta')->name('peserta.deleteSubmission');
@@ -187,6 +188,7 @@ Route::controller(SubmissionTestController::class)->group(function(){
     Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}/{notif_id}', 'detailTest')->middleware('only_peserta')->name('peserta.detailTest');
     Route::get('peserta/pelatihan/{plt_kode}/test/{test_id}', 'viewDetailTest')->middleware('only_peserta')->name('peserta.viewDetailTest');
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/soal', 'test')->middleware('only_peserta')->name('peserta.test');
+    Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/notif/soal', 'test')->middleware('only_peserta')->name('peserta.testNotif');
     Route::post('peserta/pelatihan/{plt_kode}/test/{test_id}/submit', 'submitAnswer')->middleware('only_peserta')->name('peserta.submitAnswer');
     Route::post('/save-answer', 'Answer')->middleware('only_peserta')->name('peserta.saveAnswer');
     Route::get('/peserta/pelatihan/{plt_kode}/test/{test_id}/hasil', 'hasil')->middleware('only_peserta')->name('peserta.hasil');
