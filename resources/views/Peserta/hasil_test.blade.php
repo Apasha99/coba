@@ -111,24 +111,21 @@
         @foreach ($soal_test as $soal)
 
         <div class="flex">
-            
             <table class="w-3/4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <tbody>
-                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr class="bg-zinc-100 dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $soal->title }}
                         </th>
                     </tr>
-                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    @if($soal->file_soal)
+                    <tr class="bg-zinc-100 dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if($soal->file_soal)
-                                <img class="w-80 h-30" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->urutan }}">
-                            @else
-                                <div></div> <!-- Placeholder jika tidak ada gambar -->
-                            @endif
+                            <img class="w-80 h-30" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->urutan }}">
                         </th>
                     </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    @endif
+                    <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             @if ($soal->tipe == "Pilihan Ganda")
                             @php
@@ -191,49 +188,41 @@
                     </tr>
                 </tbody>
             </table>
-            
-            
-            <div class="ml-4 w-1/4">
-                <div class="mb-2 col-span-full xl:mb-2">
-                    <h3 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Nilai</h3>
+            <div class="ml-4 w-1/4 bg-zinc-100 dark:bg-gray-800 p-2 border-b rounded dark:border-gray-600">
+                <div class="col-span-full">
+                    <h3 class="text-base font-semibold text-gray-900 sm:text-base dark:text-white">Nilai</h3>
                 </div>
                 <table class="mb-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <tbody>
-                        <tr class="bg-white dark:bg-gray-900 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
+                        <tr class="bg-zinc-100 dark:bg-gray-800 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
                             <th scope="row" class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Nilai yang diperoleh : {{ $nilai->where('soal_id', $soal->id)->first()->nilai != 0 ? '1.0' : '0.0' }} / 1.0
+                                Nilai yang diperoleh : <span class="searchable bg-blue-200 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">{{ $nilai->where('soal_id', $soal->id)->first()->nilai != 0 ? '1.0' : '0.0' }} / 1.0</span>
                             </th>
                         </tr>
                     </tbody>
                 </table>
-                <div class="mb-2 col-span-full xl:mb-2">
-                    <h3 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Jawaban Benar</h3>
+                <div class="col-span-full">
+                    <h3 class="text-base font-semibold text-gray-900 sm:text-base dark:text-white">Kunci Jawaban</h3>
                 </div>
                 <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <tbody>
                         @if ($soal->tipe == "Pilihan Ganda")
-                        <tr class="bg-white dark:bg-gray-900 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
+                        <tr class="bg-zinc-100 dark:bg-gray-800 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
                             <th scope="row" class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Jawaban : {{ $jawaban_test->where('soal_id', $soal->id)->where('status', 1)->first()->title }}
+                                Jawaban : <span class="searchable bg-green-200 text-green-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">{{ $jawaban_test->where('soal_id', $soal->id)->where('status', 1)->first()->title }}</span> 
                             </th>
                         </tr>
                         @elseif ($soal->tipe == "Jawaban Singkat")
-                        <tr class="bg-white dark:bg-gray-900 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
+                        <tr class="bg-zinc-100 dark:bg-gray-800 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900">
                             <th scope="row" class="py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Jawaban : {{ $jawaban_test->where('soal_id', $soal->id)->pluck('title')->implode(', ') }}
-
+                                Jawaban : <span class="searchable bg-green-200 text-green-900 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">{{ $jawaban_test->where('soal_id', $soal->id)->pluck('title')->implode(', ') }}</span>
                             </th>
                         </tr>
                         @endif
                     </tbody>
                 </table>
-                
             </div>
-            
         </div>
-
-
-            
         @endforeach
     @endif
 
