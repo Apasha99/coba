@@ -74,7 +74,6 @@ class RekapController extends Controller
             '71-80' => 0,
             '81-90' => 0,
             '91-100' => 0,
-            '>= 101' => 0
 
         ];
         
@@ -101,8 +100,6 @@ class RekapController extends Controller
                 $jumlahPesertaPerRentang['81-90']++;
             } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
                 $jumlahPesertaPerRentang['91-100']++;
-            }elseif ($total_nilai >= 101) {
-                $jumlahPesertaPerRentang['>= 101']++;
             }
 
         }
@@ -165,7 +162,6 @@ class RekapController extends Controller
             '71-80' => 0,
             '81-90' => 0,
             '91-100' => 0,
-            '>= 101' => 0
 
         ];
         
@@ -192,8 +188,6 @@ class RekapController extends Controller
                 $jumlahPesertaPerRentang['81-90']++;
             } elseif ($total_nilai >= 91 && $total_nilai <= 100) {
                 $jumlahPesertaPerRentang['91-100']++;
-            }elseif ($total_nilai >= 101) {
-                $jumlahPesertaPerRentang['>= 101']++;
             }
 
         }

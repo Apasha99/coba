@@ -68,8 +68,57 @@
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Submission Tugas</h1>
     </div>
+    <div class="relative overflow-x-auto sm:rounded-lg rounded-lg">
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Detail Tugas</h1>
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <tbody>
+                <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Nama 
+                    </th>
+                    <td class="px-6 py-4">
+                        {{$tugas->judul}}
+                    </td>
+                </tr>
+                <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Waktu Mulai Penugasan 
+                    </th>
+                    <td class="px-6 py-4">
+                        {{$tugas->start_date}}
+                    </td>
+                </tr>
+                <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Waktu Selesai Penugasan
+                    </th>
+                    <td class="px-6 py-4">
+                        {{$tugas->end_date}}
+                    </td>
+                </tr>
+                <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Deskripsi
+                    </th>
+                    <td class="px-6 py-4">
+                        {{$tugas->deskripsi}}
+                    </td>
+                </tr>
+                <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        File Tugas
+                    </th>
+                    <td class="px-6 py-4">
+                        <a href="{{ asset('storage/' . $tugas->file_tugas) }}" class="text-blue-600 dark:text-blue-700 hover:underline" target="_blank">{{ basename($tugas->file_tugas) }}</a><br>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Submission Tugas</h1>
     <div class="mb-4 col-span-full xl:mb-2">
         <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
             

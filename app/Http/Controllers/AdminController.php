@@ -326,16 +326,34 @@ class AdminController extends Controller
         }
     }
 
-    public function download()
+    public function download(Request $request)
     {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
             ->where('admin.user_id', Auth::user()->id)
             ->select('admin.nama', 'admin.id', 'users.username')
             ->first();
-        $admin2 = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
-                ->select('admin.nama', 'admin.user_id as admin_id', 'users.username','users.foto','users.password_awal','users.email')
-                ->get();
-        //dd($admin2);
+
+        $request->validate([
+            'export_option' => 'required',
+            'start_user_id' => 'required_if:export_option,range|exists:users,id',
+            'end_user_id' => 'required_if:export_option,range|exists:users,id|after_or_equal:start_user_id',
+        ]);
+
+        $exportOption = $request->input('export_option');
+        $startUserId = $request->input('start_user_id');
+        $endUserId = $request->input('end_user_id');
+
+        $query = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
+            ->select('admin.nama', 'admin.user_id as admin_id', 'users.username', 'users.foto', 'users.password_awal', 'users.email');
+
+        // Filter berdasarkan opsi yang dipilih
+        if ($exportOption === 'range' && $startUserId && $endUserId) {
+            // Filter berdasarkan rentang user_id
+            $query->whereBetween('admin.user_id', [$startUserId, $endUserId]);
+        }
+
+        $admin2 = $query->get(); // Mengambil data setelah filter
+
         $pst = User::where('role_id', '=', 1)->select('id')->get();
 
         $pdf = app('dompdf.wrapper');
@@ -345,8 +363,11 @@ class AdminController extends Controller
             'pst' => $pst,
         ]);
 
-        return $pdf->stream('daftar_admin'.'.pdf');
+        $filename = $exportOption === 'range' ? 'daftar-list-admin-range.pdf' : 'daftar-list-admin.pdf';
+
+        return $pdf->stream($filename);
     }
+
 
     public function ubahPassword(){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')

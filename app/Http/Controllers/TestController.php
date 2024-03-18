@@ -162,10 +162,11 @@ class TestController extends Controller
                 ->first();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+        $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
         if(Auth::user()->role_id == 1){
-            return view('admin.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
+            return view('admin.tambah_soal', ['hitung_nilai'=>$hitung_nilai,'pelatihan'=>$pelatihan,'test' => $test]);
         }else{
-            return view('instruktur.tambah_soal', ['pelatihan'=>$pelatihan,'test' => $test]);
+            return view('instruktur.tambah_soal', ['hitung_nilai'=>$hitung_nilai,'pelatihan'=>$pelatihan,'test' => $test]);
         }
     }
 

@@ -9,6 +9,10 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Notifikasi;
 use App\Models\Nilai_Test;
+use App\Models\Jawaban_User_Pilgan;
+use App\Models\Jawaban_User_Singkat;
+use App\Models\Submission;
+use App\Models\SubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -611,24 +615,50 @@ class PesertaController extends Controller
                 ->leftJoin('users', 'users.id', '=', 'peserta.user_id')
                 ->leftJoin('pelatihan', 'pelatihan.kode', '=', 'peserta_pelatihan.plt_kode')
                 ->where('peserta.user_id', $peserta_id)
-                ->select('peserta.user_id', 'users.id','peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode')
+                ->select('peserta.user_id', 'users.id', 'peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode','peserta_id')
                 ->first();
-            //dd($peserta_pelatihan);
 
+            $submission = Submission::join('submission_files','submission_files.submission_id','=','submissions.id')
+                ->where('peserta_id', $peserta_pelatihan->peserta_id)
+                ->get();
+            $jawabpilgan = Jawaban_User_Pilgan::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            $jawabsingkat =  Jawaban_User_Singkat::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            $attempt =  Attempt::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            $nilai = Nilai_Test::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            $notif = Notifikasi::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            //dd($peserta_pelatihan);
             DB::beginTransaction();
 
             try {
-                if ($peserta_pelatihan && $peserta_pelatihan->status == 'On going') {
+                if ($peserta_pelatihan && $peserta_pelatihan->status == 'On going') { // Check if $peserta_pelatihan exists before accessing its properties
                     return redirect()->route('admin.viewDaftarPeserta')->with('error', 'Tidak dapat menghapus peserta dengan pelatihan yang masih berlangsung.');
                 }
-
+                
                 if ($peserta_pelatihan != null) {
-                    Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                            ->where('peserta.user_id', $peserta_id)->delete();
-                    $peserta_pelatihan->delete();
+                    foreach ($submission as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    foreach ($jawabpilgan as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    foreach ($jawabsingkat as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    foreach ($attempt as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    foreach ($nilai as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    foreach ($notif as $sub) { // Loop through submission to delete each submission
+                        $sub->delete();
+                    }
+                    Peserta_Pelatihan::where('peserta_id',$peserta_pelatihan->peserta_id)->delete();
                 }
-                Peserta::where('user_id', $peserta_id)->delete();
-                User::where('id', $peserta_id)->delete();
+
+                // Peserta deletion should be inside the condition where $peserta_pelatihan is not null
+                Peserta::where('user_id', $peserta_id)->delete(); // Menghapus peserta berdasarkan user_id
+                User::where('id', $peserta_id)->delete(); // Menghapus user berdasarkan id
 
                 DB::commit();
 

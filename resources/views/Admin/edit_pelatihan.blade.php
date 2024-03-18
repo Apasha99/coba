@@ -40,7 +40,7 @@
                 </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit peserta_pelatihan</h1>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Edit Pelatihan</h1>
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
@@ -48,11 +48,11 @@
             @csrf
             <div class="col-span-4">
                 <div
-                    class="p-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
+                    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Pelatihan</h3>
                     
-                        <div class="grid grid-cols-6 gap-3">
-                            <div class="col-span-6 sm:col-span-3">
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
                                     <label for="kode"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode <span class="text-red-500">*</span></label>
                                     <input type="text" name="kode" placeholder="kode" id="kode" value="{{ $plt->kode }}" disabled
@@ -169,7 +169,7 @@
                                 @php 
                                     $nama_file = basename($plt->poster)
                                 @endphp
-                                <div class="col-span-full">
+                                <div class="col-span-full sm:col-span-full" >
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Poster</label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                         aria-describedby="file_input_help" id="poster" name="poster" type="file" accept="image/*">
@@ -179,7 +179,7 @@
                                         </div>
                                     @endif
                                     @error('poster')
-                                    <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                    <div class="col-span-full sm:col-span-full p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
                                     </div>
                                     @enderror
