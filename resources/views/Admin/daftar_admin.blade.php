@@ -145,10 +145,6 @@
                                                 class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                                 Email
                                             </th>
-                                            <th scope="col"
-                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
-                                                Password
-                                            </th>
                                             @if (auth()->check() && auth()->user()->id == 1)
                                                 <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                                     Actions
@@ -179,9 +175,6 @@
                                                 <td
                                                     class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                     {{ $plt->email }}</td>
-                                                <td
-                                                    class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {{ $plt->password_awal }}</td>
                                                 @if (auth()->check() && auth()->user()->id == 1)
                                                 <td class="p-4 space-x-2 whitespace-nowrap ">
                                                     @if($plt && $plt->admin_id)

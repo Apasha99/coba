@@ -7,9 +7,12 @@ use App\Models\Peserta;
 use App\Models\Admin;
 use App\Models\Notifikasi;
 use App\Models\Attempt;
+use App\Models\Nilai_Test;
 use App\Models\Instruktur;
 use App\Models\Soal_Test;
 use App\Models\Jawaban_Test;
+use App\Models\Jawaban_User_Pilgan;
+use App\Models\Jawaban_User_Singkat;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -148,10 +151,11 @@ class TestController extends Controller
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
         $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
         $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
+        $existingNilai = Nilai_Test::where('test_id', $test_id)->exists();
         if(Auth::user()->role_id == 1){
-            return view('admin.detail_test', ['hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+            return view('admin.detail_test', ['existingNilai'=>$existingNilai,'hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
         } else{
-            return view('instruktur.detail_test', ['instruktur'=>$instruktur,'hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
+            return view('instruktur.detail_test', ['existingNilai'=>$existingNilai,'instruktur'=>$instruktur,'hitung_nilai'=>$hitung_nilai,'pelatihan' => $pelatihan, 'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test,'hitung_soal'=>$hitung_soal]);
         }
     }
 
@@ -387,16 +391,33 @@ class TestController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->get();
-        //dd($test);
+        $jawaban_pilgan = Jawaban_User_Pilgan::where('test_id',$test_id)->get();
+        $jawaban_singkat = Jawaban_User_Singkat::where('test_id',$test_id)->get();
+        $attempt = Attempt::where('test_id',$test_id)->get();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->firstOrFail();
         $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
+        $cekPeserta = Attempt::where('test_id',$test_id)->exists();
+
+        if($cekPeserta == true){
+            return redirect()->back()->with('error','Tidak dapat menghapus test yang telah dikerjakan peserta');
+        }else if($test->start_date <= now()){
+            return redirect()->back()->with('error','Tidak dapat menghapus test yang telah dimulai');
+        }
         DB::beginTransaction();
 
         try {
+            foreach ($jawaban_pilgan as $jawaban) {
+                $jawaban->delete();
+            }
+            foreach ($jawaban_singkat as $jawaban) {
+                $jawaban->delete();
+            }
+            foreach ($attempt as $jawaban) {
+                $jawaban->delete();
+            }
             foreach ($jawaban_test as $jawaban) {
                 $jawaban->delete();
             }
-
             foreach ($soal_test as $soal) {
                 $soal->delete();
             }
@@ -448,9 +469,9 @@ class TestController extends Controller
         $cekPeserta = Attempt::where('test_id',$test_id)->exists();
 
         if($cekPeserta == true){
-            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dikerjakan peserta');
+            return redirect()->back()->with('error','Tidak dapat menghapus soal dan jawaban yang telah dikerjakan peserta');
         }else if($test->start_date <= now()){
-            return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dimulai');
+            return redirect()->back()->with('error','Tidak dapat menghapus soal dan jawaban yang telah dimulai');
         }
 
         DB::beginTransaction();
@@ -512,15 +533,16 @@ class TestController extends Controller
         $jawaban_test = Jawaban_Test::where('test_id', $test_id)->where('soal_id',$soal_id)->get();
                                 //dd($test);
         $cekPeserta = Attempt::where('test_id',$test_id)->exists();
+        $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
         if($cekPeserta == true){
             return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dikerjakan peserta');
         }else if($test->start_date <= now()){
             return redirect()->back()->with('error','Tidak dapat mengedit soal dan jawaban yang telah dimulai');
         }
         if(Auth::user()->role_id == 1){
-            return view('admin.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+            return view('admin.edit_soal', ['hitung_nilai'=>$hitung_nilai,'pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
         }else{
-            return view('instruktur.edit_soal', ['pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
+            return view('instruktur.edit_soal', ['hitung_nilai'=>$hitung_nilai,'pelatihan'=>$pelatihan,'test' => $test,'soal_test'=>$soal_test,'jawaban_test'=>$jawaban_test]);
         }
     }
 

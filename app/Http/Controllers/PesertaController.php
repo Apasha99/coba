@@ -695,28 +695,46 @@ class PesertaController extends Controller
         ]);
 
         $data = Excel::toArray(new PesertaImport(), $request->file('file'));
+        
+        $errors = [];
         foreach ($data[0] as $row) {
             $validator = Validator::make($row, [
                 'nama' => 'required|regex:/^[a-zA-Z\s]*$/',
                 'nohp' => 'required',
                 'alamat' => 'required',
-                'email' => 'required|email|unique:users,email', // Check uniqueness in the users table for the email field
+                'email' => [
+                    'required',
+                    'email',
+                    function ($attribute, $value, $fail) {
+                        // Check if the email already exists in the users table
+                        if (User::where('email', $value)->exists()) {
+                            return redirect()
+                                ->back()
+                                ->with('error', 'Email peserta sudah terdaftar');
+                        }
+                    }
+                ],
             ]);
-            //dd($data);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                $errors[] = $validator->errors()->all();
             }
         }
-       
+
+        if (!empty($errors)) {
+            return redirect()
+                ->back()
+                ->with('errors', $errors)
+                ->withInput();
+        }
+
         // Flash the data for a single request
         session()->put('peserta_data', $data[0]);
 
         return redirect()->route('admin.previewPeserta');
     }
+
+
 
     public function preview()
     {
@@ -724,10 +742,16 @@ class PesertaController extends Controller
         
         // If there is no data, you might want to handle it accordingly (e.g., redirect back with an error message)
         if (!$data) {
-            return redirect()->route('admin.tambahPeserta')->with('error', 'Tidak ada data yang ingin di generate.');
+            return redirect()->route('admin.tambahPeserta')->with('error', 'Tidak ada data yang ingin di generate');
         }
 
         return view('admin.import_peserta', ['data' => $data]);
+    }
+
+    public function clearSessionData()
+    {
+        session()->forget('peserta_data');
+        return redirect()->route('admin.previewPeserta')->with('success', 'Session data telah dihapus');
     }
 
     public function generateAkun()

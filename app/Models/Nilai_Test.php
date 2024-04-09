@@ -24,5 +24,8 @@ class Nilai_Test extends Model
     {
         return $this->belongsTo(Peserta::class, 'peserta_id', 'id');
     }
-
+    public function test()
+    {
+        return $this->belongsTo(Test::class, 'test_id', 'id');
+    }
 }

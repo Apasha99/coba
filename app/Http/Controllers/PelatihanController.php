@@ -10,6 +10,8 @@ use App\Models\Attempt;
 use App\Models\Bidang;
 use App\Models\Instruktur;
 use App\Models\Instruktur_Pelatihan;
+use App\Models\Jawaban_User_Pilgan;
+use App\Models\Jawaban_User_Singkat;
 use App\Models\Nilai_Test;
 use App\Models\Peserta;
 use App\Models\Peserta_Pelatihan;
@@ -71,62 +73,83 @@ class PelatihanController extends Controller
         if (!$pelatihan) {
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menemukan pelatihan yang ingin dihapus.');
         }
-
-        $test = Test::where('plt_kode', $plt_kode)->first();
+        $materi = Materi::where('plt_kode',$plt_kode)->get();
+        // Memeriksa apakah ada tugas yang terkait dengan pelatihan
         $tugas = Tugas::where('plt_kode', $plt_kode)->first();
 
+        // Memeriksa apakah ada test yang terkait dengan pelatihan
+        $test = Test::where('plt_kode', $plt_kode)->first();
+
+        // Memeriksa apakah ada submission untuk tugas atau test yang terkait dengan pelatihan
+        $submissiontugas = Tugas::where('plt_kode', $plt_kode)->exists();
+
+        $submissiontest = Soal_Test::whereHas('test', function ($query) use ($plt_kode) {
+            $query->where('plt_kode', $plt_kode);
+        })->exists();
+
+        // Membuka transaksi database
         DB::beginTransaction();
 
         try {
+            // Memeriksa apakah pelatihan memiliki tugas atau test yang masih aktif
             if ($test && $test->status == 1) {
-                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan dengan test yang masih aktif.');
+                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Tidak dapat menghapus pelatihan dengan test yang masih aktif');
             }
 
-            if (!$tugas) {
+            // Memeriksa apakah ada submission untuk tugas atau test terkait dengan pelatihan
+            if ($submissiontugas) {
+                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Pelatihan gagal dihapus karena terdapat data tugas');
+            }else{
+                $materi->delete();
                 $pelatihan->delete();
-
-                DB::commit();
-
-                return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada tugas terkait.');
             }
 
-
-            if (!$test) {
+            if ($submissiontest) {
+                return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Pelatihan gagal dihapus karena terdapat data test.');
+            }else{
+                $materi->delete();
                 $pelatihan->delete();
-
-                DB::commit();
-
-                return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan berhasil dihapus karena tidak ada test terkait.');
             }
 
-            if ($pelatihan->status !== 'On going') {
-                // Delete related data if status is not 'On going'
-                Nilai_Test::where('test_id', $test)->delete();
-                Jawaban_Test::where('test_id', $test)->delete();
-                Soal_Test::where('test_id', $test)->delete();
-                Submission::where('tugas_id', $tugas)->delete();
-                SubmissionFile::where('tugas_id', $tugas)->delete();
-                Test::where('plt_kode', $plt_kode)->delete();
-                Materi::where('plt_kode', $plt_kode)->delete();
-                Tugas::where('plt_kode', $plt_kode)->delete();
-                Peserta_Pelatihan::where('plt_kode', $plt_kode)->delete();
+
+            // Menghapus semua data terkait dengan pelatihan
+            if ($tugas) {
+                // Menghapus submission dan file terkait
+                Submission::where('tugas_id', $tugas->id)->delete();
+                SubmissionFile::where('tugas_id', $tugas->id)->delete();
+
+                // Menghapus tugas dan semua data terkait
+                $tugas->delete();
             }
 
-            // Finally, delete the pelatihan itself
+            if ($test) {
+                // Menghapus semua data terkait dengan test
+                Attempt::where('test_id', $test->id)->delete();
+                Jawaban_User_Pilgan::where('test_id', $test->id)->delete();
+                Jawaban_User_Singkat::where('test_id', $test->id)->delete();
+                Nilai_Test::where('test_id', $test->id)->delete();
+                Jawaban_Test::where('test_id', $test->id)->delete();
+                Soal_Test::where('test_id', $test->id)->delete();
+
+                // Menghapus test dan semua data terkait
+                $test->delete();
+            }
+
+            // Menghapus pelatihan
             $pelatihan->delete();
 
-            // Commit the transaction
+            // Commit transaksi database
             DB::commit();
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
         } catch (\Exception $e) {
             dd($e->getMessage());
-            // Rollback the transaction in case of any error
             DB::rollback();
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
         }
     }
+
 
     public function edit($plt_id){
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')

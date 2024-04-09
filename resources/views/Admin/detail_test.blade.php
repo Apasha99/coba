@@ -149,6 +149,18 @@
                     {{ $test->deskripsi}}
                 </td>
             </tr>
+            @if ($existingNilai)
+            <tr class="bg-zinc-100 dark:bg-gray-800">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Rekap Test
+                </th>
+                <td class="px-6 py-4 p-4 space-x-2 whitespace-nowrap ">
+                    <a href="{{route('rekap.detailRekap', [$pelatihan->kode, $test->id])}}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                        Lihat Rekap
+                    </a>
+                </td>
+            </tr>
+            @endif
         </tbody>
     </table>
 </div>

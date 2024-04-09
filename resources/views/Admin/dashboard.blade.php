@@ -3,7 +3,12 @@
 @section('content')
     <div class="top-0 mb-4 col-span-full xl:mb-2 relative">
         <img class="mb-4 rounded-lg w-full h-40 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ asset('image/hi2.png') }}">
-        <h1 class="absolute top-12 left-56 right-0 bottom-0 flex text-xl font-bold text-gray-900 sm:text-2xl dark:text-blue-900">Halo, {{ Illuminate\Support\Str::limit($admin->nama, 10, '...') }}!</h1>
+        @php
+            $nama_array = explode(' ', $admin->nama);
+        @endphp
+
+        <h1 class="absolute top-12 left-56 right-0 bottom-0 flex text-xl font-bold text-gray-900 sm:text-2xl dark:text-blue-900">Halo, {{ $nama_array[0] }}!</h1>
+
         <p class="absolute top-20 left-56 right-0 bottom-0 flex text-sm font-semibold text-gray-900 sm:text-l dark:text-blue-900">Selamat bekerja!</p>
     </div>
     <div class="w-full h-full border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-xl">

@@ -120,10 +120,6 @@
                                             </th>
                                             <th scope="col"
                                                 class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
-                                                Password
-                                            </th>
-                                            <th scope="col"
-                                                class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                                 Actions
                                             </th>
                                         </tr>
@@ -150,9 +146,6 @@
                                                 </td>
                                                 <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
                                                     {{ $plt->email }}
-                                                </td>
-                                                <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {{ $plt->password_awal }}
                                                 </td>
                                                 <td class="p-4 space-x-2 whitespace-nowrap ">
                                                     @if($plt && $plt->peserta_id)

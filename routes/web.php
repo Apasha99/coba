@@ -80,6 +80,7 @@ Route::controller(PesertaController::class)->middleware('only_admin')->group(fun
     Route::get('/admin/daftar-peserta/import','tambah')->name('admin.tambahPeserta');
     Route::post('/admin/daftar-peserta/import','import')->name('admin.importPeserta');
     Route::get('/admin/daftar-peserta/import/preview', 'preview')->name('admin.previewPeserta');
+    Route::delete('/admin/daftar-peserta/import/preview', 'clearSessionData')->name('admin.clearPeserta');
     Route::post('/admin/daftar-peserta/generate-akun','generateAkun')->name('admin.generatePeserta');
     Route::get('/admin/daftar-peserta/export','export')->name('admin.exportPeserta');
     Route::get('/admin/daftar-peserta/send-email', 'daftar_peserta')->name('admin.tulisEmail');

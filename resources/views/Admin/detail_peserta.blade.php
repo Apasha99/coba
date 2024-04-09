@@ -108,8 +108,8 @@
                     Pelatihan
                 </th>
                 <td class="px-6 py-4">
-                    @foreach ($pstplt as $pst)
-                    {{ $pst->plt_kode }} - {{$pst->nama}}
+                    @foreach ($pstplt as $index => $pst)
+                        {{ $index + 1 }}. {{ $pst->plt_kode }} - {{ $pst->nama }}<br>
                     @endforeach
                 </td>
             </tr>

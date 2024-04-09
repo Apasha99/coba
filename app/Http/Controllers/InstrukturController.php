@@ -445,28 +445,51 @@ class InstrukturController extends Controller
         return redirect()->back()->with('success', 'Berhasil mengirim email');
     }
 
-    public function download()
+    public function download(Request $request)
     {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
             ->where('admin.user_id', Auth::user()->id)
             ->select('admin.nama', 'admin.id', 'users.username')
             ->first();
-        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
-            ->select('instruktur.user_id as instruktur_id','instruktur.nama as instruktur_nama', 'instruktur.bidang', 'users.foto', 'users.password_awal', 'instruktur.id', 'users.username', 'users.email', 'users.password_awal')
-            ->get();
 
         $instruktur2 = User::join('instruktur', 'instruktur.user_id', '=', 'users.id')
             ->where('users.role_id', '=', 3)
             ->select('instruktur.user_id as users_id', 'instruktur.nama')
             ->get();
+        $request->validate([
+            'export_option' => 'required',
+            'start_user_id' => 'required_if:export_option,range|exists:users,id',
+            'end_user_id' => 'required_if:export_option,range|exists:users,id|after_or_equal:start_user_id',
+        ]);
+
+        $exportOption = $request->input('export_option');
+        $startUserId = $request->input('start_user_id');
+        $endUserId = $request->input('end_user_id');
+
+        $query = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
+            ->select('instruktur.nama', 'instruktur.bidang','instruktur.user_id as instruktur_id', 'users.username', 'users.foto', 'users.password_awal', 'users.email');
+
+        // Filter berdasarkan opsi yang dipilih
+        if ($exportOption === 'range' && $startUserId && $endUserId) {
+            // Filter berdasarkan rentang user_id
+            $query->whereBetween('instruktur.user_id', [$startUserId, $endUserId]);
+        }
+
+        $instruktur = $query->get(); // Mengambil data setelah filter
+
+        $pst = User::where('role_id', '=', 3)->select('id')->get();
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('admin.download_instruktur', [
             'admin' => $admin,
-            'instruktur' => $instruktur,
+            'instruktur'=>$instruktur,
             'instruktur2' => $instruktur2,
+            'pst' => $pst,
         ]);
 
-        return $pdf->stream('daftar_instruktur'.'.pdf');
+        $filename = $exportOption === 'range' ? 'daftar-list-instruktur-range.pdf' : 'daftar-list-instruktur.pdf';
+
+        return $pdf->stream($filename);
     }
 
     public function ubahPassword(){

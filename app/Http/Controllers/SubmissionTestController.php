@@ -39,15 +39,13 @@ class SubmissionTestController extends Controller
 
         $existingNilai = Attempt::where('peserta_id', Auth::user()->peserta->id)
                                 ->where('test_id',$test_id)->get();
-        //dd($existingNilai);
 
         $existing = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
-            $query->where('user_id', Auth::user()->id);
+            $query->where('user_id', Auth::user()->id)
+                    ->where('attempt','=', 3);
         })
         ->exists();
-
-        //dd($existingNilai);
         
         $soal_id = null;
         $soal_urutan = null;
@@ -124,7 +122,8 @@ class SubmissionTestController extends Controller
 
         $existing = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
-            $query->where('user_id', Auth::user()->id);
+            $query->where('user_id', Auth::user()->id)
+                 ->where('attempt','=', 3);
         })
         ->exists();
 
