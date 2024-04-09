@@ -167,6 +167,7 @@
     <div class="mt-4 relative overflow-x-auto sm:rounded-lg">
         <h3 class="text-m font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Soal Tes</h3>
         <div class="col-span-full mt-4 mb-4">
+            @if ($pelatihan->status != 'Completed')
             <a type="button" href = "{{route('soal.add', [$pelatihan->kode, $test->id])}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 <svg class="w-5 h-5 mr-2 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -176,6 +177,7 @@
                 </svg>
                 Tambah Soal
             </a>
+            @endif
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
         <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 rounded-lg" id="myTable">
@@ -193,9 +195,11 @@
                     <th scope="col" class="border-r px-2 py-4 text-sm text-center text-white whitespace-nowrap dark:text-white">
                         Nilai
                     </th>
+                    @if ($pelatihan->status != 'Completed')
                     <th scope="col" class="border-r px-4 py-4 text-sm text-white text-center whitespace-nowrap dark:text-white">
                         Actions
                     </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -247,6 +251,7 @@
                         <td class="border-r px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
                             {{ $soal->nilai }}
                         </td>
+                        @if ($pelatihan->status != 'Completed')
                         <td class="px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
                             <div class="relative lock justify-between mt-2">
                             @if($soal && $soal->id)
@@ -281,6 +286,7 @@
                                 </div>
                             </div>
                         </td>
+                        @endif
                     </tr>
                     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden top-8 md:inset-0 sm:h-50"
                         id="delete-soal-modal-{{ $soal->id }}">

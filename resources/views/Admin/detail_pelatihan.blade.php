@@ -93,7 +93,7 @@
             {{ $pelatihan->deskripsi }}
         </p>
     </div>
-   
+    @if ($pelatihan->status != 'Completed')
     <div class="mb-4 col-span-full xl:mb-2">
         <a type="button" href="{{ route('admin.viewTambahMateri', [$pelatihan->kode]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -105,6 +105,7 @@
             Tambah Materi
         </a>
     </div>
+    @endif
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-materi">
             <button type="button" class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-open-body-materi" aria-expanded="true" aria-controls="accordion-open-body-materi">
@@ -119,8 +120,9 @@
             <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                 <a href="{{ asset('storage/' . $mtr->file_materi) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $mtr->judul }}</a>
                 <!-- <a href="#" class="flex items-center text-m font-semibold leading-tight tracking-tight text-gray-900 md:text-m dark:text-white">View Details</a> -->
+                @if ($pelatihan->status != 'Completed')
                 <div>
-                <a data-popover-target="popover-edit-{{ $mtr->id }}" href="{{ route('admin.viewEditMateri', [$pelatihan->kode, $mtr->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
+                    <a data-popover-target="popover-edit-{{ $mtr->id }}" href="{{ route('admin.viewEditMateri', [$pelatihan->kode, $mtr->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
                         <i class="material-icons-outlined text-base">edit</i>
                     </a>
                     <div data-popover id="popover-edit-{{ $mtr->id }}" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
@@ -162,9 +164,11 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         @endforeach
     </div>
+    @if ($pelatihan->status != 'Completed')
     <div class="mb-2 mt-6 col-span-full xl:mb-2">
         <a type="button" href="{{ route('admin.viewTambahTugas', [$pelatihan->kode]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -176,6 +180,7 @@
             Tambah Tugas
         </a>
     </div>
+    @endif
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-tugas">
             <button type="button" class="flex items-center justify-between w-full mt-4 p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-open-body-tugas" aria-expanded="true" aria-controls="accordion-open-body-tugas">
@@ -189,8 +194,9 @@
             @foreach ($tugas as $tgs)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{ route('admin.viewDaftarSubmissionTugas', [$pelatihan->kode, $tgs->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tgs->judul }}</a>
+                    @if ($pelatihan->status != 'Completed')
                     <div>
-                    <a data-popover-target="popover-edit-{{ $tgs->id }}" href="{{ route('admin.viewEditTugas', [$pelatihan->kode, $tgs->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
+                        <a data-popover-target="popover-edit-{{ $tgs->id }}" href="{{ route('admin.viewEditTugas', [$pelatihan->kode, $tgs->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
                             <i class="material-icons-outlined text-base">edit</i>
                         </a>
                         <div data-popover id="popover-edit-{{ $tgs->id }}" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
@@ -232,10 +238,12 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             @endforeach
         </div>
     </div>
+    @if ($pelatihan->status != 'Completed')
     <div class="mb-2 mt-6 col-span-full xl:mb-2">
         <a type="button" href = "{{route('test.add', $pelatihan->kode)}}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -246,8 +254,8 @@
             </svg>
             Tambah Test
         </a>
-
     </div>
+    @endif
     <div id="accordion-open" data-accordion="open">
         <h2 id="accordion-open-heading-test">
             <button type="button" class="flex items-center justify-between w-full mt-4 p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-open-body-test" aria-expanded="true" aria-controls="accordion-open-body-test">
@@ -261,6 +269,7 @@
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{route('test.detail', ['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                    @if ($pelatihan->status != 'Completed')
                     <div>
                         <a data-popover-target="popover-edit-{{ $tes->id }}" href="{{route('test.edit', [$tes->plt_kode, $tes->id])}}" class="text-blue-400 hover:text-blue-100 mx-2">
                             <i class="material-icons-outlined text-base">edit</i>
@@ -304,6 +313,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             @endforeach
         </div>

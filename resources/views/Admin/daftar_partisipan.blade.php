@@ -59,6 +59,7 @@
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
     <h1 class="mb-3 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Partisipan</h1>
+        @if ($pelatihan->status != 'Completed')
         <button data-modal-toggle="modal-inv-ins"
             class="inline-flex items-center justify-center mb-2 w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -74,6 +75,7 @@
             </svg>
             Undang Peserta
         </button>
+        @endif
     </div>
     <div
         class="bg-white block sm:flex items-center justify-between border-b border-gray-200 mb-4 dark:bg-gray-800 dark:border-gray-700">
@@ -96,10 +98,12 @@
                                             class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             Role
                                         </th>
+                                        @if ($pelatihan->status != 'Completed')
                                         <th scope="col"
                                             class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
                                             Aksi
                                         </th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -120,11 +124,13 @@
                                             class="p-4 text-base font-small text-gray-900 whitespace-nowrap dark:text-white">
                                             Instruktur
                                         </td>
+                                        @if ($pelatihan->status != 'Completed')
                                         <td class="p-4 space-x-2 whitespace-nowrap ">
                                             <button data-modal-toggle="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" class="text-red-600 underline hover:text-red-800 hover:underline">
                                                 Remove
                                             </button>
                                         </td>
+                                        @endif
                                     </tr>
                                     <div id="remove-instruktur-modal-{{ $instruktur->instruktur->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                         <div class="relative p-4 w-full max-w-md max-h-full">
@@ -167,11 +173,13 @@
                                             class="p-4 text-base font-small text-gray-900 whitespace-nowrap dark:text-white">
                                             Peserta
                                         </td>
+                                        @if ($pelatihan->status != 'Completed')
                                         <td class="p-4 space-x-2 whitespace-nowrap ">
                                             <button data-modal-toggle="remove-peserta-modal-{{ $peserta->peserta->id }}" class="text-red-600 underline hover:text-red-800 hover:underline">
                                                 Remove
                                             </button>
                                         </td>
+                                        @endif
                                     </tr>
                                     <div id="remove-peserta-modal-{{ $peserta->peserta->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                         <div class="relative p-4 w-full max-w-md max-h-full">
