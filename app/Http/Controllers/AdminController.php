@@ -118,21 +118,23 @@ class AdminController extends Controller
                 ->first();
     
         if($admin){
-            $pelatihan = Pelatihan::all();
-    
+            // Mengambil semua pelatihan dan mengurutkannya berdasarkan 'created_at'
+            $pelatihan = Pelatihan::orderBy('created_at','desc')->get();
+            
             // Menggunakan loop untuk menghitung peserta pelatihan untuk setiap pelatihan
             foreach ($pelatihan as $p) {
                 $kodePelatihan = $p->kode;
-    
+        
                 // Menghitung peserta_pelatihan berdasarkan kode_pelatihan
                 $pesertaPelatihan = Peserta_Pelatihan::where('plt_kode', $kodePelatihan)->count();
-    
+        
                 // Menambahkan informasi pesertaPelatihan ke dalam objek pelatihan
                 $p->pesertaPelatihan = $pesertaPelatihan;
             }
-    
+        
             return view('admin.daftar_pelatihan', ['admin' => $admin, 'pelatihan' => $pelatihan]);
         }
+                
     }
 
     public function create()

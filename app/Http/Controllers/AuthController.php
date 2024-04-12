@@ -4,11 +4,33 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Password;
 class AuthController extends Controller
 {
     public function login() {
         return view('login');
+    }
+    public function forgetpassword() {
+        return view('forget_password');
+    }
+
+    // Di dalam controller
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+        
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+                    ? back()->with('success', __($status))
+                    : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function showResetForm(Request $request, $token)
+    {
+        return view('auth.reset-password')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
     }
 
     public function authenticate(LoginRequest $request)

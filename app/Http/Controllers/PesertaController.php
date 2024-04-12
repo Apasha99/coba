@@ -217,7 +217,7 @@ class PesertaController extends Controller
             ->get();
         $pst = User::leftjoin('peserta','peserta.user_id','=','users.id')
                     ->where('role_id', '=', 2)->select('users.id','nama')->get();
-        $pelatihan = Pelatihan::select('kode','nama')->get();
+        $pelatihan = Pelatihan::select('kode','nama','status')->where('status','!=','Completed')->get();
         return view('admin.daftar_peserta', ['admin' => $admin, 'peserta' => $peserta,'pst'=>$pst,'pelatihan'=>$pelatihan]);
     }
 
@@ -597,7 +597,6 @@ class PesertaController extends Controller
                 ->route('admin.viewDaftarPeserta')
                 ->with('success', 'Data peserta berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data peserta');
         }

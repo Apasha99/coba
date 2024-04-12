@@ -28,7 +28,9 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Route::get('/login', [AuthController::class,'login'])->name('login');
+Route::get('/forget-password', [AuthController::class,'forgetpassword'])->name('forgetpassword');
 Route::post('/login', [AuthController::class, 'authenticate']);
+Route::post('/forget-password', [AuthController::class, 'forgotpassword'])->name('forgotpassword');
 Route::get('/logout', [AuthController::class,'logout'])->middleware('auth')->name('logout');
 
 Route::controller(AdminController::class)->middleware('only_admin')->group(function(){

@@ -175,7 +175,7 @@ class InstrukturController extends Controller
 
         //dd($ins);
 
-        $pelatihan = Pelatihan::select('kode','nama')->get();
+        $pelatihan = Pelatihan::select('kode','nama','status')->where('status','!=','Completed')->get();
 
         return view('admin.daftar_instruktur', ['admin' => $admin, 'instruktur' => $instruktur,'instruktur2'=>$instruktur2,'pelatihan'=>$pelatihan]);
     }
@@ -334,7 +334,6 @@ class InstrukturController extends Controller
                 ->route('admin.viewDaftarInstruktur')
                 ->with('success', 'Data instruktur berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data instruktur');
         }

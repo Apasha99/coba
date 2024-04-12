@@ -19,7 +19,8 @@ class Pelatihan extends Model
         'end_date',
         'tempat',
         'deskripsi',
-        'poster'
+        'poster',
+        'created_at'
     ];
 
     public function peserta_pelatihan()

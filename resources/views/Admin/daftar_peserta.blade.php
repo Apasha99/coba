@@ -307,7 +307,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6 overflow-y-auto">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white p-2" for="delete">Apakah anda yakin ingin menghapus peserta dengan ID {{$plt->peserta_id}}?</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 w-full dark:text-white p-2" for="delete">Apakah anda yakin ingin menghapus peserta {{$plt->peserta_nama}}?</label>
                     <div class="col-span-full flex justify-between">
                         <form id="deleteForm" method="POST" action="{{route('admin.deletePeserta', $plt->peserta_id)}}">
                             @csrf
