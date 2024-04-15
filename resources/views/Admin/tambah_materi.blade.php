@@ -67,7 +67,7 @@
                     <!-- <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Materi</h3> -->
                     
                         <div class="grid grid-cols-6 gap-6">
-                                <div class="col-span-6 sm:col-span-3">
+                                <div class="col-span-full">
                                     <label for="judul"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
                                     <input type="text" name="judul" placeholder="judul" id="judul" value=""
