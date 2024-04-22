@@ -563,7 +563,7 @@ class TestController extends Controller
         $validated = $request->validate([
             'soal' => ['required', 'max:2000'],
             'nilai' => ['required', 'numeric', 'max:100', 'min:0'],
-            'file_soal' => ['nullable', 'image'],
+            'file_soal' => ['nullable'],
             'tipe_option' => ['required'],
         ]);
         
@@ -641,7 +641,7 @@ class TestController extends Controller
                 ->route('test.detail', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])
                 ->with('success', 'Data soal dan jawaban berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data soal dan jawaban.');
         }

@@ -82,7 +82,7 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id">
+        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id" enctype="multipart/form-data">
             @csrf
             <div class="col-span-4">
                 <div

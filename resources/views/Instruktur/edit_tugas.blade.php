@@ -65,7 +65,7 @@
                 <div
                     class="p-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <div class="grid grid-cols-6 gap-3">
-                            <div class="col-span-6 sm:col-span-3">
+                            <div class="col-span-full">
                                 <label for="judul"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
                                 <input type="text" name="judul" placeholder="judul" id="judul" value="{{ $tugas->judul }}"
