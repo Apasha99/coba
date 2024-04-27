@@ -82,7 +82,7 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id">
+        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id" enctype="multipart/form-data">
             @csrf
             <div class="col-span-4">
                 <div
@@ -113,43 +113,65 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="nilai"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai <span class="text-red-500">*</span></label>
-                                <input type="number" name="nilai" placeholder="nilai" id="nilai" value="{{ $soal_test->nilai }}" max="100" min="1"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <span class="mt-2 text-sm text-red-800 bg-red-100 dark:bg-gray-800 dark:text-red-400">
-                                    Sisa Nilai = 
-                                    @if ($hitung_nilai == 0)
-                                        100
-                                    @else
-                                        {{ 100 - $hitung_nilai }}
-                                    @endif
-                                </span>
+                                <label for="tipe_nilai" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe Nilai <span class="text-red-500">*</span> </label>
+                                <select required name="tipe_nilai" id="tipe_nilai" class="w-full mt-2 mb-2 block w-32 
+                                text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 
+                                dark:placeholder-gray-400" onchange="handleTipeNilai()">
+                                    <option value="Default" {{ $soal_test->tipe_nilai == 'Default' ? 'selected' : '' }}>Default</option>
+                                    <option value="Custom" {{ $soal_test->tipe_nilai == 'Custom' ? 'selected' : '' }}>Custom</option>
+                                </select>
+                                <div id="tipe-Custom" class="{{ $soal_test->tipe_nilai == 'Custom' ? '' : 'hidden' }} mt-2"> <!-- Menambahkan class 'hidden' jika 'tipe_nilai' tidak sama dengan 'Custom' -->
+                                    <div class="flex-col items-center mb-2">
+                                        <div id="nilais-container-custom">
+                                            <div>
+                                                <input type="number" name="nilai-custom" placeholder="nilai" id="nilai-custom" min=1 max=50 value="{{ $soal_test->nilai }}"
+                                                    class="mt-2 mb-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @error('nilai')
-                                <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                    role="alert">
+                                    <div>
                                         {{ $message }}
                                     </div>
+                                </div>
                                 @enderror
                             </div>
+
+                            <script>
+                                function handleTipeNilai() {
+                                    var tipeNilai = document.getElementById("tipe_nilai").value;
+                                    var customDiv = document.getElementById("tipe-Custom");
+                                    if (tipeNilai === "Custom") {
+                                        customDiv.classList.remove("hidden"); // Menampilkan div jika 'Custom' dipilih
+                                    } else {
+                                        customDiv.classList.add("hidden"); // Menyembunyikan div jika 'Custom' tidak dipilih
+                                    }
+                                }
+                            </script>
                             @php
                                 $nama_file = basename($soal_test->file_soal)
                             @endphp
+
                             <div class="col-span-6 sm:col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto Soal</label>
                                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                     aria-describedby="file_input_help" id="file_soal" name="file_soal" type="file" accept="image/*">
-                                @error('file_soal')
                                 @if($soal_test->file_soal)
                                     <div class="mt-1 text-sm text-gray-500">
                                         File sebelumnya: {{ $nama_file }}
                                     </div>
                                 @endif
-                                <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                @error('file_soal')
+                                    <div class="p-1 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
                                         {{ $message }}
-                                </div>
+                                    </div>
                                 @enderror
                             </div>
-                                
+     
                             <div class="col-span-full">
                                 <label for="tipe_option" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe <span class="text-red-500">*</span></label>
                                 <select disabled required name="tipe_option" id="tipe-option" class="w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600">
@@ -172,23 +194,23 @@
                                         <div id="options-container-singkat">
                                             <!-- Default input opsi jawaban -->
                                             @foreach($jawaban_test as $jawaban)
-                                                <div id="jawaban-container-{{ $jawaban->id }}">
-                                                    <div class="flex items-center">
-                                                        @if ($soal_test->tipe == "Jawaban Singkat")
-                                                            <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
-                                                                value="{{ $jawaban->title }}"
-                                                                class="mt-2 mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                            @if (!$loop->first) <!-- Cek apakah bukan jawaban pertama -->
-                                                                <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                                    </svg>
-                                                                </button>
-                                                            @endif
+                                            <div id="jawaban-container-{{ $jawaban->id }}">
+                                                <div class="flex items-center">
+                                                    @if ($soal_test->tipe == "Jawaban Singkat")
+                                                        <input type="text" name="title_singkat[]" placeholder="Jawaban Benar {{ $jawaban->urutan }}" id="title-singkat-{{$jawaban->id}}"
+                                                            value="{{ $jawaban->title }}"
+                                                            class="mt-2 mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        @if (!$loop->first) <!-- Cek apakah bukan jawaban pertama -->
+                                                            <button type="button" title="Hapus Jawaban" onclick="deleteJawaban('{{route('jawaban.delete', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id,'jawaban_id'=>$jawaban->id])}}', 'jawaban-container-{{ $jawaban->id }}')" class="ml-2 w-6 h-6 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg cursor-pointer focus:outline-none">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
                                                         @endif
-                                                    </div>
-                                                    <p class="mt-1 mb-1 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar</p>
+                                                    @endif
                                                 </div>
+                                                <p class="mt-1 mb-1 text-sm text-gray-500 dark:text-gray-300">Jawaban Benar</p>
+                                            </div>
                                             @endforeach
 
                                             <!-- Default input opsi jawaban -->

@@ -78,7 +78,13 @@
         <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             Total Nilai: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                {{$hitungnilai}}
+                <?php
+                        $nilai_setelah_pembulatan = round($hitung_nilai);
+                        if ($nilai_setelah_pembulatan > 99.99) {
+                            $nilai_setelah_pembulatan = 100;
+                        }
+                        echo $nilai_setelah_pembulatan;
+                ?>
             </span> 
         </p>
         <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">

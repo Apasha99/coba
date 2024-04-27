@@ -267,7 +267,24 @@
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{route('test.detail', ['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                    <div class="flex items-center">
+                        <a href="{{ route('test.detail', ['plt_kode' => $tes->plt_kode, 'test_id' => $tes->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                        <span class="ml-2 pointer-events-none flex items-center">
+                            @php
+                                $startDate = new DateTime($tes->start_date);
+                                $endDate = new DateTime($tes->end_date);
+                                $now = new DateTime();
+                            @endphp
+                            @if($startDate < $now && $endDate > $now)
+                                <span class="bg-green-200 text-green-900 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
+                            @elseif($startDate > $now)
+                                <span class="bg-gray-500 text-white text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+                            @elseif($endDate < $now)
+                                <span class="dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
+                            @endif 
+                        </span>
+                    </div>
+
                     @if ($pelatihan->status != 'Completed')
                     <div>
                         <a data-popover-target="popover-edit-{{ $tes->id }}" href="{{route('test.edit', [$tes->plt_kode, $tes->id])}}" class="text-blue-400 hover:text-blue-100 mx-2">

@@ -103,19 +103,19 @@
             <tbody class="bg-white dark:bg-gray-800">
                 @foreach ($test as $tes)
                 <tr>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         <span class="font-semibold">{{$tes->id}}</span>
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->nama}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->kkm}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->start_date}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->end_date}}
                     </td>
                 </tr>

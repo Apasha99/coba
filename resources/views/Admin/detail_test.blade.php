@@ -67,7 +67,22 @@
             </nav>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}</h1>
+        <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}
+            <span class="ml-2">
+                @php
+                    $startDate = new DateTime($test->start_date);
+                    $endDate = new DateTime($test->end_date);
+                    $now = new DateTime();
+                @endphp
+                @if($startDate < $now && $endDate > $now)
+                    <span class="bg-green-200 text-green-900 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
+                @elseif($startDate > $now)
+                    <span class="bg-gray-500 text-white text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+                @elseif($endDate < $now)
+                    <span class="dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
+                @endif 
+            </span>
+        </h1>
     </div>
 <div class="relative overflow-x-auto sm:rounded-lg rounded-lg">
     <h3 class="text-m p-2 font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Tes</h3>
@@ -103,7 +118,13 @@
                     Total Nilai 
                 </th>
                 <td class="px-6 py-4">
-                    {{$hitung_nilai}}
+                    <?php
+                        $nilai_setelah_pembulatan = round($hitung_nilai);
+                        if ($nilai_setelah_pembulatan > 99.99) {
+                            $nilai_setelah_pembulatan = 100;
+                        }
+                        echo $nilai_setelah_pembulatan;
+                    ?>
                 </td>
             </tr>
             <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">

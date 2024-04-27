@@ -3,7 +3,7 @@
 <div class="text-sm font-medium text-center text-gray-500 border-gray-200 dark:text-gray-400 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px">
         <li class="me-2">
-            <a href="{{ route('admin.viewDetailPelatihan', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pelatihan</a>
+            <a href="{{ route('admin.viewDetailPelatihadn', $pelatihan->kode) }}" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pelatihan</a>
         </li>
         <li class="me-2">
             <a href="{{ route('admin.viewDaftarPartisipan', $pelatihan->kode) }}" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Partisipan</a>
@@ -105,19 +105,25 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="nilai"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai <span class="text-red-500">*</span></label>
-                                    <input type="number" name="nilai" placeholder="Number" id="nilai"
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        required max="100" min="1">
-                                    <span class="mt-2 text-sm text-red-800 bg-red-100 dark:bg-gray-800 dark:text-red-400">
-                                        Sisa Nilai = 
-                                        @if ($hitung_nilai == 0)
-                                            100
-                                        @else
-                                            {{ 100 - $hitung_nilai }}
-                                        @endif
-                                    </span>
+                                    <label for="tipe_nilai" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe Nilai <span class="text-red-500">*</span> </label>
+                                    <select required name="tipe_nilai" id="tipe_nilai" class="w-full mt-2 mb-2 block w-32 
+                                    text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                    dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 
+                                    dark:placeholder-gray-400" onchange="handleTipeNilai()">
+                                        <option value="Default">Default</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                    <div id="tipe-Custom" class="hidden mt-2">
+                                        <div class="flex-col items-center mb-2">
+                                            <div id="nilais-container-custom">
+                                                <div>
+                                                    <input type="number" name="nilai-custom" placeholder="nilai" id="nilai-custom" min=1 max=50
+                                                        class="mt-2 mb-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     @error('nilai')
                                     <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
                                         role="alert">
@@ -127,6 +133,20 @@
                                     </div>
                                     @enderror
                                 </div>
+
+                                <script>
+                                    function handleTipeNilai() {
+                                        const selectedTipe = document.getElementById('tipe_nilai').value;
+
+                                        // Sembunyikan semua opsi jawaban
+                                        document.getElementById('tipe-Custom').style.display = 'none';
+
+                                        // Tampilkan opsi jawaban sesuai dengan tipe yang dipilih
+                                        if (selectedTipe === 'Custom') {
+                                            document.getElementById('tipe-Custom').style.display = 'block';
+                                        }
+                                    }
+                                </script>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="poster">Upload Foto Soal</label>
                                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
