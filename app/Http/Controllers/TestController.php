@@ -421,7 +421,6 @@ class TestController extends Controller
                     ->with('success', 'Data test berhasil diperbarui');
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
 
             if(Auth::user()->role_id == 1){
@@ -496,7 +495,7 @@ class TestController extends Controller
                     ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
+           
             // Rollback the transaction in case of any error
             DB::rollback();
             if(Auth::user()->role_id == 1){
@@ -542,7 +541,7 @@ class TestController extends Controller
             
             return redirect()->back()->with('success', 'Soal dan semua jawaban terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            
             // Rollback the transaction in case of any error
             DB::rollback();
 
@@ -564,8 +563,7 @@ class TestController extends Controller
 
             return redirect()->back()->with('success', 'Jawaban berhasil dihapus');
         } catch (\Exception $e) {
-            //dd($e->getMessage());
-            // Rollback the transaction in case of any error
+            
             DB::rollback();
 
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus jawaban');

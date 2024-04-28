@@ -250,8 +250,7 @@ class TugasController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
-
+            
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.viewDetailPelatihan', $plt_kode)->with('success', 'Gagal memperbarui data tugas');
             } else {

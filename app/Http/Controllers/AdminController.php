@@ -290,7 +290,6 @@ class AdminController extends Controller
                 ->route('admin.viewDaftarAdmin')
                 ->with('success', 'Data admin berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data admin');
         }
@@ -478,7 +477,6 @@ class AdminController extends Controller
                 ->route('admin.profil')
                 ->with('success', 'Data user berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data user');
         }

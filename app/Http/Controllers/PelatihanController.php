@@ -161,7 +161,7 @@ class PelatihanController extends Controller
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('success', 'Pelatihan dan semua data terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            
             DB::rollback();
 
             return redirect()->route('admin.viewDaftarPelatihan')->with('error', 'Terjadi kesalahan saat menghapus pelatihan dan data terkait.');
@@ -229,7 +229,7 @@ class PelatihanController extends Controller
                 ->route('admin.viewDaftarPelatihan')
                 ->with('success', 'Data pelatihan berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data pelatihan.');
         }
