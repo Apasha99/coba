@@ -277,6 +277,7 @@ class SubmissionTestController extends Controller
             // Jika peserta sudah memiliki data nilai untuk tes tertentu, kita akan menambahkan 1 ke nilai attempt sebelumnya
             $attempt = $peserta->attempt + 1;
         }
+        //dd($request);
 
         foreach ($request->input('soal_id') as $urutan => $soal_id) {
             $currentQuestion = Soal_Test::find($soal_id);
@@ -361,7 +362,7 @@ class SubmissionTestController extends Controller
             ]
         );
 
-        return redirect()->route('peserta.hasiltest', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id])->with('success', 'Jawaban berhasil disubmit');
+        return redirect()->route('peserta.hasiltest', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id, 'hitungnilai'=>$hitungnilai])->with('success', 'Jawaban berhasil disubmit');
     }
 
 
