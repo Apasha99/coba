@@ -11,7 +11,7 @@
         /* CSS style untuk membuat tampilan tabel */
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 50;
         }
         body {
             background-color: #ffffff; /* Warna latar belakang putih */
@@ -52,6 +52,54 @@
             padding: 20px;
         }
         
+    </style><style>
+        /* CSS style untuk membuat tampilan tabel */
+        @page {
+            size: A4 landscape;
+            margin: 50;
+        }
+        body {
+            background-color: #ffffff; /* Warna latar belakang putih */
+        }
+        h1, h2, h3, h4, h6 {
+            text-align: center;
+            color: #0d47a1;
+        }
+        h5{
+            text-align: center;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            border-collapse: collapse;
+            margin-bottom: 1px; /* Jarak antara tabel dan tombol */
+        }
+        table, th, td {
+            text-align: center;
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #0d47a1; /* Warna latar belakang biru */
+            color: #ffffff; /* Warna teks putih */
+        }
+        .container-lg {
+            margin-top: 20px; /* Jarak atas container */
+        }
+        .btn-print {
+            float: right; /* Tombol Cetak di sebelah kanan */
+            margin-bottom: 5px; /* Jarak dari bawah tombol */
+        }
+        .header-info {
+            flex: 1;
+            padding: 10px;
+        }
+        
     </style>
 
 </head>
@@ -72,7 +120,7 @@
 
     <div class="container-lg">
         <div class="mb-4 col-span-full xl:mb-2">
-            <h5>Daftar Rekap Test Pelatihan {{$pelatihan->nama}}</h5>
+            <h3>Daftar Rekap Test Pelatihan {{$pelatihan->nama}}</h3>
         </div>
 
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
