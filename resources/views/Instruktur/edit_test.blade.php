@@ -13,6 +13,7 @@
         </li>
     </ul>
 </div>
+@endsection
 @section('content')
     <div class="mb-4 col-span-full xl:mb-2">
         <nav class="flex mb-5" aria-label="Breadcrumb">
@@ -75,7 +76,7 @@
                 <div
                     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-full">
+                                <div class="col-span-6 sm:col-span-3">
                                 <label for="nama"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul <span class="text-red-500">*</span></label>
                                 <input type="text" name="nama" placeholder="Masukkan judul" id="nama" value="{{$test->nama}}"
@@ -87,7 +88,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-span-full">
+                            <div class="col-span-6 sm:col-span-3">
                                 <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
                                 <textarea name="deskripsi" rows="2" cols="20" placeholder="Deskripsi (max:2000 kata)" id="deskripsi"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ $test->deskripsi }}</textarea>
@@ -158,17 +159,20 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="col-span-6 sm:col-span-3">
                             <!-- Tombol untuk menyimpan data -->
-                            <div class="col-span-6 sm:col-full mt-4 flex justify-end items-center">
+                            <div class="col-span-6 mt-6 sm:col-full flex justify-end items-center">
                                 <a href="{{ route('instruktur.viewDetailPelatihan', [$pelatihan->kode]) }}"class="mr-4 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                                     Batal
                                 </a>
                                 <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="submit">Simpan</button>
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
         </form>
     </div>
+    </div>
 @endsection
-@endsection
+

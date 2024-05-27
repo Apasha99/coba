@@ -70,7 +70,7 @@
         <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}</h1>
     </div>
 <div class="relative overflow-x-auto sm:rounded-lg rounded-lg">
-    <h3 class="text-m p-2 font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Tes</h3>
+    <h3 class="text-m font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Tes</h3>
 
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <tbody>

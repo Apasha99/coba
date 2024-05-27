@@ -118,7 +118,7 @@
             </tbody>
         </table>
     </div>
-    <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Submission Tugas</h1>
+    <h1 class="mt-4 mb-2 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Submission Tugas</h1>
     <div class="mb-4 col-span-full xl:mb-2">
         <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
             

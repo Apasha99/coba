@@ -265,6 +265,12 @@ class TugasController extends Controller
         $tugas = Tugas::where('id', $id)->first();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->firstOrFail();
         $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
+        $cekPeserta = Submission::where('tugas_id', $id)->exists();
+
+        if($cekPeserta == true){
+            return redirect()->back()->with('error','Tidak dapat menghapus penugasan yang telah dikerjakan peserta');
+        }
+
         DB::beginTransaction();
 
         try {

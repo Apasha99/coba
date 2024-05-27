@@ -80,7 +80,7 @@
                                         aria-describedby="file_input_help" id="file_materi" name="file_materi" type="file" accept="application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation">
                                     @if($materi->file_materi)
                                         <div class="mt-1 text-sm text-gray-500">
-                                            File sebelumnya: {{ $nama_file }}
+                                            File sebelumnya: {{ $materi->nama_file }}
                                         </div>
                                     @endif
                                     @error('file_materi')

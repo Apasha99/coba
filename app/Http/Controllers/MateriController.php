@@ -118,9 +118,11 @@ class MateriController extends Controller
     
             if ($request->hasFile('file_materi')) {
                 $fileMateriPath = $request->file('file_materi')->store('file_materi', 'public');
+                $filename = $request->file('file_materi')->getClientOriginalName();
                 $updateData['file_materi'] = $fileMateriPath;
+                $updateData['nama_file'] = $filename;
             }
-    
+
             $materi->update(array_filter($updateData));
             
             DB::commit();

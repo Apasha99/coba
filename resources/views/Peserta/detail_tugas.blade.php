@@ -67,6 +67,7 @@
     </div>
     @if($submission)
     <div class="mb-4 col-span-full xl:mb-2">
+        @if($submission->grading_status != "graded")
         <a type="button" href="{{ route('peserta.viewEditSubmission', [$pelatihan->kode, $tugas->id, $submission->id]) }}"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Edit Pengumpulan
@@ -75,6 +76,7 @@
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center rounded-lg text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 sm:w-auto focus:ring-4 focus:ring-gray-200 font-medium text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
             Hapus Pengumpulan
         </a>
+        @endif
     </div>
     <div id="delete-modal-submission" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
@@ -147,6 +149,18 @@
                         @endif
                     </td>
                 </tr>
+                @if($submission)
+                    @if($submission->grading_status == "graded")
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            Nilai
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ $submission->nilai }}
+                        </td>
+                    </tr>
+                    @endif
+                @endif
                 <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Sisa waktu
