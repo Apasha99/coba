@@ -106,7 +106,7 @@
                                         @endif
                                     </tr>
                                 </thead>
-                                <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700 overflow-y-auto max-h-64">
                                 @php
                                     $counter = 1;
                                 @endphp

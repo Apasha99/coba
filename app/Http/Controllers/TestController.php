@@ -625,6 +625,10 @@ class TestController extends Controller
             }elseif(($hitung_nilai_custom + $validated['nilai-custom']) >= 100){
                 return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
             }
+            if ($request->has('file_soal')) {
+                $fileSoalPath = $request->file('file_soal')->store('file_soal', 'public');
+                $validated2['file_soal'] = $fileSoalPath;
+            }
 
             if ($hitung_soal == 0) {
                 if ($validated['tipe_nilai'] === 'Custom') {
@@ -692,7 +696,7 @@ class TestController extends Controller
                 'urutan' => $soal_test->urutan,
                 'tipe_nilai' => $validated['tipe_nilai'],
                 'nilai' => $nilai ?? null,  
-                'file_soal' => $soal_test->file_soal, // Use existing file if not updated
+                'file_soal' => $validated2['file_soal'] ?? null, // Use existing file if not updated
                 'tipe_option' => $validated['tipe_option'] ?? null,
             ];
             //dd($updateData);

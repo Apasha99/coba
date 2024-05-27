@@ -223,19 +223,22 @@
                     @endif
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="overflow-y-auto max-h-64">
                 @foreach ($soal_test as $soal)
                     <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $soal->urutan }}
                         </td>
-                        <td class="border-r px-16 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <td class="border-r px-16 py-4 font-medium text-gray-900 whitespace-normal dark:text-white">
                             {{ $soal->title }}<br>
                             @if($soal->file_soal)
-                                <img class="w-80 h-30" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->id }}">
+                                <div class="w-64 h-64 overflow-hidden">
+                                    <img class="w-full h-full object-contain" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->id }}">
+                                </div>
                             @else
                                 <div></div> <!-- Placeholder jika tidak ada gambar -->
                             @endif
+
                             <br>
                             @php
                                 // Assuming you have a way to determine dark mode, replace this with your logic
