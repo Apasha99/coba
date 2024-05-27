@@ -198,7 +198,17 @@
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->user_id }} </td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->nama }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $test2->kkm }}</td>
-                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->max_totalnilai }}</td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
+                                            <?php
+                                                $max_totalnilai = $score->max_totalnilai;
+                                                if ($max_totalnilai > 99.99) {
+                                                    $max_totalnilai = 100;
+                                                } else {
+                                                    $max_totalnilai = ceil($max_totalnilai);
+                                                }
+                                                echo $max_totalnilai;
+                                            ?>
+                                        </td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->jumlah_attempt }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white" >
                                             @if ($hitungnilai >= $test2->kkm)

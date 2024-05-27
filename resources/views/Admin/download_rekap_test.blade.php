@@ -11,7 +11,7 @@
         /* CSS style untuk membuat tampilan tabel */
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 50;
         }
         body {
             background-color: #ffffff; /* Warna latar belakang putih */
@@ -22,19 +22,22 @@
         }
         h5{
             text-align: center;
+            font-size: 14px;
         }
         table {
             width: 100%;
-            font-size: 12px;
+            text-align: center;
+            font-size: 16px;
             border-collapse: collapse;
             margin-bottom: 1px; /* Jarak antara tabel dan tombol */
         }
         table, th, td {
+            text-align: center;
             border: 1px solid black;
         }
         th, td {
-            padding: 2px;
-            text-align: left;
+            padding: 5px;
+            text-align: center;
         }
         th {
             background-color: #0d47a1; /* Warna latar belakang biru */
@@ -45,15 +48,14 @@
         }
         .btn-print {
             float: right; /* Tombol Cetak di sebelah kanan */
-            margin-bottom: 10px; /* Jarak dari bawah tombol */
+            margin-bottom: 5px; /* Jarak dari bawah tombol */
         }
         .header-info {
             flex: 1;
-            padding: 20px;
+            padding: 10px;
         }
         
     </style>
-
 </head>
 <body>
     <div class="kop-surat" style="display: flex;">
@@ -72,7 +74,7 @@
 
     <div class="container-lg">
         <div class="mb-4 col-span-full xl:mb-2">
-            <h5>Daftar Rekap Test Pelatihan {{$pelatihan->nama}}</h5>
+            <h3>Daftar Rekap Test Pelatihan {{$pelatihan->nama}}</h3>
         </div>
 
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -103,19 +105,19 @@
             <tbody class="bg-white dark:bg-gray-800">
                 @foreach ($test as $tes)
                 <tr>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         <span class="font-semibold">{{$tes->id}}</span>
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->nama}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->kkm}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->start_date}}
                     </td>
-                    <td class="p-2 text-sm text-center font-normal text-gray-900 whitespace-nowrap">
+                    <td class="text-s text-center font-normal text-gray-900 whitespace-nowrap">
                         {{$tes->end_date}}
                     </td>
                 </tr>

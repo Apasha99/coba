@@ -147,7 +147,17 @@
                     </td>
                     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            <div class="text-base font-small text-gray-900 dark:text-white">{{ $nilai->totalnilai }}</div>
+                            <div class="text-base font-small text-gray-900 dark:text-white">
+                                <?php
+                                $total_nilai = $nilai->totalnilai;
+                                if ($total_nilai > 99.99) {
+                                    $total_nilai = 100;
+                                } else {
+                                    $total_nilai = round($total_nilai);
+                                }
+                                echo $total_nilai;
+                                ?>
+                            </div>
                         </div>
                     </td>
                 </tr>

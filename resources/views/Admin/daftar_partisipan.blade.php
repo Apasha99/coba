@@ -106,7 +106,7 @@
                                         @endif
                                     </tr>
                                 </thead>
-                                <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700 overflow-y-auto max-h-64">
                                 @php
                                     $counter = 1;
                                 @endphp
@@ -145,7 +145,7 @@
                                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                                     </svg>
-                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus instruktur ini dari pelatihan?</h3>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus {{$instruktur->instruktur->nama}} dengan role instruktur dari pelatihan?</h3>
                                                     <form id="delete" method="POST" action="{{ route('admin.removeInstruktur', [$pelatihan->kode, $instruktur->instruktur->id]) }}">
                                                     @csrf
                                                     @method('DELETE')
@@ -194,7 +194,7 @@
                                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                                     </svg>
-                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus peserta ini dari pelatihan?</h3>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus {{$peserta->peserta->nama}} dengan role peserta dari pelatihan?</h3>
                                                     <form id="delete" method="POST" action="{{ route('admin.removePeserta', [$pelatihan->kode, $peserta->peserta->id]) }}">
                                                     @csrf
                                                     @method('DELETE')

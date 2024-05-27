@@ -78,7 +78,13 @@
         <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
             Total Nilai: 
             <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                {{$hitungnilai}}
+                <?php
+                        $nilai_setelah_pembulatan = round($hitungnilai);
+                        if ($nilai_setelah_pembulatan > 99.99) {
+                            $nilai_setelah_pembulatan = 100;
+                        }
+                        echo $nilai_setelah_pembulatan;
+                ?>
             </span> 
         </p>
         <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
@@ -101,7 +107,7 @@
             </div>
         @endif
     </div>
-    @if ($test->tampil_hasil == true)
+    @if ($test->tampil_hasil == 1)
         <div class="mb-4 col-span-full xl:mb-2">
             <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Review Test</h1>
         </div>

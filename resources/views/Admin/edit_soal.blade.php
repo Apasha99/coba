@@ -82,7 +82,7 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id">
+        <form action="{{ route('soal.update', ['plt_kode' => $test->plt_kode,'test_id'=>$test->id,'soal_id'=>$soal_test->id]) }}" method="post" id="edit-id" enctype="multipart/form-data">
             @csrf
             <div class="col-span-4">
                 <div
@@ -113,24 +113,45 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="nilai"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nilai <span class="text-red-500">*</span></label>
-                                <input type="number" name="nilai" placeholder="nilai" id="nilai" value="{{ $soal_test->nilai }}" max="100" min="1"
-                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <span class="mt-2 text-sm text-red-800 bg-red-100 dark:bg-gray-800 dark:text-red-400">
-                                    Sisa Nilai = 
-                                    @if ($hitung_nilai == 0)
-                                        100
-                                    @else
-                                        {{ 100 - $hitung_nilai }}
-                                    @endif
-                                </span>
+                                <label for="tipe_nilai" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipe Nilai <span class="text-red-500">*</span> </label>
+                                <select required name="tipe_nilai" id="tipe_nilai" class="w-full mt-2 mb-2 block w-32 
+                                text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 
+                                dark:placeholder-gray-400" onchange="handleTipeNilai()">
+                                    <option value="Default" {{ $soal_test->tipe_nilai == 'Default' ? 'selected' : '' }}>Default</option>
+                                    <option value="Custom" {{ $soal_test->tipe_nilai == 'Custom' ? 'selected' : '' }}>Custom</option>
+                                </select>
+                                <div id="tipe-Custom" class="{{ $soal_test->tipe_nilai == 'Custom' ? '' : 'hidden' }} mt-2"> <!-- Menambahkan class 'hidden' jika 'tipe_nilai' tidak sama dengan 'Custom' -->
+                                    <div class="flex-col items-center mb-2">
+                                        <div id="nilais-container-custom">
+                                            <div>
+                                                <input type="number" name="nilai-custom" placeholder="nilai" id="nilai-custom" min=1 max=50 value="{{ $soal_test->nilai }}"
+                                                    class="mt-2 mb-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @error('nilai')
-                                <div class="p-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
+                                    role="alert">
+                                    <div>
                                         {{ $message }}
                                     </div>
+                                </div>
                                 @enderror
                             </div>
+
+                            <script>
+                                function handleTipeNilai() {
+                                    var tipeNilai = document.getElementById("tipe_nilai").value;
+                                    var customDiv = document.getElementById("tipe-Custom");
+                                    if (tipeNilai === "Custom") {
+                                        customDiv.classList.remove("hidden"); // Menampilkan div jika 'Custom' dipilih
+                                    } else {
+                                        customDiv.classList.add("hidden"); // Menyembunyikan div jika 'Custom' tidak dipilih
+                                    }
+                                }
+                            </script>
                             @php
                                 $nama_file = basename($soal_test->file_soal)
                             @endphp

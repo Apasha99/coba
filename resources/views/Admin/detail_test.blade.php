@@ -67,7 +67,22 @@
             </nav>
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
-        <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}</h1>
+        <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}
+            <span class="ml-2">
+                @php
+                    $startDate = new DateTime($test->start_date);
+                    $endDate = new DateTime($test->end_date);
+                    $now = new DateTime();
+                @endphp
+                @if($startDate < $now && $endDate > $now)
+                    <span class="bg-green-200 text-green-900 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
+                @elseif($startDate > $now)
+                    <span class="bg-gray-500 text-white text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+                @elseif($endDate < $now)
+                    <span class="dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
+                @endif 
+            </span>
+        </h1>
     </div>
 <div class="relative overflow-x-auto sm:rounded-lg rounded-lg">
     <h3 class="text-m p-2 font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Tes</h3>
@@ -103,7 +118,13 @@
                     Total Nilai 
                 </th>
                 <td class="px-6 py-4">
-                    {{$hitung_nilai}}
+                    <?php
+                        $nilai_setelah_pembulatan = round($hitung_nilai);
+                        if ($nilai_setelah_pembulatan > 99.99) {
+                            $nilai_setelah_pembulatan = 100;
+                        }
+                        echo $nilai_setelah_pembulatan;
+                    ?>
                 </td>
             </tr>
             <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
@@ -202,19 +223,22 @@
                     @endif
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="overflow-y-auto max-h-64">
                 @foreach ($soal_test as $soal)
                     <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $soal->urutan }}
                         </td>
-                        <td class="border-r px-16 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <td class="border-r px-16 py-4 font-medium text-gray-900 whitespace-normal dark:text-white">
                             {{ $soal->title }}<br>
                             @if($soal->file_soal)
-                                <img class="w-80 h-30" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->id }}">
+                                <div class="w-64 h-64 overflow-hidden">
+                                    <img class="w-full h-full object-contain" src="{{ asset('storage/' . $soal->file_soal) }}" alt="{{ $soal->id }}">
+                                </div>
                             @else
                                 <div></div> <!-- Placeholder jika tidak ada gambar -->
                             @endif
+
                             <br>
                             @php
                                 // Assuming you have a way to determine dark mode, replace this with your logic

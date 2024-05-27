@@ -119,7 +119,6 @@
         @foreach ($materi as $mtr)
             <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                 <a href="{{ asset('storage/' . $mtr->file_materi) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $mtr->judul }}</a>
-                <!-- <a href="#" class="flex items-center text-m font-semibold leading-tight tracking-tight text-gray-900 md:text-m dark:text-white">View Details</a> -->
                 @if ($pelatihan->status != 'Completed')
                 <div>
                     <a data-popover-target="popover-edit-{{ $mtr->id }}" href="{{ route('admin.viewEditMateri', [$pelatihan->kode, $mtr->id]) }}" class="text-blue-400 hover:text-blue-100 mx-2">
@@ -151,7 +150,7 @@
                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                     </svg>
-                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus materi ini?</h3>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus materi {{$mtr->judul}}?</h3>
                                     <form action="{{ route('materi.delete', [$pelatihan->kode, $mtr->id]) }}" method="post">
                                         @csrf
                                         <button data-modal-hide="delete-modal-materi-{{ $mtr->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
@@ -225,7 +224,7 @@
                                         <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                         </svg>
-                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus tugas ini?</h3>
+                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus tugas {{$tgs->judul}}?</h3>
                                         <form action="{{ route('tugas.delete', [$pelatihan->kode, $tgs->id]) }}" method="post">
                                             @csrf
                                             <button data-modal-hide="delete-modal-tugas-{{ $tgs->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
@@ -268,7 +267,24 @@
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
             @foreach ($test as $tes)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
-                    <a href="{{route('test.detail', ['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                    <div class="flex items-center">
+                        <a href="{{ route('test.detail', ['plt_kode' => $tes->plt_kode, 'test_id' => $tes->id]) }}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
+                        <span class="ml-2 pointer-events-none flex items-center">
+                            @php
+                                $startDate = new DateTime($tes->start_date);
+                                $endDate = new DateTime($tes->end_date);
+                                $now = new DateTime();
+                            @endphp
+                            @if($startDate < $now && $endDate > $now)
+                                <span class="bg-green-200 text-green-900 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-100">Aktif</span> 
+                            @elseif($startDate > $now)
+                                <span class="bg-gray-500 text-white text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum mulai</span>
+                            @elseif($endDate < $now)
+                                <span class="dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
+                            @endif 
+                        </span>
+                    </div>
+
                     @if ($pelatihan->status != 'Completed')
                     <div>
                         <a data-popover-target="popover-edit-{{ $tes->id }}" href="{{route('test.edit', [$tes->plt_kode, $tes->id])}}" class="text-blue-400 hover:text-blue-100 mx-2">
@@ -300,7 +316,7 @@
                                         <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                         </svg>
-                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus test ini?</h3>
+                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin menghapus test {{$tes->nama}}?</h3>
                                         <form action="{{route('test.delete',['plt_kode'=>$tes->plt_kode,'test_id'=>$tes->id])}}" method="post">
                                             @csrf
                                             <button data-modal-hide="delete-modal-test-{{ $tes->id }}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">

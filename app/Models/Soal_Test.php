@@ -16,7 +16,8 @@ class Soal_Test extends Model
         'urutan',
         'nilai',
         'tipe',
-        'file_soal'
+        'file_soal',
+        'tipe_nilai'
     ];
 
     public function test()

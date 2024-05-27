@@ -589,7 +589,7 @@ class InstrukturController extends Controller
                 ->route('instruktur.profil')
                 ->with('success', 'Data user berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+           
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data user');
         }

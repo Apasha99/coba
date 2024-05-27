@@ -51,32 +51,52 @@ class PesertaController extends Controller
                 ->where('status','=','On going')
                 ->get();
 
-            foreach ($kode as $kd){
-                $pltkode = $kd->kode;
-                $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
-                $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
-                                    ->where('notifikasi.judul', '=', 'Tugas')
-                                    ->where('notifikasi.plt_kode', $pltkode)
-                                    ->where('start_date','<=',now())
-                                    ->where('peserta_id', '=', Auth::user()->peserta->id)
-                                    ->select('isChecked','notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
-                                    ->where(function($query) {
-                                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
-                                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
-                                    })
-                                    ->get();
-                $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')->where('start_date','<=',now())
-                    ->where('notifikasi.judul','=','Test')->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
-                    ->select('isChecked','notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
-                    ->where(function($query) {
-                        $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
-                            ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
-                    })
-                    ->get();
+                $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+                $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+                $notif_test = collect(); // Inisialisasi variabel sebelum loop
+                
+                foreach ($kode as $kd) {
+                    $pltkode = $kd->kode;
+                    $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+                    $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
+                                        ->where('notifikasi.judul', '=', 'Tugas')
+                                        ->where('notifikasi.plt_kode', $pltkode)
+                                        ->where('start_date','<=',now())
+                                        ->where('peserta_id', '=', Auth::user()->peserta->id)
+                                        ->select('isChecked','notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                        ->where(function($query) {
+                                            $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
+                                                ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
+                                        })
+                                        ->get();
+                    $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')->where('start_date','<=',now())
+                        ->where('notifikasi.judul','=','Test')->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
+                        ->select('isChecked','notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                        ->where(function($query) {
+                            $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                                ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                        })
+                        ->get();
+                }
+                
+            // Menginisialisasi variabel
+            $total_notif = 0;
+
+            // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+            if (isset($notif_materi)) {
+                $total_notif += $notif_materi->where('isChecked', 0)->count();
             }
-            $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-               $notif_tugas->where('isChecked', 0)->count() + 
-               $notif_test->where('isChecked', 0)->count();
+
+            // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+            if (isset($notif_tugas)) {
+                $total_notif += $notif_tugas->where('isChecked', 0)->count();
+            }
+
+            // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+            if (isset($notif_test)) {
+                $total_notif += $notif_test->where('isChecked', 0)->count();
+            }
+
             //dd($total_notif, $notif_materi, $notif_test, $notif_tugas);
             // return view('peserta.dashboard',['total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'peserta'=>$peserta, 'pelatihan'=>$pelatihan]);
 
@@ -118,15 +138,19 @@ class PesertaController extends Controller
                 ->where('status','=','On going')
                 ->get();
 
-        foreach ($kode as $kd){
+        $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+        $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+        $notif_test = collect(); // Inisialisasi variabel sebelum loop
+
+        foreach ($kode as $kd) {
             $pltkode = $kd->kode;
-            $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+            $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
             $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
                                 ->where('notifikasi.judul', '=', 'Tugas')
-                                ->where('start_date','<=',now())
                                 ->where('notifikasi.plt_kode', $pltkode)
+                                ->where('start_date','<=',now())
                                 ->where('peserta_id', '=', Auth::user()->peserta->id)
-                                ->select('notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                ->select('isChecked','notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
                                 ->where(function($query) {
                                     $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
                                         ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
@@ -134,14 +158,32 @@ class PesertaController extends Controller
                                 ->get();
             $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')->where('start_date','<=',now())
                 ->where('notifikasi.judul','=','Test')->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
-                ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                ->select('isChecked','notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
                 ->where(function($query) {
                     $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
                         ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
                 })
                 ->get();
         }
-        $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
+
+        // Menginisialisasi variabel
+        $total_notif = 0;
+
+        // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+        if (isset($notif_materi)) {
+            $total_notif += $notif_materi->where('isChecked', 0)->count();
+        }
+
+        // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+        if (isset($notif_tugas)) {
+            $total_notif += $notif_tugas->where('isChecked', 0)->count();
+        }
+
+        // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+        if (isset($notif_test)) {
+            $total_notif += $notif_test->where('isChecked', 0)->count();
+        }
+
     
         return view('peserta.daftar_pelatihan', ['peserta'=>$peserta, 'pelatihan' => $pelatihan, 'total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test]);
     }
@@ -164,30 +206,52 @@ class PesertaController extends Controller
                 ->where('status','=','On going')
                 ->get();
 
-        foreach ($kode as $kd){
-            $pltkode = $kd->kode;
-            $notif_materi = Notifikasi::where('judul','=','Materi')->where('isChecked','=',0)->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
-            $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
-                                ->where('notifikasi.judul', '=', 'Tugas')
-                                ->where('start_date','<=',now())
-                                ->where('notifikasi.plt_kode', $pltkode)
-                                ->where('peserta_id', '=', Auth::user()->peserta->id)
-                                ->select('notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
-                                ->where(function($query) {
-                                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
-                                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
-                                })
-                                ->get();
-            $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')->where('start_date','<=',now())
-                ->where('notifikasi.judul','=','Test')->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
-                ->select('notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
-                ->where(function($query) {
-                    $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
-                        ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
-                })
-                ->get();
+                $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+                $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+                $notif_test = collect(); // Inisialisasi variabel sebelum loop
+                
+                foreach ($kode as $kd) {
+                    $pltkode = $kd->kode;
+                    $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
+                    $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
+                                        ->where('notifikasi.judul', '=', 'Tugas')
+                                        ->where('notifikasi.plt_kode', $pltkode)
+                                        ->where('start_date','<=',now())
+                                        ->where('peserta_id', '=', Auth::user()->peserta->id)
+                                        ->select('isChecked','notifikasi.plt_kode', 'tugas.judul','notifikasi.id as notif_id', 'subjudul', 'tugas.id as tugas_id')
+                                        ->where(function($query) {
+                                            $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada tugas baru: ', -1) = tugas.judul")
+                                                ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan tugas: ', -1) = tugas.judul");
+                                        })
+                                        ->get();
+                    $notif_test = Notifikasi::join('test','test.plt_kode','=','test.plt_kode')->where('start_date','<=',now())
+                        ->where('notifikasi.judul','=','Test')->where('notifikasi.plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)
+                        ->select('isChecked','notifikasi.plt_kode','notifikasi.id as notif_id','subjudul','notifikasi.judul','test.id as test_id')
+                        ->where(function($query) {
+                            $query->whereRaw("SUBSTRING_INDEX(subjudul, 'Ada test baru: ', -1) = test.nama")
+                                ->orWhereRaw("SUBSTRING_INDEX(subjudul, 'Ada pembaharuan test: ', -1) = test.nama");
+                        })
+                        ->get();
+                }
+                
+        // Menginisialisasi variabel
+        $total_notif = 0;
+
+        // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+        if (isset($notif_materi)) {
+            $total_notif += $notif_materi->where('isChecked', 0)->count();
         }
-        $total_notif = count($notif_materi) + count($notif_tugas) + count($notif_test);
+
+        // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+        if (isset($notif_tugas)) {
+            $total_notif += $notif_tugas->where('isChecked', 0)->count();
+        }
+
+        // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+        if (isset($notif_test)) {
+            $total_notif += $notif_test->where('isChecked', 0)->count();
+        }
+
     
         return view('peserta.history_pelatihan', ['peserta'=>$peserta, 'pelatihan' => $pelatihan, 'total_notif'=>$total_notif,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test]);
     }
@@ -234,7 +298,11 @@ class PesertaController extends Controller
                 ->where('peserta.id', '=', Auth::user()->peserta->id)
                 ->where('status','=','On going')
                 ->get();
-                foreach ($kode as $kd){
+                $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+                $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+                $notif_test = collect(); // Inisialisasi variabel sebelum loop
+                
+                foreach ($kode as $kd) {
                     $pltkode = $kd->kode;
                     $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
                     $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
@@ -257,9 +325,25 @@ class PesertaController extends Controller
                         })
                         ->get();
                 }
-                $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-                   $notif_tugas->where('isChecked', 0)->count() + 
-                   $notif_test->where('isChecked', 0)->count();
+                
+                // Menginisialisasi variabel
+                $total_notif = 0;
+
+                // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+                if (isset($notif_materi)) {
+                    $total_notif += $notif_materi->where('isChecked', 0)->count();
+                }
+
+                // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+                if (isset($notif_tugas)) {
+                    $total_notif += $notif_tugas->where('isChecked', 0)->count();
+                }
+
+                // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+                if (isset($notif_test)) {
+                    $total_notif += $notif_test->where('isChecked', 0)->count();
+                }
+
         $notification = Notifikasi::where('peserta_id', '=', Auth::user()->peserta->id)
                             ->where('plt_kode', $plt_kode)->where('id',$notif_id)
                             ->where('isChecked','=',0)->first();
@@ -341,7 +425,11 @@ class PesertaController extends Controller
                 ->where('peserta.id', '=', Auth::user()->peserta->id)
                 ->where('status','=','On going')
                 ->get();
-                foreach ($kode as $kd){
+                $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+                $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+                $notif_test = collect(); // Inisialisasi variabel sebelum loop
+
+                foreach ($kode as $kd) {
                     $pltkode = $kd->kode;
                     $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
                     $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
@@ -364,10 +452,25 @@ class PesertaController extends Controller
                         })
                         ->get();
                 }
-                $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-                   $notif_tugas->where('isChecked', 0)->count() + 
-                   $notif_test->where('isChecked', 0)->count();
-        
+
+                // Menginisialisasi variabel
+                $total_notif = 0;
+
+                // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+                if (isset($notif_materi)) {
+                    $total_notif += $notif_materi->where('isChecked', 0)->count();
+                }
+
+                // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+                if (isset($notif_tugas)) {
+                    $total_notif += $notif_tugas->where('isChecked', 0)->count();
+                }
+
+                // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+                if (isset($notif_test)) {
+                    $total_notif += $notif_test->where('isChecked', 0)->count();
+                }
+
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
                 ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
                 ->where('peserta.user_id', Auth::user()->id)
@@ -926,7 +1029,11 @@ class PesertaController extends Controller
             ->where('peserta.id', '=', Auth::user()->peserta->id)
             ->where('status','=','On going')
             ->get();
-            foreach ($kode as $kd){
+            $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+            $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+            $notif_test = collect(); // Inisialisasi variabel sebelum loop
+
+            foreach ($kode as $kd) {
                 $pltkode = $kd->kode;
                 $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
                 $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
@@ -949,9 +1056,26 @@ class PesertaController extends Controller
                     })
                     ->get();
             }
-            $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-               $notif_tugas->where('isChecked', 0)->count() + 
-               $notif_test->where('isChecked', 0)->count();
+
+
+           // Menginisialisasi variabel
+            $total_notif = 0;
+
+            // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+            if (isset($notif_materi)) {
+                $total_notif += $notif_materi->where('isChecked', 0)->count();
+            }
+
+            // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+            if (isset($notif_tugas)) {
+                $total_notif += $notif_tugas->where('isChecked', 0)->count();
+            }
+
+            // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+            if (isset($notif_test)) {
+                $total_notif += $notif_test->where('isChecked', 0)->count();
+            }
+
     
         return view('peserta.ubah_password', compact('total_notif','peserta','notif_materi','notif_tugas','notif_test'));
     }
@@ -1009,7 +1133,11 @@ class PesertaController extends Controller
             ->where('peserta.id', '=', Auth::user()->peserta->id)
             ->where('status','=','On going')
             ->get();
-            foreach ($kode as $kd){
+            $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+            $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+            $notif_test = collect(); // Inisialisasi variabel sebelum loop
+
+            foreach ($kode as $kd) {
                 $pltkode = $kd->kode;
                 $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
                 $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
@@ -1032,9 +1160,25 @@ class PesertaController extends Controller
                     })
                     ->get();
             }
-            $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-               $notif_tugas->where('isChecked', 0)->count() + 
-               $notif_test->where('isChecked', 0)->count();
+
+            // Menginisialisasi variabel
+            $total_notif = 0;
+
+            // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+            if (isset($notif_materi)) {
+                $total_notif += $notif_materi->where('isChecked', 0)->count();
+            }
+
+            // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+            if (isset($notif_tugas)) {
+                $total_notif += $notif_tugas->where('isChecked', 0)->count();
+            }
+
+            // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+            if (isset($notif_test)) {
+                $total_notif += $notif_test->where('isChecked', 0)->count();
+            }
+
         return view('peserta.profil', compact('peserta','total_notif','notif_materi','notif_tugas','notif_test'));
     }
 
@@ -1047,7 +1191,11 @@ class PesertaController extends Controller
         ->where('peserta.id', '=', Auth::user()->peserta->id)
         ->where('status','=','On going')
         ->get();
-        foreach ($kode as $kd){
+        $notif_materi = collect(); // Inisialisasi variabel sebelum loop
+        $notif_tugas = collect(); // Inisialisasi variabel sebelum loop
+        $notif_test = collect(); // Inisialisasi variabel sebelum loop
+
+        foreach ($kode as $kd) {
             $pltkode = $kd->kode;
             $notif_materi = Notifikasi::where('judul','=','Materi')->where('plt_kode',$pltkode)->where('peserta_id', '=', Auth::user()->peserta->id)->get();
             $notif_tugas = Notifikasi::join('tugas', 'tugas.plt_kode', '=', 'notifikasi.plt_kode')
@@ -1070,9 +1218,25 @@ class PesertaController extends Controller
                 })
                 ->get();
         }
-        $total_notif = $notif_materi->where('isChecked', 0)->count() + 
-           $notif_tugas->where('isChecked', 0)->count() + 
-           $notif_test->where('isChecked', 0)->count();
+
+        // Menginisialisasi variabel
+        $total_notif = 0;
+
+        // Memeriksa dan menambahkan jumlah notifikasi materi yang belum dicentang
+        if (isset($notif_materi)) {
+            $total_notif += $notif_materi->where('isChecked', 0)->count();
+        }
+
+        // Memeriksa dan menambahkan jumlah notifikasi tugas yang belum dicentang
+        if (isset($notif_tugas)) {
+            $total_notif += $notif_tugas->where('isChecked', 0)->count();
+        }
+
+        // Memeriksa dan menambahkan jumlah notifikasi test yang belum dicentang
+        if (isset($notif_test)) {
+            $total_notif += $notif_test->where('isChecked', 0)->count();
+        }
+
         return view('peserta.edit_profil', compact('total_notif','peserta','notif_materi','notif_tugas','notif_test'));
     }
 
@@ -1166,6 +1330,7 @@ class PesertaController extends Controller
                 ->route('peserta.profil')
                 ->with('success', 'Data peserta berhasil diperbarui');
         } catch (\Exception $e) {
+            
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data peserta');
         }
