@@ -358,7 +358,7 @@
                         @csrf
                         <div class="col-span-6 sm:col-span-6">
                             <label for="subjek"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subjek</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subjek <span class="text-red-500">*</span></label>
                             <input type="text" name="subjek" placeholder="Tulis Subjek" id="subjek"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 required>
@@ -370,7 +370,7 @@
                         </div>
                         <div class="col-span-6 justify-between items-center">
                             <div class="items-center">
-                                <label for="deliver-option" class="text-sm font-medium text-gray-900 dark:text-white">Kepada</label>
+                                <label for="deliver-option" class="text-sm font-medium text-gray-900 dark:text-white">Kepada <span class="text-red-500">*</span></label>
                                 <select name="deliver_option" id="deliver-option" class="block w-full mt-2 mb-2 block w-32 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                     <option value="all">Semua</option>
                                     <option value="range">Rentang</option>
@@ -379,7 +379,7 @@
                                 <!-- Rentang id -->
                                 <div id="deliver-range" class="hidden">
                                     <div class="flex-col items-center mt-2">
-                                        <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID:</label>
+                                        <label for="start_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Pilih Rentang User ID: <span class="text-red-500">*</span></label>
                                         <select name="start_user_id" id="start_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                             <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
                                             @foreach ($pst as $data)
@@ -388,7 +388,7 @@
                                         </select>
                                     </div>
                                     <div class="flex-col items-center mt-2 mb-4">
-                                        <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID:</label>
+                                        <label for="end_user_id" class="text-sm font-medium text-gray-900 dark:text-white">Akhir User ID: <span class="text-red-500">*</span></label>
                                         <select name="end_user_id" id="end_user_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                             <option value="" class="text-sm font-medium" selected disabled>Pilih User ID</option>
                                             @foreach ($pst as $data)
@@ -400,7 +400,7 @@
                             </div>
                         <div class="col-span-6 sm:col-span-6">
                             <label for="kode"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pelatihan</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pelatihan <span class="text-red-500">*</span></label>
                             <select name="kode" id="kode" class="mb-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     <option value="" class="text-sm font-medium" selected disabled>Pilih Pelatihan</option>
                                     @foreach ($pelatihan as $data)
