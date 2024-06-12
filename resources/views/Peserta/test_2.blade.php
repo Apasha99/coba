@@ -47,7 +47,6 @@
                                 @endphp
 
                                 <input type="hidden" name="soal_id[{{ $soal->urutan }}]" value="{{ $soal->id }}">
-                                <!-- Add these hidden fields inside the form -->
                                 <input type="hidden" name="selected_option[{{ $soal->urutan }}]" id="hiddenSelectedOption" value="{{ $selectedOption }}">
 
                                 @foreach ($shuffledOrder as $index => $shuffledIndex)
@@ -88,7 +87,6 @@
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     value="{{ old('singkat_' . $soal->urutan) ?? session('singkat_' . $soal->urutan) }}">
 
-
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var jawabanInput = document.getElementById('singkat-{{ $soal->urutan }}');
@@ -124,7 +122,6 @@
                                     });
                                 </script>
                             @endif
-                            
                         </th>
                     </tr>
                 </tbody>
@@ -166,77 +163,62 @@
     <script>
     function submitForm() {
         document.getElementById('answerForm').submit();
-        document.addEventListener('DOMContentLoaded', function () {
-            var form = document.getElementById('answerForm');
-            form.addEventListener('submit', function () {
-                // Membersihkan local storage
-                localStorage.clear();
-            });
-        });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('answerForm');
+        form.addEventListener('submit', function () {
+            localStorage.clear();
+        });
+    });
     </script>
 
-    <script>
-        // Setelah formulir berhasil disubmit, membersihkan local storage
-        document.addEventListener('DOMContentLoaded', function () {
-            var form = document.getElementById('answerForm');
-            form.addEventListener('submit', function () {
-                // Membersihkan local storage
-                localStorage.clear();
-            });
-        });
-    </script>
     <!-- JavaScript untuk menghitung mundur durasi tes -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
+
+            // Cek apakah ada durasi tersisa di localStorage
+            var remainingDuration = localStorage.getItem('remainingDuration');
+            if (remainingDuration) {
+                duration = remainingDuration;
+            }
+
+            var timeArray = duration.split(':');
+            var hours = parseInt(timeArray[0], 10);
+            var minutes = parseInt(timeArray[1], 10);
+            var seconds = parseInt(timeArray[2], 10);
+
+            var totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+            var countdown = setInterval(function() {
+                var hours = Math.floor(totalSeconds / 3600);
+                var minutes = Math.floor((totalSeconds % 3600) / 60);
+                var seconds = totalSeconds % 60;
+
+                var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+
+                document.getElementById('countdownTimer').innerText = formattedTime;
+
+                totalSeconds--;
+
+                localStorage.setItem('remainingDuration', formattedTime);
+
+                if (totalSeconds < 0) {
+                    clearInterval(countdown);
+                    document.getElementById('answerForm').submit();
+                    localStorage.removeItem('remainingDuration');
+                }
+            }, 1000);
+
+            document.getElementById('answerForm').addEventListener('submit', function() {
+                localStorage.removeItem('remainingDuration');
+            });
+
+            window.addEventListener('beforeunload', function() {
+                localStorage.removeItem('remainingDuration');
+            });
+        });
+    </script>
 </div>
-<script>
-    // Ambil durasi tes dari PHP ke JavaScript
-    var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
-
-    // Cek apakah ada durasi tersisa di localStorage
-    var remainingDuration = localStorage.getItem('remainingDuration');
-    if (remainingDuration) {
-        duration = remainingDuration;
-    }
-
-    // Split durasi menjadi jam, menit, dan detik
-    var timeArray = duration.split(':');
-    var hours = parseInt(timeArray[0], 10); // Parse sebagai angka desimal
-    var minutes = parseInt(timeArray[1], 10);
-    var seconds = parseInt(timeArray[2], 10);
-
-    // Hitung total detik
-    var totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-    // Hitung mundur durasi tes
-    var countdown = setInterval(function() {
-        // Hitung jam, menit, dan detik yang tersisa
-        var hours = Math.floor(totalSeconds / 3600);
-        var minutes = Math.floor((totalSeconds % 3600) / 60);
-        var seconds = totalSeconds % 60;
-
-        // Format ulang waktu menjadi HH:MM:SS
-        var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-
-        // Tampilkan waktu mundur di dalam elemen dengan id "countdownTimer"
-        document.getElementById('countdownTimer').innerText = formattedTime;
-
-        // Kurangi total detik dengan 1 setiap detik
-        totalSeconds--;
-
-        // Simpan durasi tersisa ke localStorage
-        localStorage.setItem('remainingDuration', formattedTime);
-
-        // Jika waktu sudah habis, hentikan hitungan mundur
-        if (totalSeconds < 0) {
-            clearInterval(countdown);
-            // Otomatis submit form
-            document.getElementById('answerForm').submit();
-            // Hapus durasi tersisa dari localStorage
-            localStorage.removeItem('remainingDuration');
-        }
-    }, 1000);
-
-
-</script>
-
 @endsection

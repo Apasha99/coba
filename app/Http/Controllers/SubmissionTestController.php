@@ -53,7 +53,7 @@ class SubmissionTestController extends Controller
         $existing = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
             $query->where('user_id', Auth::user()->id)
-                    ->where('attempt','=', 3);
+                    ->where('attempt','<', 3);
         })
         ->exists();
         
@@ -143,7 +143,7 @@ class SubmissionTestController extends Controller
         $existing = Nilai_Test::where('test_id', $test_id)
         ->whereHas('peserta', function($query) {
             $query->where('user_id', Auth::user()->id)
-                 ->where('attempt','=', 3);
+                 ->where('attempt','<', 3);
         })
         ->exists();
 
