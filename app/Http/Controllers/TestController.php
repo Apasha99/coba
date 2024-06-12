@@ -166,7 +166,15 @@ class TestController extends Controller
                 ->first();
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+        $cekPeserta = Attempt::where('test_id',$test_id)->exists();
         $hitung_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
+
+        if($cekPeserta == true){
+            return redirect()->back()->with('error','Tidak dapat menambahkan soal dan jawaban untuk tes yang telah dikerjakan peserta');
+        }else if($test->start_date <= now()){
+            return redirect()->back()->with('error','Tidak dapat menambahkan soal dan jawaban untuk tes yang telah dimulai');
+        }
+        
         if(Auth::user()->role_id == 1){
             return view('admin.tambah_soal', ['hitung_nilai'=>$hitung_nilai,'pelatihan'=>$pelatihan,'test' => $test]);
         }else{

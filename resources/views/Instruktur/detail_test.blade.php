@@ -187,7 +187,12 @@
 </div>
     <div class="mt-4 relative overflow-x-auto sm:rounded-lg">
         <h3 class="text-m font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Soal Tes</h3>
-        @if ($pelatihan->status != 'Completed')
+        @php
+            $startDate = new DateTime($test->start_date);
+            $endDate = new DateTime($test->end_date);
+            $now = new DateTime();
+        @endphp
+        @if ($pelatihan->status != 'Completed' && $now < $endDate)
         <div class="col-span-full mt-4 mb-4">
             <a type="button" href = "{{route('soal.add', [$pelatihan->kode, $test->id])}}"
                 class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
