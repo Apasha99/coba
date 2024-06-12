@@ -29,10 +29,20 @@ class SubmissionTestController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
+        $maxAttempt = DB::table('attempt')
+                        ->leftJoin('peserta', 'attempt.peserta_id', '=', 'peserta.id')
+                        ->leftJoin('test','test.id','=','attempt.test_id')
+                        ->where('peserta.user_id', Auth::user()->id)
+                        ->where('test.id', $test_id)
+                        ->max('attempt.attempt'); 
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
                 ->leftJoin('peserta_pelatihan', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+                ->leftJoin('attempt', function($join) use ($maxAttempt) {
+                    $join->on('attempt.peserta_id', '=', 'peserta.id')
+                         ->where('attempt.attempt', '=', $maxAttempt);
+                })
                 ->where('peserta.user_id', Auth::user()->id)
-                ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
+                ->select('attempt.*','peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
                 ->first();
         //dd($test);
         $hitungsoal = Soal_Test::where('test_id', $test_id)->count();
@@ -108,10 +118,20 @@ class SubmissionTestController extends Controller
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $soal_test = Soal_Test::where('test_id', $test_id)->get();
+        $maxAttempt = DB::table('attempt')
+                        ->leftJoin('peserta', 'attempt.peserta_id', '=', 'peserta.id')
+                        ->leftJoin('test','test.id','=','attempt.test_id')
+                        ->where('peserta.user_id', Auth::user()->id)
+                        ->where('test.id', $test_id)
+                        ->max('attempt.attempt'); 
         $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
                 ->leftJoin('peserta_pelatihan', 'peserta.id', '=', 'peserta_pelatihan.peserta_id')
+                ->leftJoin('attempt', function($join) use ($maxAttempt) {
+                    $join->on('attempt.peserta_id', '=', 'peserta.id')
+                         ->where('attempt.attempt', '=', $maxAttempt); // Ganti 'attempt_value' dengan nama kolom yang sesuai
+                })
                 ->where('peserta.user_id', Auth::user()->id)
-                ->select('peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
+                ->select('attempt.*','peserta.nama', 'peserta.id', 'users.username', 'peserta_pelatihan.plt_kode', 'peserta.user_id')
                 ->first();
         //dd($test);
         $hitungsoal = Soal_Test::where('test_id', $test_id)->count();
@@ -169,11 +189,6 @@ class SubmissionTestController extends Controller
         $total_notif = $notif_materi->where('isChecked', 0)->count() + 
            $notif_tugas->where('isChecked', 0)->count() + 
            $notif_test->where('isChecked', 0)->count();
-        $peserta = Peserta::leftJoin('users', 'peserta.user_id', '=', 'users.id')
-                ->leftJoin('peserta_pelatihan','peserta.id','=','peserta_pelatihan.peserta_id')
-                ->where('peserta.user_id', Auth::user()->id)
-                ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
-                ->first();
         return view('peserta.detail_test', ['total_notif'=>$total_notif,'peserta'=>$peserta,'notif_materi'=>$notif_materi,'notif_tugas'=>$notif_tugas,'notif_test'=>$notif_test,'existing'=>$existing,'hitungsoal'=>$hitungsoal,
         'existingNilai'=>$existingNilai,'pelatihan' => $pelatihan, 'test' => $test, 'peserta' => $peserta, 'soal_test' => $soal_test, 'currentQuestion' => $currentQuestion]);
     }    
@@ -264,60 +279,60 @@ class SubmissionTestController extends Controller
 
     public function submitAnswer(Request $request, $plt_kode, $test_id)
     {
+        $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         $peserta = Peserta::join('nilai_test', 'nilai_test.peserta_id', '=', 'peserta.id')
                     ->where('peserta.id', Auth::user()->peserta->id)
                     ->where('nilai_test.test_id', $test_id)
                     ->latest('attempt')
                     ->first();
 
-        if ($peserta == null) {
-            $attempt = 1;
-        
-        } else {
-            // Jika peserta sudah memiliki data nilai untuk tes tertentu, kita akan menambahkan 1 ke nilai attempt sebelumnya
-            $attempt = $peserta->attempt + 1;
-        }
-        //dd($request);
+        $attempt = $peserta ? $peserta->attempt + 1 : 1;
 
         foreach ($request->input('soal_id') as $urutan => $soal_id) {
             $currentQuestion = Soal_Test::find($soal_id);
-            $request->validate([
-                'singkat.*' => 'required|required_if:soal_id,' . $soal_id . '|string', // Validasi input 'singkat' untuk setiap soal
-                'selected_option.*' => 'required|required_if:soal_id,' . $soal_id, // Validasi input 'selected_option' untuk setiap soal
-            ]);
-            if ($currentQuestion->tipe == "Jawaban Singkat") {
-                $jawabanSingkatSoal = strtolower($request->input('singkat')[$urutan] ?? null);
-            } else {
-                $selectedOptionId = $request->input('selected_option.' . $urutan) ?? null;
-            }            
 
-            $test = Test::find($test_id);
+            $request->validate([
+                'singkat.*' => 'string|nullable', // Validasi input 'singkat' untuk setiap soal
+                'selected_option.*' => 'nullable' // Validasi input 'selected_option' untuk setiap soal
+            ]);
 
             $nilai = 0;
             $currentAnswer = null;
+            $jawaban_id = null;
 
-            if ($currentQuestion->tipe == "Pilihan Ganda") {
-                $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->first();
-                $nilai = ($jawabanBenar && $jawabanBenar->id == $selectedOptionId) ? $currentQuestion->nilai : 0;
-                $currentAnswer = Jawaban_Test::find($selectedOptionId);
-            } elseif ($currentQuestion->tipe == "Jawaban Singkat") {
-                $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->pluck('title');
-                $nilai = in_array($jawabanSingkatSoal, $jawabanBenar->toArray()) ? $currentQuestion->nilai : 0;
-                $currentAnswer = $jawabanSingkatSoal;
+            if ($currentQuestion->tipe == "Jawaban Singkat") {
+                $jawabanSingkatSoal = strtolower($request->input('singkat')[$urutan] ?? null);
+                if ($jawabanSingkatSoal) {
+                    $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->pluck('title');
+                    $nilai = in_array($jawabanSingkatSoal, $jawabanBenar->toArray()) ? $currentQuestion->nilai : 0;
+                    $currentAnswer = $jawabanSingkatSoal;
+                }
+            } else if ($currentQuestion->tipe == "Pilihan Ganda") {
+                $selectedOptionId = $request->input('selected_option.' . $urutan) ?? null;
+                if ($selectedOptionId) {
+                    $jawabanBenar = $currentQuestion->jawaban_test->where('status', 1)->first();
+                    $nilai = ($jawabanBenar && $jawabanBenar->id == $selectedOptionId) ? $currentQuestion->nilai : 0;
+                    $currentAnswer = Jawaban_Test::find($selectedOptionId);
+                    $jawaban_id = $selectedOptionId;
+                }
             }
 
-            if ($currentQuestion->tipe == "Pilihan Ganda") {
+            // Simpan jawaban Pilihan Ganda hanya jika ada jawaban
+            if ($currentQuestion->tipe == "Pilihan Ganda" && $jawaban_id) {
                 $jawabanUserPilganData = [
                     'peserta_id' => Auth::user()->peserta->id,
                     'test_id' => $test_id,
                     'soal_id' => $currentQuestion->id,
-                    'jawaban_id' => $currentAnswer ? $currentAnswer->id : null,
+                    'jawaban_id' => $jawaban_id,
                     'jawaban' => $currentAnswer ? $currentAnswer->title : null,
                     'attempt' => $attempt
                 ];
 
                 Jawaban_User_Pilgan::create($jawabanUserPilganData);
-            } elseif ($currentQuestion->tipe == "Jawaban Singkat") {
+            }
+
+            // Simpan jawaban Jawaban Singkat
+            if ($currentQuestion->tipe == "Jawaban Singkat" && $currentAnswer) {
                 $jawabanUserSingkatData = [
                     'peserta_id' => Auth::user()->peserta->id,
                     'test_id' => $test_id,
@@ -329,44 +344,38 @@ class SubmissionTestController extends Controller
                 Jawaban_User_Singkat::create($jawabanUserSingkatData);
             }
 
+            // Simpan nilai untuk semua jenis soal
             Nilai_Test::create([
                 'peserta_id' => Auth::user()->peserta->id,
                 'test_id' => $test_id,
                 'soal_id' => $currentQuestion->id,
                 'nilai' => $nilai,
-                'user_answers' => $currentQuestion->tipe == "Pilihan Ganda" ? json_encode($currentAnswer->title) : json_encode($currentAnswer),
+                'user_answers' => $currentAnswer ? json_encode($currentAnswer) : null,
                 'attempt' => $attempt
             ]);
         }
 
-        if ($peserta == null) {
-            // Jika peserta belum memiliki nilai untuk tes ini, kita hitung semua nilai untuk tes ini
-            $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                        ->where('test_id', $test_id)
-                                        ->where('peserta.user_id', Auth::user()->id)
-                                        ->sum('nilai');
-        } else {
-            // Jika peserta sudah memiliki nilai untuk tes ini, kita hitung nilai hanya untuk percobaan saat ini
-            $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
-                                        ->where('test_id', $test_id)
-                                        ->where('peserta.user_id', Auth::user()->id)
-                                        ->where('attempt', $attempt)
-                                        ->sum('nilai');
-        }
-        Attempt::Create(
-            [
-                'peserta_id' => Auth::user()->peserta->id,
-                'test_id' => $test_id,
-                'totalnilai' => $hitungnilai,
-                'attempt' => $attempt
-            ]
-        );
+        // Hitung total nilai untuk percobaan saat ini
+        $hitungnilai = Nilai_Test::join('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
+                                ->where('test_id', $test_id)
+                                ->where('peserta.user_id', Auth::user()->id)
+                                ->where('attempt', $attempt)
+                                ->sum('nilai');
 
-        return redirect()->route('peserta.hasiltest', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id, 'hitungnilai'=>$hitungnilai])->with('success', 'Jawaban berhasil disubmit');
+        Attempt::Create([
+            'peserta_id' => Auth::user()->peserta->id,
+            'test_id' => $test_id,
+            'totalnilai' => $hitungnilai,
+            'attempt' => $attempt
+        ]);
+
+        return redirect()->route('peserta.hasiltest', ['plt_kode' => $test->plt_kode, 'test_id' => $test->id, 'hitungnilai' => $hitungnilai])->with('success', 'Jawaban berhasil disubmit');
     }
 
 
-    public function hasil($plt_kode, $test_id)
+
+
+    public function hasil(Request $request, $plt_kode, $test_id)
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
@@ -376,7 +385,7 @@ class SubmissionTestController extends Controller
                 ->where('peserta.user_id', Auth::user()->id)
                 ->where('nilai_test.test_id', $test_id)
                 ->max('nilai_test.attempt');
-
+        //dd($request);
         $nilai = Nilai_Test::leftJoin('peserta', 'peserta.id', '=', 'nilai_test.peserta_id')
                     ->where('test_id', $test_id)
                     ->where('peserta.user_id', Auth::user()->id)

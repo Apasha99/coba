@@ -78,100 +78,61 @@
             </p>
         </div>
         @if ($existing == true)
-            <div class="p-2 col-span-6 sm:col-span-3 xl:mb-2">
+            <div class="p-2 col-span-full sm:col-span-3 xl:mb-2">
                 <div class="mb-4 col-span-full xl:mb-2">
                     <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
                 </div>
-                <div class="mb-4 col-span-full xl:mb-2">
-                    <p class="text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                        Test: 
-                        <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                            {{ $test->nama }}
-                        </span> 
-                    </p>
-                    <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-                        Total Soal: 
-                        <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-                            {{ $hitungsoal }}
-                        </span> 
-                    </p>
-                </div>
-                <!-- <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th  colspan="4" class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                                Attempt
-                            </th>
-                            <th colspan="4" class="border-r px-16 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                                Total Nilai
-                            </th>
-                        </tr>
-                        @foreach ($existingNilai as $nilai)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td colspan="4" class="border-r px-2 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $nilai->attempt }}
-                                </td>
-                                
-                                <td colspan="4" class="border-r px-2 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
-                                    {{ $nilai->totalnilai }}
-                                </td>
-                                
+                <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
+                        <thead class="bg-indigo-600 dark:bg-indigo-700">
+                            <tr>
+                                <th scope="col" class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
+                                    Attempt
+                                </th>
+                                <th scope="col" class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
+                                    Nilai
+                                </th>
                             </tr>
-                            
-                        @endforeach
-                    </tbody>
-                </table> -->
+                        </thead>
+                        <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                            @foreach ($existingNilai as $nilai)
+                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <td class="p-2 text-s font-normal text-gray-500 dark:text-gray-400">
+                                    <div class="text-base font-small text-gray-900 dark:text-white">{{ $nilai->attempt }}</div>
+                                </td>
+                                <td class="flex items-center p-2 mr-12 space-x-6 whitespace-nowrap">
+                                    <div class="text-s font-normal text-gray-500 dark:text-gray-400">
+                                        <div class="text-base font-small text-gray-900 dark:text-white">
+                                            <?php
+                                            $total_nilai = $nilai->totalnilai;
+                                            if ($total_nilai > 99.99) {
+                                                $total_nilai = 100;
+                                            } else {
+                                                $total_nilai = round($total_nilai);
+                                            }
+                                            echo $total_nilai;
+                                            ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         @endif
         
     </div>
-    @if ($existing == true)
-    <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
-            <thead class="bg-indigo-600 dark:bg-indigo-700">
-                <tr>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
-                        Attempt
-                    </th>
-                    <th scope="col"
-                        class="p-4 text-xs font-medium text-left text-white uppercase dark:text-white">
-                        Nilai
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-zinc-100 divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                @foreach ($existingNilai as $nilai)
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <td class="p-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                        <div class="text-base font-small text-gray-900 dark:text-white">{{ $nilai->attempt }}</div>
-                    </td>
-                    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            <div class="text-base font-small text-gray-900 dark:text-white">
-                                <?php
-                                $total_nilai = $nilai->totalnilai;
-                                if ($total_nilai > 99.99) {
-                                    $total_nilai = 100;
-                                } else {
-                                    $total_nilai = round($total_nilai);
-                                }
-                                echo $total_nilai;
-                                ?>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
+    
     <div class="col-span-full mt-4 mb-4 text-center">
         @if(now()->between($test->start_date, $test->end_date))
-        <a type="button" href="{{ route('peserta.testNotif', ['plt_kode' => $pelatihan->kode, 'test_id' => $test->id]) }}"
-            class="inline-flex items-center justify-center w-1/2 px-12 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            Mulai
-        </a>
+            @if($peserta->attempt <= 3)
+            <a type="button" href="{{ route('peserta.testNotif', ['plt_kode' => $pelatihan->kode, 'test_id' => $test->id]) }}"
+                class="inline-flex items-center justify-center w-1/2 px-12 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Mulai
+            </a>
+            @endif
         @endif
     </div>
     
