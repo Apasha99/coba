@@ -180,16 +180,12 @@
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="deskripsi"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <span class="text-red-500">*</span></label>
-                                    <input type="text" name="deskripsi" placeholder="Deskripsi (max:255 kata)" id="deskripsi"
-                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        required>
+                                    <textarea name="deskripsi" placeholder="Deskripsi" id="deskripsi"
+                                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
                                     @error('deskripsi')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
+                                    <div class="invalid-feedback mt-2 text-sm text-red-800 dark:text-red-400">
                                             {{ $message }}
                                         </div>
-                                    </div>
                                     @enderror
                                 </div>
                                 <div class="col-span-full">
