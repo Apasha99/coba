@@ -11,6 +11,7 @@ use App\Models\Nilai_Test;
 use App\Models\Instruktur;
 use App\Models\Soal_Test;
 use App\Models\Jawaban_Test;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Jawaban_User_Pilgan;
 use App\Models\Jawaban_User_Singkat;
 use Carbon\Carbon;
@@ -188,14 +189,28 @@ class TestController extends Controller
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
         //dd($request);
         try {
-            
-            $validated = $request->validate([
+            //dd($request);
+            $rules = [
                 'soal' => ['required', 'max:2000'],
                 'nilai-custom' => ['nullable'],
                 'tipe_nilai' => ['required'],
                 'file_soal' => ['nullable', 'image'],
                 'tipe_option' => ['required', Rule::in(['Pilihan Ganda', 'Jawaban Singkat'])],
-            ]);
+            ];
+            
+            // Initial validation
+            $validated = $request->validate($rules);
+            
+            // Additional validation for Pilihan Ganda
+            if ($request->tipe_option == 'Pilihan Ganda') {
+                $additionalRules = [
+                    'ganda_benar' => ['required'],
+                    'title_ganda' => ['required', 'array', 'min:1'],
+                    'title_ganda.*' => ['required', 'distinct'],
+                ];
+            
+                $validated = array_merge($validated, $request->validate($additionalRules));
+            }
     
             // Hitung jumlah soal dan nilai total
             $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
@@ -209,13 +224,14 @@ class TestController extends Controller
             if ($hitung_soal == 0) {
                 if ($validated['tipe_nilai'] === 'Custom') {
                     $nilai = $request['nilai-custom']; // Gunakan nilai custom jika disediakan
-                } else {
+                    $nilaiDefault = 0;
+                }else {
                     $nilai = 100;
                 }
-            } elseif ($hitung_nilai_custom > 0 && $hitung_nilai_default > 0) {
+            }elseif ($hitung_nilai_custom > 0 && $hitung_nilai_default > 0) {
                 if ($validated['tipe_nilai'] === 'Custom') {
                     $nilai = $request['nilai-custom']; // Gunakan nilai custom jika disediakan
-                    //dd($nilai);
+                    dd($nilai);
                     $nilaiDefault = round(((100 - ($hitung_nilai_custom + $nilai))/ (Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count())),2);
                 } else {
                     $nilaiDefault = round((100 - $hitung_nilai_custom) / ((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) + 1),2);
@@ -241,7 +257,13 @@ class TestController extends Controller
             } else {
                 $nilai = 100;
             }
-    
+            if ($hitung_soal != 0){
+                if ($validated['tipe_nilai'] === 'Custom') {
+                    Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilaiDefault]);
+                }
+            }
+             //dd($nilaiDefault, $nilai);
+
             // Pembuatan soal dengan nilai yang ditentukan
             $existingSoal = Soal_Test::where('test_id', $test_id)->orderBy('urutan', 'desc')->first();
             $incrementedUrutan = $existingSoal ? $existingSoal->urutan + 1 : 1;
@@ -259,11 +281,6 @@ class TestController extends Controller
                 'file_soal' => $validated2['file_soal'] ?? null,
                 'tipe' => $validated['tipe_option'],
             ]);    
-
-            // Update nilai untuk semua soal dengan tipe nilai default jika nilai dihitung otomatis
-            if ($validated['tipe_nilai'] === 'Custom') {
-                Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilaiDefault]);
-            }
 
             $existingJawaban = Jawaban_Test::where('test_id', $test_id)
                                             ->where('soal_id', $soal->id)
@@ -335,11 +352,10 @@ class TestController extends Controller
             }
 
             return redirect()->route('test.detail', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (QueryException $e) {
-            // Log or handle the query exception as needed
-            return redirect()->back()->with('error', 'Terjadi kesalahan dalam menyimpan data')->withInput();
+        } catch (\Exception $e) {
+            //dd($e);
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menyimpan data soal dan jawaban.');
         }
     }
 
@@ -542,14 +558,16 @@ class TestController extends Controller
 
             $total_soal_default = Soal_Test::where('test_id',$test_id)->where('tipe_nilai','Default')->count();
             $hitung_nilai_custom = Soal_Test::where('test_id',$test_id)->where('tipe_nilai','Custom')->sum('nilai');
-            $nilaiDefault = (100-$hitung_nilai_custom)/$total_soal_default;
-            Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilaiDefault]);
+            if($total_soal_default>0){
+                $nilaiDefault = (100-$hitung_nilai_custom)/$total_soal_default;
+                Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilaiDefault]);
+            }
             // Commit the transaction
             DB::commit();
             
             return redirect()->back()->with('success', 'Soal dan semua jawaban terkait berhasil dihapus.');
         } catch (\Exception $e) {
-            
+            dd($e);
             // Rollback the transaction in case of any error
             DB::rollback();
 
@@ -612,14 +630,28 @@ class TestController extends Controller
         $soal_test = Soal_Test::where('test_id',$test_id)->find($soal_id);
         $jawaban_test = Jawaban_Test::where('test_id',$test_id)->where('soal_id',$soal_id)->get();
         try {
-            // Validasi input
-            $validated = $request->validate([
+            //dd($request);
+            $rules = [
                 'soal' => ['required', 'max:2000'],
                 'nilai-custom' => ['nullable'],
                 'tipe_nilai' => ['required'],
                 'file_soal' => ['nullable', 'image'],
                 'tipe_option' => ['required', Rule::in(['Pilihan Ganda', 'Jawaban Singkat'])],
-            ]);
+            ];
+            
+            // Initial validation
+            $validated = $request->validate($rules);
+            
+            // Additional validation for Pilihan Ganda
+            if ($request->tipe_option == 'Pilihan Ganda') {
+                $additionalRules = [
+                    'ganda_benar' => ['required'],
+                    'title_ganda' => ['required', 'array', 'min:1'],
+                    'title_ganda.*' => ['required', 'distinct'],
+                ];
+            
+                $validated = array_merge($validated, $request->validate($additionalRules));
+            }
             // Validasi nilai 'old'
             $tipe_nilai_old = $soal_test->tipe_nilai ?? null;
     
@@ -775,7 +807,7 @@ class TestController extends Controller
                 ->route('test.detail', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])
                 ->with('success', 'Data soal dan jawaban berhasil diperbarui');
         } catch (\Exception $e) {
-            dd($e);
+            //dd($e);
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data soal dan jawaban.');
         }
