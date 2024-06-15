@@ -556,19 +556,20 @@ class InstrukturController extends Controller
     }
 
     public function updateProfil(Request $request, $instruktur_id){
-        $instruktur = Instruktur::leftJoin('users', 'instruktur.user_id', '=', 'users.id')
-                    ->where('instruktur.user_id', Auth::user()->id)
-                    ->where('user_id',$instruktur_id)
-                    ->first();
+        $instruktur = Instruktur::with('user')
+        ->where('instruktur.user_id', Auth::user()->id)
+        ->where('user_id', $instruktur_id)
+        ->firstOrFail(); 
 
         $validated = $request->validate([
+            'nama' => ['required'],
             'username' => ['required'],
             'email' => ['required', 'email'],
             'foto' => [ 'max:10240'],
         ]);
-        //dd($validated);
         try {
             DB::beginTransaction();
+            $instruktur->update(['nama' => $validated['nama']]);
 
             $updateData2 = [
                 'username' => $validated['username'] ?? null,

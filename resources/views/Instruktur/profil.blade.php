@@ -55,16 +55,16 @@
     <div class="col-span-2">
         <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
+            <!-- <h3 class="mb-4 text-xl font-semibold dark:text-white">Data Diri</h3> -->
 
                 <div class="grid grid-cols-6 gap-6">
-                    <div class="col-span-6 sm:col-span-3">
+                    <!-- <div class="col-span-6 sm:col-span-3">
                         <label for="user_id"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
                         <input type="text" name="user_id" id="user_id"
                             class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             value="{{ $instruktur->user_id }}" required="" wfd-id="id2" readonly disabled>
-                    </div>
+                    </div> -->
                     <div class="col-span-6 sm:col-span-3">
                         <label for="nama"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>

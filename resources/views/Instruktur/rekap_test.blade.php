@@ -118,7 +118,7 @@
                             <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">
                                 <thead class="bg-purple-600 dark:bg-purple-500">
                                     <tr>
-                                        <th scope="col"
+                                        <!-- <th scope="col"
                                             class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             <span style="float: left;">ID</span>
                                             <span id="sortIcon" style="float: left;">
@@ -127,7 +127,7 @@
                                                 </svg>
                                             </span>
                                             <div style="clear: both;"></div>
-                                        </th>
+                                        </th> -->
                                         <th scope="col"
                                             class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             <span style="float: left;">Nama</span>
@@ -159,9 +159,9 @@
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                                     @foreach ($test as $tes)
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td
+                                            <!-- <td
                                                 class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable">
-                                                {{ $tes->id }}</td>
+                                                {{ $tes->id }}</td> -->
                                             <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap searchable">
                                                 <div class="text-sm font-small text-gray-500 dark:text-gray-400">
                                                     <div class="text-sm font-small text-gray-900 dark:text-white">{{ $tes->nama }}</div>

@@ -136,7 +136,7 @@ class SubmissionController extends Controller
     try {
         $request->validate([
             'submission_files' => 'required|array',
-            'submission_files.*' => 'required', 
+            'submission_files.*' => 'required|file|max:10240', 
         ]);
         
         $peserta_id = Peserta::where('user_id', Auth::user()->id)->value('id');
@@ -168,7 +168,6 @@ class SubmissionController extends Controller
         return redirect()->route('peserta.viewDetailTugas', [$plt_kode, $tugas_id])->with('success', 'Tugas berhasil disubmit');
     } catch (\Exception $e) {
         DB::rollback();
-
         return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
 }
@@ -176,6 +175,11 @@ class SubmissionController extends Controller
     public function update(Request $request, $plt_kode, $tugas_id, $submission_id)
     {
         try {
+            $request->validate([
+                'submission_files' => 'required|array',
+                'submission_files.*' => 'required|file|max:10240', 
+            ]);
+            
             DB::beginTransaction();
 
             $submission = Submission::findOrFail($submission_id);
@@ -207,9 +211,7 @@ class SubmissionController extends Controller
                 ->with('success', 'Data submission berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal memperbarui data submission.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

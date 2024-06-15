@@ -61,7 +61,7 @@
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">JPG, JPEG, or PNG
                         </p>
                         @error('foto')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-500">Some error message.</p>
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -73,16 +73,13 @@
 
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="user_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID <span class="text-red-500">*</span></label>
-                            <input type="text" name="user_id" id="user_id"
-                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                value="{{ $instruktur->user_id }}" required="" wfd-id="id2" readonly disabled>
-                        </div>
-                        <div class="col-span-6 sm:col-span-3">
                             <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" id="nama"
                                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                value="{{ $instruktur->nama }}" required="" wfd-id="id1" readonly disabled>
+                                value="{{ $instruktur->nama }}" required="" wfd-id="id1">
+                                @error('nama')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="username"

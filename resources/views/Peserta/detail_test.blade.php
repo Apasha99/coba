@@ -57,17 +57,15 @@
                 {{ \Carbon\Carbon::parse($test->end_date)->format('l, j F Y, h:i A') }}
             </span> 
         </p>
-    </div>
-    <div class="grid grid-cols-6 gap-3 overflow-x-auto shadow-md sm:rounded-lg">
-        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
-            <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Deskripsi Test</h3>
-            <p class="text-sm font-normal text-black-500 dark:text-gray-400">
-                {!! nl2br(e($test->deskripsi)) !!}
-            </p>
-        </div>
-        <div class="p-2 mb-4 col-span-6 sm:col-span-3 xl:mb-2">
-            <h3 class="text-l font-semibold text-gray-900 sm:text-l dark:text-white">Durasi</h3>
-            <p class="text-sm font-normal text-black-500 dark:text-gray-400">
+        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Deskripsi: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
+            {!! nl2br(e($test->deskripsi)) !!}
+            </span> 
+        </p>
+        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
+            Durasi: 
+            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
             @if (\Carbon\Carbon::parse($test->durasi)->format('H') != '00')
                 {{ \Carbon\Carbon::parse($test->durasi)->format('H') }} Jam
             @elseif (\Carbon\Carbon::parse($test->durasi)->format('i') != '00')
@@ -75,9 +73,10 @@
             @elseif (\Carbon\Carbon::parse($test->durasi)->format('s') != '00')
                 {{ \Carbon\Carbon::parse($test->durasi)->format('s') }} Detik
             @endif
-            </p>
-        </div>
-        @if ($existing == true)
+            </span> 
+        </p>
+    </div>
+    @if ($existing == true)
             <div class="p-2 col-span-full sm:col-span-3 xl:mb-2">
                 <div class="mb-4 col-span-full xl:mb-2">
                     <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
@@ -122,9 +121,6 @@
                 </div>
             </div>
         @endif
-        
-    </div>
-    
     <div class="col-span-full mt-4 mb-4 text-center">
         @if(now()->between($test->start_date, $test->end_date))
             @if($peserta->attempt < 3)

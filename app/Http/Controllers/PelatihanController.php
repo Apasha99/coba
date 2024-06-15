@@ -235,30 +235,72 @@ class PelatihanController extends Controller
         }
     }
 
+    // public function joinPelatihan(Request $request) {
+    //     //dd($request);
+    //     $validated = $request->validate([
+    //         'kode' => ['required', 'exists:pelatihan,kode'],
+    //     ]);
+    //     //dd($validated);
+    //     // Cek apakah kode pelatihan valid dan masih terbuka untuk pendaftaran
+    //     $pelatihan = Pelatihan::where('kode', $validated['kode'])
+    //         ->where('status', 'On going')
+    //         ->firstOrFail();
+    
+    //     if (!$pelatihan) {
+    //         return redirect()->route('peserta.dashboard')->with('error', 'Kode pelatihan tidak valid atau pelatihan sudah ditutup untuk pendaftaran');
+    //     } else {
+    //         // Tambahkan peserta ke tabel Peserta_Pelatihan
+    //         $pesertaPelatihan = new Peserta_Pelatihan();
+    //         $pesertaPelatihan->peserta_id = Auth::user()->peserta->id; // Ganti dengan cara Anda untuk mendapatkan ID peserta saat ini
+    //         $pesertaPelatihan->plt_kode = $validated['kode'];
+    //         $pesertaPelatihan->save();
+        
+    //         // Redirect ke halaman atau tindakan yang sesuai setelah bergabung dengan pelatihan
+    //         return redirect()->route('peserta.dashboard')->with('success', 'Berhasil bergabung dengan pelatihan');
+    //     }
+    // }
+
     public function joinPelatihan(Request $request) {
-        //dd($request);
+        // Validasi dengan pesan error kustom
         $validated = $request->validate([
-            'kode' => ['required', 'exists:pelatihan,kode'],
+            'kode' => ['required'],
         ]);
-        //dd($validated);
-        // Cek apakah kode pelatihan valid dan masih terbuka untuk pendaftaran
-        $pelatihan = Pelatihan::where('kode', $validated['kode'])
-            ->where('status', 'On going')
-            ->first();
+    
+        // Cek apakah kode pelatihan valid
+        $pelatihan = Pelatihan::where('kode', $validated['kode'])->first();
     
         if (!$pelatihan) {
-            return redirect()->back()->with('error', 'Kode pelatihan tidak valid atau pelatihan sudah ditutup untuk pendaftaran');
+            return redirect()->route('peserta.dashboard')->with('error', 'Kode pelatihan tidak valid');
+        }
+    
+        // Cek apakah pelatihan masih terbuka untuk pendaftaran
+        $pelatihan = Pelatihan::where('kode', $validated['kode'])
+            ->where('status', 'Completed')
+            ->first();
+    
+        if ($pelatihan) {
+            return redirect()->route('peserta.dashboard')->with('error', 'Pelatihan sudah tutup pendaftaran');
+        }
+    
+        // Cek apakah peserta sudah bergabung dengan pelatihan ini
+        $isJoined = Peserta_Pelatihan::where('peserta_id', Auth::user()->peserta->id)
+            ->where('plt_kode', $validated['kode'])
+            ->exists();
+    
+        if ($isJoined) {
+            return redirect()->route('peserta.dashboard')->with('error', 'Anda sudah bergabung dengan pelatihan ini');
         }
     
         // Tambahkan peserta ke tabel Peserta_Pelatihan
         $pesertaPelatihan = new Peserta_Pelatihan();
-        $pesertaPelatihan->peserta_id = Auth::user()->peserta->id; // Ganti dengan cara Anda untuk mendapatkan ID peserta saat ini
+        $pesertaPelatihan->peserta_id = Auth::user()->peserta->id;
         $pesertaPelatihan->plt_kode = $validated['kode'];
         $pesertaPelatihan->save();
     
         // Redirect ke halaman atau tindakan yang sesuai setelah bergabung dengan pelatihan
-        return redirect()->route('peserta.dashboard')->with('success', 'Berhasil bergabung dengan pelatihan!');
+        return redirect()->route('peserta.dashboard')->with('success', 'Berhasil bergabung dengan pelatihan');
     }
+    
 
     public function searchPelatihan(Request $request)
     {
