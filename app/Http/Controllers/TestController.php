@@ -187,7 +187,7 @@ class TestController extends Controller
     {
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
-        //dd($request);
+        // dd($request);
         try {
             //dd($request);
             $rules = [
@@ -204,7 +204,7 @@ class TestController extends Controller
             // Additional validation for Pilihan Ganda
             if ($request->tipe_option == 'Pilihan Ganda') {
                 $additionalRules = [
-                    'ganda_benar' => ['required'],
+                    'ganda-benar' => ['required'],
                     'title_ganda' => ['required', 'array', 'min:1'],
                     'title_ganda.*' => ['required', 'distinct'],
                 ];
@@ -353,7 +353,7 @@ class TestController extends Controller
 
             return redirect()->route('test.detail', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
         } catch (\Exception $e) {
-            //dd($e);
+            dd($e);
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal menyimpan data soal dan jawaban.');
         }
@@ -717,6 +717,16 @@ class TestController extends Controller
                     $nilaiDefault = 100 - $hitung_nilai_custom;
                     $nilai = $nilaiDefault;
                 }
+            } elseif ($hitung_nilai_default == 100 && !$hitung_nilai_custom) {
+                if ($tipe_nilai_old === 'Default' && $validated['tipe_nilai'] === 'Custom') {
+                    // Jika 'old' adalah Default dan berubah ke Custom
+                    $nilaiDefault = round(((100 - ($validated['nilai-custom']))), 2);
+                    $nilai = $validated['nilai-custom'];
+                }else {
+                    $nilaiDefault = round(100 / ($hitung_soal),2);
+                    $nilai = $nilaiDefault;
+                }
+                Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilai]);
             } elseif ($hitung_nilai_default > 0 && !$hitung_nilai_custom) {
                 if ($tipe_nilai_old === 'Default' && $validated['tipe_nilai'] === 'Custom') {
                     // Jika 'old' adalah Default dan berubah ke Custom

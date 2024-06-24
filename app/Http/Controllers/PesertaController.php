@@ -720,14 +720,14 @@ class PesertaController extends Controller
                 ->select('peserta.user_id', 'users.id', 'peserta.nama', 'pelatihan.status', 'peserta_pelatihan.plt_kode','peserta_id')
                 ->first();
 
-            $submission = Submission::join('submission_files','submission_files.submission_id','=','submissions.id')
-                ->where('peserta_id', $peserta_pelatihan->peserta_id)
-                ->get();
-            $jawabpilgan = Jawaban_User_Pilgan::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
-            $jawabsingkat =  Jawaban_User_Singkat::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
-            $attempt =  Attempt::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
-            $nilai = Nilai_Test::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
-            $notif = Notifikasi::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            // $submission = Submission::join('submission_files','submission_files.submission_id','=','submissions.id')
+            //     ->where('peserta_id', $peserta_pelatihan->peserta_id)
+            //     ->get();
+            // $jawabpilgan = Jawaban_User_Pilgan::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            // $jawabsingkat =  Jawaban_User_Singkat::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            // $attempt =  Attempt::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            // $nilai = Nilai_Test::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
+            // $notif = Notifikasi::where('peserta_id', $peserta_pelatihan->peserta_id)->get(); 
             //dd($peserta_pelatihan);
             DB::beginTransaction();
 
@@ -737,25 +737,25 @@ class PesertaController extends Controller
                 }
                 
                 if ($peserta_pelatihan != null) {
-                    foreach ($submission as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    foreach ($jawabpilgan as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    foreach ($jawabsingkat as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    foreach ($attempt as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    foreach ($nilai as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    foreach ($notif as $sub) { // Loop through submission to delete each submission
-                        $sub->delete();
-                    }
-                    Peserta_Pelatihan::where('peserta_id',$peserta_pelatihan->peserta_id)->delete();
+                //     foreach ($submission as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     foreach ($jawabpilgan as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     foreach ($jawabsingkat as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     foreach ($attempt as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     foreach ($nilai as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     foreach ($notif as $sub) { // Loop through submission to delete each submission
+                //         $sub->delete();
+                //     }
+                //     Peserta_Pelatihan::where('peserta_id',$peserta_pelatihan->peserta_id)->delete();
                 }
 
                 // Peserta deletion should be inside the condition where $peserta_pelatihan is not null
