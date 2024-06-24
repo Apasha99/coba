@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Pelatihan;
 use App\Models\Peserta;
 use App\Models\Notifikasi;
@@ -122,16 +124,46 @@ class TugasController extends Controller
     }
 
     public function store(Request $request, String $kode): RedirectResponse {
-        $validated = $request->validate([
+        // Dapatkan data pelatihan
+        $pelatihan = Pelatihan::where('kode', $kode)->first();
+        $pelatihan_start_date = $pelatihan->start_date;
+        $pelatihan_end_date = $pelatihan->end_date;
+        
+        // Validasi input dengan aturan kustom
+        $validator = Validator::make($request->all(), [
             'judul' => ['required'],
-            'start_date' => ['required', 'date', 'after_or_equal:today'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'start_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                    if ($value < $pelatihan_start_date) {
+                        $fail('Start date must be after or equal to the start date of the training.');
+                    }
+                }
+            ],
+            'end_date' => [
+                'required',
+                'date',
+                'after_or_equal:start_date',
+                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                    if ($value > $pelatihan_end_date) {
+                        $fail('End date must be before or equal to the end date of the training.');
+                    }
+                }
+            ],
             'deskripsi' => ['required', 'max:2000'],
             'file_tugas' => ['max:10240']
         ]);
-        $pelatihan = Pelatihan::where('kode', $kode)->first();
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
+        // Validasi berhasil
+        $validated = $validator->validated();
+        
         $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
-
         if ($request->has('file_tugas')) {
             $fileTugasPath = $request->file('file_tugas')->store('file_tugas', 'public');
             $filename = $request->file('file_tugas')->getClientOriginalName();
@@ -178,16 +210,33 @@ class TugasController extends Controller
         $tugas = Tugas::find($id);
         $pelatihan = Pelatihan::find($plt_kode);
         $pelatihan2 = Pelatihan::where('kode', $plt_kode)->first();
+        $pelatihan_start_date = $pelatihan2->start_date;
+        $pelatihan_end_date = $pelatihan2->end_date;
         $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'judul' => ['required'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'start_date' => ['required', 'date',
+                            function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                                if ($value < $pelatihan_start_date) {
+                                    $fail('Start date must be after or equal to the start date of the training.');
+                                }
+                            }
+                            ],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date',
+                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                                    if ($value > $pelatihan_end_date) {
+                                        $fail('End date must be before or equal to the end date of the training.');
+                                    }
+                                }
+                            ],
             'deskripsi' => ['required', 'max:2000'],
             'file_tugas' => ['max:10240']
         ]);
 
-        //dd($validated);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $validated = $validator->validated();
         try {
             DB::beginTransaction();
     

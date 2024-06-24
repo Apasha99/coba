@@ -89,16 +89,37 @@ class TestController extends Controller
 
     public function store(Request $request, String $kode): RedirectResponse {
         $pelatihan = Pelatihan::where('kode', $kode)->first();
-        $validated = $request->validate([
+        $pelatihan2 = Pelatihan::where('kode', $kode)->first();
+        $pelatihan_start_date = $pelatihan->start_date;
+        $pelatihan_end_date = $pelatihan->end_date;
+        $validator = Validator::make($request->all(), [
             'nama' => ['required'],
-            'start_date' => ['required', 'date','after_or_equal:today'],
-            'end_date' => ['required', 'date','after_or_equal:start_date'],
+            'start_date' => ['required', 'date','after_or_equal:today',
+                                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                                    if ($value < $pelatihan_start_date) {
+                                        $fail('Start date must be after or equal to the start date of the training.');
+                                    }
+                                }
+                            ],
+            'end_date' => ['required', 'date','after_or_equal:start_date',
+                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                                    if ($value > $pelatihan_end_date) {
+                                        $fail('End date must be before or equal to the end date of the training.');
+                                    }
+                                }
+                            ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'tampil_hasil' => ['required'],
             'durasi' => ['required','date_format:H:i:s'],
             'kkm' => ['required', 'max:100','min:0']
         ]);
-        $pelatihan2 = Pelatihan::where('kode', $kode)->first();
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
+        // Validasi berhasil
+        $validated = $validator->validated();
         $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
     
         try {
@@ -383,15 +404,35 @@ class TestController extends Controller
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
         $pelatihan = Pelatihan::where('kode', $plt_kode)->first();
         $peserta_ids = $pelatihan->peserta_pelatihan()->pluck('peserta_id');
-        $validated = $request->validate([
+        $pelatihan_start_date = $pelatihan->start_date;
+        $pelatihan_end_date = $pelatihan->end_date;
+        $validator = Validator::make($request->all(), [
             'nama' => ['required'],
-            'start_date' => ['required', 'date'],
+            'start_date' => ['required', 'date',
+                                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                                    if ($value < $pelatihan_start_date) {
+                                        $fail('Start date must be after or equal to the start date of the training.');
+                                    }
+                                }
+                            ],
             'kkm' => ['required', 'max:100','min:0'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date',
+                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                                    if ($value > $pelatihan_end_date) {
+                                        $fail('End date must be before or equal to the end date of the training.');
+                                    }
+                                }
+                            ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'durasi' => ['required','date_format:H:i:s'],
             'tampil_hasil' => ['required'],
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
+        // Validasi berhasil
+        $validated = $validator->validated();
         
         try {
             DB::beginTransaction();
