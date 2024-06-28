@@ -273,6 +273,59 @@ class SubmissionController extends Controller
     
     return response()->download($zipFilePath)->deleteFileAfterSend();
 }
- 
 
+public function downloadAll(Request $request, String $plt_kode, String $tugas_id)
+{
+    $submissions = Submission::where('tugas_id', $tugas_id)->get();
+    $zipFileName = 'all_submissions.zip';
+    $zipFilePath = public_path($zipFileName);
+
+    $zip = new \ZipArchive();
+    if ($zip->open($zipFilePath, \ZipArchive::CREATE) === true) {
+        foreach ($submissions as $submission) {
+            foreach ($submission->submission_file as $file) {
+                $filePath = public_path(str_replace(url('/'), '', Storage::url($file->path_file)));
+                $relativeName = $submission->peserta->nama . '/' . basename($file->nama_file);
+
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, $relativeName);
+                } else {
+                    // Jika file tidak ditemukan, Anda bisa memutuskan apakah ingin mengabaikan atau menampilkan pesan kesalahan
+                    // Untuk sekarang kita akan mengabaikannya
+                    continue;
+                }
+            }
+        }
+        $zip->close();
+    } else {
+        return response()->json(['error' => 'Failed to create ZIP file'], 500);
+    }
+
+    return response()->download($zipFilePath)->deleteFileAfterSend(true);
+}
+
+    public function downloadRekap($plt_kode, $tugas_id)
+    {
+        $tugas = Tugas::where('id', $tugas_id)->first();
+        $submission_peserta = Submission::where('tugas_id', $tugas_id)->get();
+
+        // dd($submission_peserta);
+        if(Auth::user()->role_id == 1){
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('admin.download_daftar_submission', [
+                'submissions' => $submission_peserta,
+                'tugas' => $tugas
+            ]);
+
+            return $pdf->stream('rekap_test_'.$tugas_id.'.pdf');
+        }else{
+            $pdf = app('dompdf.wrapper');
+            $pdf->loadView('instruktur.download_daftar_submission', [
+                'submissions' => $submission_peserta,
+                'tugas' => $tugas
+            ]);
+
+            return $pdf->stream('rekap_nilai_'.$tugas_id.'.pdf');
+        }
+    }
 }

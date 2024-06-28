@@ -182,7 +182,9 @@ Route::controller(SubmissionController::class)->group(function(){
 
     Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions', 'viewDaftarSubmissionTugas')->middleware('only_admin')->name('admin.viewDaftarSubmissionTugas');
     Route::post('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submission/{submission_id}', 'inputNilai')->withoutMiddleware('only_peserta')->name('submissionTugas.inputNilai');
-    Route::get('admin/pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->withoutMiddleware('only_peserta')->name('submissionTugas.downloadSubmissionTugas');
+    Route::get('pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download/{submission_id}', 'download')->withoutMiddleware('only_peserta')->name('submissionTugas.downloadSubmissionTugas');
+    Route::get('pelatihan/{plt_kode}/tugas/{tugas_id}/submissions/download-all', 'downloadAll')->withoutMiddleware('only_peserta')->name('submissionTugas.downloadAllSubmissionTugas');
+    Route::get('pelatihan/{plt_kode}/tugas/{test_id}/submissions/download-rekap-nilai', 'downloadRekap')->withoutMiddleware('only_peserta')->name('submissionTugas.downloadRekapNilai');
 });
 
 Route::controller(SubmissionTestController::class)->group(function(){
