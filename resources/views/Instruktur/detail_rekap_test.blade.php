@@ -130,7 +130,7 @@
                             <table class="min-w-full divide-y-100 divide-gray-200 table-fixed dark:divide-gray-800" id="myTable">
                                 <thead class="bg-purple-600 dark:bg-purple-500" style="width: 100%; margin-left: 0;">
                                     <tr>
-                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                        <!-- <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             <span style="float: left;">ID</span>
                                             <span id="sortIcon" style="float: left;">
                                                 <svg class="ml-2 w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -138,8 +138,10 @@
                                                 </svg>
                                             </span>
                                             <div style="clear: both;"></div>
+                                        </th> -->
+                                        <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
+                                            <span style="float: left;">No</span>
                                         </th>
-
                                         <th scope="col" class="p-4 text-xs font-large text-left text-white uppercase dark:text-white">
                                             <span style="float: left;">Nama</span>
                                         </th>
@@ -170,7 +172,7 @@
                                     
                                     @foreach ($highestScores as $score)
                                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->user_id }} </td>
+                                        <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $loop->iteration }} </td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $score->nama }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >{{ $test2->kkm }}</td>
                                         <td class="p-4 text-sm font-small text-gray-900 whitespace-nowrap dark:text-white searchable" >
