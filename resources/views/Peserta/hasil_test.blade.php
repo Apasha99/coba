@@ -111,7 +111,7 @@
         <div></div>
             <div>
             <a href="{{route('peserta.viewDetailTest',[$pelatihan->kode, $test->id])}}"
-            class="justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+            class="justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 border border-gray-300 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 Kembali
             </a>
             </div>

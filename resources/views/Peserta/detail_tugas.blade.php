@@ -5,7 +5,7 @@
     <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                 <li class="inline-flex items-center">
-                    <a href="/dashboardAdmin"
+                    <a href="/peserta/dashboard"
                         class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                         <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -61,7 +61,7 @@
         <p class="text-sm font-normal text-black-500 dark:text-gray-400">
             {!! nl2br(e($tugas->deskripsi)) !!}
             @if($tugas->file_tugas)
-            <a href="{{ asset('storage/' . $tugas->file_tugas) }}" target="_blank" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tugas->nama_file }}</a>
+            <a href="{{ asset('storage/' . $tugas->file_tugas) }}" target="_blank" class="mt-4 flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tugas->nama_file }}</a>
             @endif
         </p>
     </div>
@@ -127,13 +127,17 @@
                     </th>
                     <td class="px-6 py-4">
                         @if($submission)
+                            @if($submission->grading_status == 'graded')
+                            Sudah mengumpulkan
+                            @else
                             Menunggu untuk dinilai
+                            @endif
                         @else
                             Belum ada pengumpulan
                         @endif
                     </td>
                 </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <!-- <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Status penilaian
                     </th>
@@ -148,7 +152,7 @@
                             Belum dinilai
                         @endif
                     </td>
-                </tr>
+                </tr> -->
                 @if($submission)
                     @if($submission->grading_status == "graded")
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">

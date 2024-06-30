@@ -496,7 +496,8 @@ class PesertaController extends Controller
     
         $doneTugas = 0;
         foreach ($tugas as $tgs) {
-            if ($tgs->submissions()->where('peserta_id', $peserta->id)->first()) {
+            $submission = $tgs->submissions()->where('peserta_id', $peserta->id)->where('grading_status', 'graded')->first();
+            if ($submission) {
                 $doneTugas++;
             }
         }
