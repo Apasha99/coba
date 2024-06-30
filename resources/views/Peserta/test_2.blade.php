@@ -39,7 +39,6 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             @if ($soal->tipe == "Pilihan Ganda")
                                 @php
-                                    // Get all options for the current question
                                     $options = $jawaban_test->where('soal_id', $soal->id);
                                     $originalOrder = $options->pluck('urutan')->toArray();
                                     $shuffledOrder = collect($originalOrder)->shuffle();
@@ -60,11 +59,8 @@
                                 @endforeach
 
                                 <script>
-                                    // JavaScript to handle saving and retrieving selected option using localStorage
                                     document.addEventListener('DOMContentLoaded', function () {
                                         var form = document.getElementById('answerForm_{{ $soal->urutan }}');
-
-                                        // Add event listener to the form to clear localStorage when the form is submitted
                                         form.addEventListener('submit', function () {
                                             localStorage.removeItem('ganda-{{ $soal->urutan }}');
                                         });
@@ -74,7 +70,6 @@
                                         localStorage.setItem('ganda-' + currentQuestionId, selectedOptionId);
                                     }
 
-                                    // Retrieve and set the selected option when the page loads
                                     var storedOption = localStorage.getItem('ganda-{{ $soal->urutan }}');
                                     if (storedOption) {
                                         document.querySelector('input[name="selected_option[{{ $soal->urutan }}]"][value="' + storedOption + '"]').checked = true;
@@ -95,12 +90,10 @@
 
                                         jawabanInput.addEventListener('input', function () {
                                             localStorage.setItem('jawaban-{{ $soal->urutan }}', this.value);
-                                            hiddenJawabanSingkat.value = this.value; // Update the hidden field
+                                            hiddenJawabanSingkat.value = this.value;
                                         });
 
-                                        // Your existing short answer input change handling logic
                                         jawabanInput.addEventListener('input', function () {
-                                            // Ganti localStorage dengan mengirimkan data ke server menggunakan AJAX
                                             axios.post('/save-answer', {
                                                 currentQuestionId: {{ $soal->id }},
                                                 jawabanSingkat: this.value
@@ -113,11 +106,10 @@
                                             });
                                         });
 
-                                        // Retrieve and set the entered text when the page loads
                                         var storedJawaban = localStorage.getItem('jawaban-{{ $soal->urutan }}');
                                         if (storedJawaban) {
                                             jawabanInput.value = storedJawaban;
-                                            hiddenJawabanSingkat.value = storedJawaban; // Update the hidden field
+                                            hiddenJawabanSingkat.value = storedJawaban;
                                         }
                                     });
                                 </script>
@@ -127,7 +119,6 @@
                 </tbody>
             </table>
         @endforeach
-        <!-- Tombol "Submit" -->
         <div class="float-right col-span-6 sm:col-full mt-4 mb-4">
             <button data-modal-target="confirmationModal" data-modal-toggle="confirmationModal" class="mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Submit</button>
         </div>
@@ -146,11 +137,9 @@
                         </svg>
                         <h3 class="mb-5 text-m font-normal text-gray-500 dark:text-gray-400">Apakah Anda yakin ingin mengumpulkan tes ini?</h3>
                         <div class="flex space-x-2 justify-center">
-                            
                             <button onclick="submitForm()" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                 Ya
                             </button>
-                        
                             <button data-modal-hide="confirmationModal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                 Tidak
                             </button>
@@ -161,24 +150,22 @@
         </div>
     </form>
     <script>
-    function submitForm() {
-        document.getElementById('answerForm').submit();
-    }
+        function submitForm() {
+            document.getElementById('answerForm').submit();
+        }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var form = document.getElementById('answerForm');
-        form.addEventListener('submit', function () {
-            localStorage.clear();
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('answerForm');
+            form.addEventListener('submit', function () {
+                localStorage.clear();
+            });
         });
-    });
     </script>
 
-    <!-- JavaScript untuk menghitung mundur durasi tes -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var duration = '{{$test->durasi}}'; // format: 'HH:MM:SS'
+            var duration = '{{$test->durasi}}';
 
-            // Cek apakah ada durasi tersisa di localStorage
             var remainingDuration = localStorage.getItem('remainingDuration');
             if (remainingDuration) {
                 duration = remainingDuration;
