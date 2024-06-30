@@ -2,9 +2,6 @@
 @section('nav')
 <div class="w-full p-2">
     <h3 class="text-center justify-between text-lg font-bold text-gray-900 sm:text-lg dark:text-white mb-2">{{$test->nama}}</h3>
-    <div class="w-52 bg-zinc-300 dark:bg-gray-800 rounded-lg shadow p-2">
-        <p class="dark:text-white justify-between">Durasi Tes: <span id="countdownTimer" class="dark:text-white font-bold">{{$test->durasi}}</span></p>
-    </div>
 </div>
 @endsection
 @section('content')
@@ -158,52 +155,6 @@
             var form = document.getElementById('answerForm');
             form.addEventListener('submit', function () {
                 localStorage.clear();
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var duration = '{{$test->durasi}}';
-
-            var remainingDuration = localStorage.getItem('remainingDuration');
-            if (remainingDuration) {
-                duration = remainingDuration;
-            }
-
-            var timeArray = duration.split(':');
-            var hours = parseInt(timeArray[0], 10);
-            var minutes = parseInt(timeArray[1], 10);
-            var seconds = parseInt(timeArray[2], 10);
-
-            var totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-            var countdown = setInterval(function() {
-                var hours = Math.floor(totalSeconds / 3600);
-                var minutes = Math.floor((totalSeconds % 3600) / 60);
-                var seconds = totalSeconds % 60;
-
-                var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-
-                document.getElementById('countdownTimer').innerText = formattedTime;
-
-                totalSeconds--;
-
-                localStorage.setItem('remainingDuration', formattedTime);
-
-                if (totalSeconds < 0) {
-                    clearInterval(countdown);
-                    document.getElementById('answerForm').submit();
-                    localStorage.removeItem('remainingDuration');
-                }
-            }, 1000);
-
-            document.getElementById('answerForm').addEventListener('submit', function() {
-                localStorage.removeItem('remainingDuration');
-            });
-
-            window.addEventListener('beforeunload', function() {
-                localStorage.removeItem('remainingDuration');
             });
         });
     </script>

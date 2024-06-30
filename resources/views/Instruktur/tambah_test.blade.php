@@ -123,23 +123,6 @@
                                     @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
-                                    <label for="durasi"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Durasi <span class="text-red-500">*</span></label>
-                                        <input type="text" name="durasi" placeholder="Durasi (HH:MM:SS)" id="durasi"
-                                            pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"
-                                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            required>
-
-                                    @error('durasi')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
-                                </div>
-                                <div class="col-span-6 sm:col-span-3">
                                     <label for="start_date"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai <span class="text-red-500">*</span></label>
                                     <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date"

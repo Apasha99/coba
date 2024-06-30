@@ -129,17 +129,6 @@
             </tr>
             <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Durasi
-                </th>
-                <td class="px-6 py-4">
-                    {{ \Carbon\Carbon::parse($test->durasi)->format('H') }} Jam
-                    {{ \Carbon\Carbon::parse($test->durasi)->format('i') }} Menit
-                    {{ \Carbon\Carbon::parse($test->durasi)->format('s') }} Detik
-                </td>
-
-            </tr>
-            <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Tanggal Mulai
                 </th>
                 <td class="px-6 py-4">

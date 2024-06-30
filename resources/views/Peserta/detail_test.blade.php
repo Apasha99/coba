@@ -63,18 +63,6 @@
             {!! nl2br(e($test->deskripsi)) !!}
             </span> 
         </p>
-        <p class="mt-2 text-sm font-semibold text-gray-900 sm:text-sm dark:text-white">
-            Durasi: 
-            <span class="text-sm font-normal text-gray-900 sm:text-sm dark:text-white">
-            @if (\Carbon\Carbon::parse($test->durasi)->format('H') != '00')
-                {{ \Carbon\Carbon::parse($test->durasi)->format('H') }} Jam
-            @elseif (\Carbon\Carbon::parse($test->durasi)->format('i') != '00')
-                {{ \Carbon\Carbon::parse($test->durasi)->format('i') }} Menit
-            @elseif (\Carbon\Carbon::parse($test->durasi)->format('s') != '00')
-                {{ \Carbon\Carbon::parse($test->durasi)->format('s') }} Detik
-            @endif
-            </span> 
-        </p>
     </div>
     @if ($existing == true)
             <div class="p-2 col-span-full sm:col-span-3 xl:mb-2">
