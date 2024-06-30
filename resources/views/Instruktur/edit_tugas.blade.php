@@ -108,7 +108,7 @@
                                 @enderror
                             </div>
                             @php
-                                $nama_file = basename($tugas->file_tugas)
+                                $nama_file = $tugas->nama_file
                             @endphp
                             <div class="col-span-full">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_tugas">Upload File tugas</label>

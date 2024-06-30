@@ -111,7 +111,7 @@
                         File Tugas
                     </th>
                     <td class="px-6 py-4">
-                        <a href="{{ asset('storage/' . $tugas->file_tugas) }}" class="text-blue-600 dark:text-blue-700 hover:underline" target="_blank">{{ basename($tugas->file_tugas) }}</a><br>
+                        <a href="{{ asset('storage/' . $tugas->file_tugas) }}" class="text-blue-600 dark:text-blue-700 hover:underline" target="_blank">{{ $tugas->nama_file }}</a><br>
                     </td>
 
                 </tr>

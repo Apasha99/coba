@@ -80,6 +80,7 @@
             <div class="p-2 col-span-full sm:col-span-3 xl:mb-2">
                 <div class="mb-4 col-span-full xl:mb-2">
                     <h3 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">Hasil Test</h3>
+                    <span class="bg-green-200 text-green text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Sisa attempt: {{ 3 - $peserta->attempt }} </span>
                 </div>
                 <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" id="myTable">

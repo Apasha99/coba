@@ -4,8 +4,11 @@
     <div class="mt-2 mb-2">
         <div class="items-center flex block h-40 p-2 bg-indigo-400 border border-gray-200 rounded-lg shadow dark:bg-indigo-900 dark:border-gray-700">
             <div class="p-4 w-full">
-                <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                <!-- <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
                     Halo, {{ Illuminate\Support\Str::limit($peserta->nama, 10, '...') }}
+                </p> -->
+                <p class="text-xl font-bold text-white sm:text-4xl dark:text-gray-100">
+                    Halo, {{ $peserta->nama }}
                 </p>
                 <!-- <p class="text-sm font-regular text-white sm:text-xs dark:text-gray-100">
                     Selamat belajar!

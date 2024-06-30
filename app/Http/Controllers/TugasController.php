@@ -153,7 +153,8 @@ class TugasController extends Controller
                 }
             ],
             'deskripsi' => ['required', 'max:2000'],
-            'file_tugas' => ['max:10240']
+            'file_tugas' => ['max:10240'],
+            'nama_file' => ['optional']
         ]);
         
         if ($validator->fails()) {
@@ -168,7 +169,7 @@ class TugasController extends Controller
             $fileTugasPath = $request->file('file_tugas')->store('file_tugas', 'public');
             $filename = $request->file('file_tugas')->getClientOriginalName();
             $validated['file_tugas'] = $fileTugasPath;
-            $validated['nama_tugas'] = $filename;
+            $validated['nama_file'] = $filename;
         }
 
         $validated['plt_kode'] = $kode;
@@ -282,7 +283,7 @@ class TugasController extends Controller
                 $filename = $request->file('file_tugas')->getClientOriginalName();
                 $updateData['file_tugas'] = $fileTugasPathBaru;
                 $updateData['nama_file'] = $filename;
-                //dd($filename);
+                // dd($filename);
                 if ($fileTugasPathLama) {
                     Storage::delete('public/' . $fileTugasPathLama);
                 }
