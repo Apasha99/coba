@@ -110,7 +110,6 @@ class TestController extends Controller
                             ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'tampil_hasil' => ['required'],
-            'durasi' => ['required','date_format:H:i:s'],
             'kkm' => ['required', 'max:100','min:0']
         ]);
 
@@ -130,7 +129,6 @@ class TestController extends Controller
                 'start_date' => $validated['start_date'], // Tambahkan nilai untuk start_date
                 'end_date' => $validated['end_date'],
                 'deskripsi' => $validated['deskripsi'],
-                'durasi' => $validated['durasi'],
                 'tampil_hasil' => $validated['tampil_hasil'],
             ]);
             //dd($test);
@@ -424,7 +422,6 @@ class TestController extends Controller
                                 }
                             ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
-            'durasi' => ['required','date_format:H:i:s'],
             'tampil_hasil' => ['required'],
         ]);
         if ($validator->fails()) {
@@ -443,7 +440,6 @@ class TestController extends Controller
                 'end_date' => $validated['end_date'] ?? null,
                 'kkm' => $validated['kkm'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
-                'durasi' => $validated['durasi'] ?? null,
                 'tampil_hasil' => $validated['tampil_hasil'],
             ];
 
