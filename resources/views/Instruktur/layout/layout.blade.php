@@ -303,13 +303,9 @@
                             <li class="hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl dark:hover:rounded-xl">
                                 <a href="{{ route('instruktur.viewHistoryPelatihan') }}"
                                 class="flex items-center p-2 text-base text-gray-900 hover:text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 {{ Request::is('instruktur/history-pelatihan') ? 'bg-purple-500 text-white' : '' }}">
-                                    <svg class="flex-shrink-0 w-6 h-6 text-gray-800 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                                        <path fill-rule="evenodd"
-                                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"/>
+                                </svg>
                                     <span class="ml-3" sidebar-toggle-item="">History</span>
                                 </a>
                             </li>
