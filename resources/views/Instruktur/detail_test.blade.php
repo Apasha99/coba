@@ -68,6 +68,9 @@
     </div>
     <div class="mb-4 col-span-full xl:mb-2">
         <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ $test->nama }}
+            @if ($test->published == "0")
+                <span class="ml-2 bg-gray-500 text-white text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Belum dipublish</span> 
+            @else
             <span class="ml-2">
                 @php
                     $startDate = new DateTime($test->start_date);
@@ -82,11 +85,40 @@
                     <span class="dark:bg-red-900 bg-red-300 text-red-900 text-sm font-medium px-2.5 py-0.5 rounded dark:text-red-200">Selesai</span>
                 @endif 
             </span>
+            @endif
         </h1>
     </div>
 <div class="relative overflow-x-auto sm:rounded-lg rounded-lg">
     <h3 class="text-m font-semibold text-gray-900 sm:text-lg dark:text-white mb-2">Detail Tes</h3>
-
+    @if ($pelatihan->status != 'Completed' && $test->published == '0')
+    <div class="col-span-full mt-2 mb-4">
+        <form action="{{ route('test.publish', [$pelatihan->kode, $test->id]) }}" method="POST">
+            @csrf
+            <button type="submit" class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <svg class="w-5 h-5 mr-2 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Publish Tes
+            </button>
+        </form>
+    </div>
+    @elseif ($startDate > $now && $test->published == '1')
+    <div class="col-span-full mt-2 mb-4">
+        <form action="{{ route('test.unpublish', [$pelatihan->kode, $test->id]) }}" method="POST">
+            @csrf
+            <button type="submit" class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <svg class="w-5 h-5 mr-2 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Unpublish Tes
+            </button>
+        </form>
+    </div>
+    @endif
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <tbody>
             <tr class="bg-zinc-100 border-b dark:bg-gray-800 dark:border-gray-700">

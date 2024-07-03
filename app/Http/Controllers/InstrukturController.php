@@ -131,7 +131,17 @@ class InstrukturController extends Controller
     public function viewEditTugas($plt_kode, $id){
         $tugas = Tugas::find($id);
         $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
-        return view('instruktur.edit_tugas', ['tugas' => $tugas, 'pelatihan' => $pelatihan]);
+        $cekPeserta = Submission::where('tugas_id', $id)->exists();
+
+        if ($cekPeserta == true) {
+            return redirect()->back()->with('error','Tidak dapat mengedit tugas yang telah dikerjakan peserta');
+        } else if (now() > $tugas->start_date  && now() < $tugas->end_date) {
+            return redirect()->back()->with('error','Tidak dapat mengedit tugas yang telah dimulai');
+        } else if (now() > $tugas->start_date  && now() > $tugas->end_date){
+            return redirect()->back()->with('error','Tidak dapat mengedit tugas yang telah selesai');
+        } else {
+            return view('instruktur.edit_tugas', ['tugas' => $tugas, 'pelatihan' => $pelatihan]);
+        }
     }
 
     public function viewDaftarSubmissionTugas(String $plt_kode, String $tugas_id){

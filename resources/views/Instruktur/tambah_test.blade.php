@@ -128,14 +128,11 @@
                                     <input type="datetime-local" name="start_date" placeholder="Tanggal Mulai" id="start_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                    @error('start_date')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
+                                        @error('start_date')
+                                        <div class="invalid-feedback mt-2 text-sm text-red-800 dark:text-red-400">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="end_date"
@@ -143,14 +140,11 @@
                                     <input type="datetime-local" name="end_date" placeholder="Tanggal Selesai" id="end_date"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         required>
-                                    @error('end_date')
-                                    <div class="mt-2 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-gray-800 dark:text-red-400"
-                                        role="alert">
-                                        <div>
-                                            {{ $message }}
-                                        </div>
-                                    </div>
-                                    @enderror
+                                        @error('end_date')
+                                        <div class="invalid-feedback mt-2 text-sm text-red-800 dark:text-red-400">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="tampil_hasil"

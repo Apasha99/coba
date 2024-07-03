@@ -128,6 +128,12 @@
         </h2>
         <div id="accordion-open-body-test" class="hidden" aria-labelledby="accordion-open-heading-test">
             @foreach ($test as $tes)
+                @php
+                    $startDate = new DateTime($tes->start_date);
+                    $endDate = new DateTime($tes->end_date);
+                    $now = new DateTime();
+                @endphp
+                @if ($tes->published == '1' && $startDate < $now && $endDate > $now)
                 <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 flex justify-between">
                     <a href="{{route('peserta.viewDetailTest',[$pelatihan->kode, $tes->id])}}" class="flex items-center text-m font-semibold leading-tight tracking-tight text-blue-500 md:text-m dark:text-blue-500 hover:underline">{{ $tes->nama }}</a>
                     @if ($totalNilaiTes[$tes->id] == null)
@@ -160,6 +166,7 @@
                     </div>
                     @endif
                 </div>
+                @endif
             @endforeach
         </div>
     </div>

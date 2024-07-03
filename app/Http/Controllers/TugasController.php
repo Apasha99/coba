@@ -145,7 +145,7 @@ class TugasController extends Controller
             'end_date' => [
                 'required',
                 'date',
-                'after_or_equal:start_date',
+                'after:start_date',
                 function ($attribute, $value, $fail) use ($pelatihan_end_date) {
                     if ($value > $pelatihan_end_date) {
                         $fail('End date must be before or equal to the end date of the training.');
@@ -216,27 +216,35 @@ class TugasController extends Controller
         $peserta_ids = $pelatihan2->peserta_pelatihan()->pluck('peserta_id');
         $validator = Validator::make($request->all(), [
             'judul' => ['required'],
-            'start_date' => ['required', 'date',
-                            function ($attribute, $value, $fail) use ($pelatihan_start_date) {
-                                if ($value < $pelatihan_start_date) {
-                                    $fail('Start date must be after or equal to the start date of the training.');
-                                }
-                            }
-                            ],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date',
-                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
-                                    if ($value > $pelatihan_end_date) {
-                                        $fail('End date must be before or equal to the end date of the training.');
-                                    }
-                                }
-                            ],
+            'start_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                    if ($value < $pelatihan_start_date) {
+                        $fail('Start date must be after or equal to the start date of the training.');
+                    }
+                }
+            ],
+            'end_date' => [
+                'required',
+                'date',
+                'after:start_date',
+                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                    if ($value > $pelatihan_end_date) {
+                        $fail('End date must be before or equal to the end date of the training.');
+                    }
+                }
+            ],
             'deskripsi' => ['required', 'max:2000'],
-            'file_tugas' => ['max:10240']
+            'file_tugas' => ['max:10240'],
+            'nama_file' => ['optional']
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $validated = $validator->validated();
         try {
             DB::beginTransaction();

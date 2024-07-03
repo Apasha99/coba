@@ -163,6 +163,8 @@ Route::controller(TestController::class)->group(function(){
     Route::post('pelatihan/{plt_kode}/delete/{test_id}', 'delete')->withoutMiddleware('only_peserta')->name('test.delete');
     Route::get('pelatihan/{plt_kode}/edit/{test_id}', 'edit')->withoutMiddleware('only_peserta')->name('test.edit');
     Route::post('pelatihan/{plt_kode}/edit/{test_id}/update', 'update')->withoutMiddleware('only_peserta')->name('test.update');
+    Route::post('/pelatihan/{plt_kode}/publish-test/{test_id}', 'publishTest')->withoutMiddleware('only_peserta')->name('test.publish');
+    Route::post('/pelatihan/{plt_kode}/unpublish-test/{test_id}', 'unpublishTest')->withoutMiddleware('only_peserta')->name('test.unpublish');
     Route::get('pelatihan/{plt_kode}/test/{test_id}/detail', 'DetailTest')->withoutMiddleware('only_peserta')->name('test.detail');
     Route::get('pelatihan/{plt_kode}/test/{test_id}/createSoal', 'createSoal')->withoutMiddleware('only_peserta')->name('soal.add');
     Route::post('pelatihan/{plt_kode}/test/{test_id}/storeSoal', 'storeSoal')->withoutMiddleware('only_peserta')->name('soal.store');

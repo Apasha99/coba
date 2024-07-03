@@ -94,25 +94,31 @@ class TestController extends Controller
         $pelatihan_end_date = $pelatihan->end_date;
         $validator = Validator::make($request->all(), [
             'nama' => ['required'],
-            'start_date' => ['required', 'date','after_or_equal:today',
-                                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
-                                    if ($value < $pelatihan_start_date) {
-                                        $fail('Start date must be after or equal to the start date of the training.');
-                                    }
-                                }
-                            ],
-            'end_date' => ['required', 'date','after_or_equal:start_date',
-                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
-                                    if ($value > $pelatihan_end_date) {
-                                        $fail('End date must be before or equal to the end date of the training.');
-                                    }
-                                }
-                            ],
+            'start_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                    if ($value < $pelatihan_start_date) {
+                        $fail('Start date must be after or equal to the start date of the training.');
+                    }
+                }
+            ],
+            'end_date' => [
+                'required',
+                'date',
+                'after:start_date',
+                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                    if ($value > $pelatihan_end_date) {
+                        $fail('End date must be before or equal to the end date of the training.');
+                    }
+                }
+            ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'tampil_hasil' => ['required'],
             'kkm' => ['required', 'max:100','min:0']
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -130,6 +136,7 @@ class TestController extends Controller
                 'end_date' => $validated['end_date'],
                 'deskripsi' => $validated['deskripsi'],
                 'tampil_hasil' => $validated['tampil_hasil'],
+                'published' => "0", // Set kolom published dengan nilai 0
             ]);
             //dd($test);
     
@@ -149,13 +156,15 @@ class TestController extends Controller
                 return redirect()->route('instruktur.viewDetailPelatihan', $pelatihan->kode)->with('success', 'Data test berhasil disimpan');
             }
         } catch (\Exception $e) {
+            dd($e);
             if (Auth::user()->role_id == 1) {
                 return redirect()->route('admin.viewDetailPelatihan', $pelatihan->kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
             }else{
                 return redirect()->route('instruktur.viewDetailPelatihan', $pelatihan->kode)->with('error', 'Terjadi kesalahan saat menyimpan data');
             }
         }
-    }    
+    }
+     
 
     public function DetailTest(String $plt_kode, String $test_id) {
         $admin = Admin::leftJoin('users', 'admin.user_id', '=', 'users.id')
@@ -235,9 +244,9 @@ class TestController extends Controller
             $hitung_soal = Soal_Test::where('test_id', $test_id)->count();
             $hitung_nilai_default = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->sum('nilai');
             $hitung_nilai_custom = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Custom')->sum('nilai');
-            if((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) >= 0 && ($hitung_nilai_custom + $validated['nilai-custom']) >99){
+            if((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) >= 0 && ($hitung_nilai_custom + $validated['nilai-custom']) > 100){
                 return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
-            }elseif(($hitung_nilai_custom + $validated['nilai-custom']) >= 100){
+            }elseif(($hitung_nilai_custom + $validated['nilai-custom']) > 100){
                 return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
             }
             if ($hitung_soal == 0) {
@@ -247,11 +256,11 @@ class TestController extends Controller
                 }else {
                     $nilai = 100;
                 }
-            }elseif ($hitung_nilai_custom > 0 && $hitung_nilai_default > 0) {
+            } elseif ($hitung_nilai_custom > 0 && $hitung_nilai_default > 0) {
                 if ($validated['tipe_nilai'] === 'Custom') {
                     $nilai = $request['nilai-custom']; // Gunakan nilai custom jika disediakan
-                    dd($nilai);
-                    $nilaiDefault = round(((100 - ($hitung_nilai_custom + $nilai))/ (Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count())),2);
+                    // dd($nilai);
+                    $nilaiDefault = round(((100 - ($hitung_nilai_custom + $nilai)) / (Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count())),2);
                 } else {
                     $nilaiDefault = round((100 - $hitung_nilai_custom) / ((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) + 1),2);
                     $nilai = $nilaiDefault;
@@ -267,7 +276,7 @@ class TestController extends Controller
             } elseif ($hitung_nilai_default > 0 && !$hitung_nilai_custom) {
                 if ($validated['tipe_nilai'] === 'Custom') {
                     $nilai = $request['nilai-custom']; // Gunakan nilai custom jika disediakan
-                    $nilaiDefault = round((100 - $nilai)/ ($hitung_soal),2);
+                    $nilaiDefault = round((100 - $nilai) / ($hitung_soal), 2);
                 } else {
                     $nilaiDefault = round(100 / ($hitung_soal + 1),2);
                     $nilai = $nilaiDefault;
@@ -278,6 +287,7 @@ class TestController extends Controller
             }
             if ($hitung_soal != 0){
                 if ($validated['tipe_nilai'] === 'Custom') {
+                    $nilaiDefault = round((100 - $nilai) / ($hitung_soal), 2);
                     Soal_Test::where('test_id', $test_id)->where('tipe_nilai', 'Default')->update(['nilai' => $nilaiDefault]);
                 }
             }
@@ -371,10 +381,11 @@ class TestController extends Controller
             }
 
             return redirect()->route('test.detail', [$pelatihan->kode, $test->id])->with('success', 'Soal dan Jawaban berhasil disimpan');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal menyimpan data soal dan jawaban.');
+        } 
+        catch (\Exception $e) {
+            // dd($e);
+            // DB::rollBack();
+            // return redirect()->back()->with('error', 'Gagal menyimpan data soal dan jawaban.');
         }
     }
 
@@ -389,6 +400,16 @@ class TestController extends Controller
                 ->first();
         $pelatihan = Pelatihan::where('kode',$plt_kode)->first();
         $test = Test::where('plt_kode',$plt_kode)->find($test_id);
+        $cekPeserta = Attempt::where('test_id',$test_id)->exists();
+      
+        if ($cekPeserta == true) {
+            return redirect()->back()->with('error','Tidak dapat mengedit tes yang telah dikerjakan peserta');
+        } else if (now() > $test->start_date  && now() < $test->end_date) {
+            return redirect()->back()->with('error','Tidak dapat mengedit tes yang telah dimulai');
+        } else if (now() > $test->start_date  && now() > $test->end_date){
+            return redirect()->back()->with('error','Tidak dapat mengedit tes yang telah selesai');
+        } 
+        
         if(Auth::user()->role_id == 1){
             return view('admin.edit_test', ['admin' => $admin, 'test' => $test, 'pelatihan' => $pelatihan]);
         } else{
@@ -406,21 +427,26 @@ class TestController extends Controller
         $pelatihan_end_date = $pelatihan->end_date;
         $validator = Validator::make($request->all(), [
             'nama' => ['required'],
-            'start_date' => ['required', 'date',
-                                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
-                                    if ($value < $pelatihan_start_date) {
-                                        $fail('Start date must be after or equal to the start date of the training.');
-                                    }
-                                }
-                            ],
-            'kkm' => ['required', 'max:100','min:0'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date',
-                                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
-                                    if ($value > $pelatihan_end_date) {
-                                        $fail('End date must be before or equal to the end date of the training.');
-                                    }
-                                }
-                            ],
+            'start_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                function ($attribute, $value, $fail) use ($pelatihan_start_date) {
+                    if ($value < $pelatihan_start_date) {
+                        $fail('Start date must be after or equal to the start date of the training.');
+                    }
+                }
+            ],
+            'end_date' => [
+                'required',
+                'date',
+                'after:start_date',
+                function ($attribute, $value, $fail) use ($pelatihan_end_date) {
+                    if ($value > $pelatihan_end_date) {
+                        $fail('End date must be before or equal to the end date of the training.');
+                    }
+                }
+            ],
             'deskripsi' => ['nullable', 'max:2000', 'string'],
             'tampil_hasil' => ['required'],
         ]);
@@ -549,11 +575,11 @@ class TestController extends Controller
             if(Auth::user()->role_id == 1){
                 return redirect()
                     ->route('admin.viewDetailPelatihan', $test->plt_kode)
-                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
+                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus');
             }else{
                 return redirect()
                     ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
-                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus.');
+                    ->with('success', 'Test, soal, dan semua jawaban terkait berhasil dihapus');
             }
         } catch (\Exception $e) {
            
@@ -562,11 +588,11 @@ class TestController extends Controller
             if(Auth::user()->role_id == 1){
                 return redirect()
                     ->route('admin.viewDetailPelatihan', $test->plt_kode)
-                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait.');
+                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait');
             }else{
                 return redirect()
                     ->route('instruktur.viewDetailPelatihan', $test->plt_kode)
-                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait.');
+                    ->with('error', 'Terjadi kesalahan saat menghapus test, soal, dan jawaban terkait');
             }
         }
     }
@@ -602,13 +628,13 @@ class TestController extends Controller
             // Commit the transaction
             DB::commit();
             
-            return redirect()->back()->with('success', 'Soal dan semua jawaban terkait berhasil dihapus.');
+            return redirect()->back()->with('success', 'Soal dan semua jawaban terkait berhasil dihapus');
         } catch (\Exception $e) {
             dd($e);
             // Rollback the transaction in case of any error
             DB::rollback();
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus soal dan jawaban terkait.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus soal dan jawaban terkait');
         }
     }
 
@@ -697,9 +723,10 @@ class TestController extends Controller
             $hitung_nilai_default = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->sum('nilai');
             $hitung_nilai_custom = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Custom')->sum('nilai');
 
-            if((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) >= 0 && ($hitung_nilai_custom + $validated['nilai-custom']) > 99){
+            if((Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()) >= 0 && ($hitung_nilai_custom + $validated['nilai-custom'] - $soal_test->nilai) > 100){
+                // dd($hitung_nilai_custom + $validated['nilai-custom'] - $soal_test->nilai);
                 return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
-            }elseif(($hitung_nilai_custom + $validated['nilai-custom']) >= 100){
+            }elseif(($hitung_nilai_custom + $validated['nilai-custom'] - $soal_test->nilai) > 100){
                 return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
             }
             if ($request->has('file_soal')) {
@@ -725,8 +752,22 @@ class TestController extends Controller
                     //dd($nilai,$nilaiDefault,$hitung_new_custom,$hitung_nilai_default);
                 } elseif ($tipe_nilai_old === 'Default' && $validated['tipe_nilai'] === 'Custom') {
                     // Jika 'old' adalah Default dan berubah ke Custom
-                    $nilaiDefault = round(((100 - ($hitung_nilai_custom + $validated['nilai-custom'])) / (Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()-1)), 2);
+                    $hitung_nilai_default = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->sum('nilai');
+                    $hitung_nilai_custom = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Custom')->sum('nilai');
+                    $total_nilai = $hitung_nilai_default + $hitung_nilai_custom;
+                    $jumlahDefault = Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count();
+                    if ($jumlahDefault > 0) {
+                        if ($jumlahDefault - 1 == 0) {
+                            $nilaiDefault = $validated['nilai-custom'];
+                        } else {
+                            $nilaiDefault = round(((100 - ($hitung_nilai_custom + $validated['nilai-custom'])) / (Soal_Test::where('test_id', $test_id)->where('tipe_nilai','=','Default')->count()-1)), 2);
+                        }
+                    }
+                    
                     $nilai = $validated['nilai-custom'];
+                    if(($total_nilai - $soal_test->nilai + $nilai) > 100){
+                        return redirect()->back()->with('error', 'Nilai soal tidak boleh lebih dari 100');
+                    }
                 } else {
                     // Jika tidak ada perubahan pada tipe nilai
                     if ($validated['tipe_nilai'] === 'Custom') {
@@ -854,10 +895,47 @@ class TestController extends Controller
                 ->route('test.detail', ['plt_kode'=>$test->plt_kode, 'test_id'=>$test->id])
                 ->with('success', 'Data soal dan jawaban berhasil diperbarui');
         } catch (\Exception $e) {
-            //dd($e);
+            dd($e);
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memperbarui data soal dan jawaban.');
         }
     }
     
+    public function publishTest($plt_kode, $test_id)
+    {
+        try {
+            $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+            $soal_test = Soal_Test::where('test_id', $test_id)->get();
+            $total_nilai = Soal_Test::where('test_id', $test_id)->sum('nilai');
+
+            // Ubah nilai published menjadi '1'
+            if($total_nilai == 100){
+                $test->published = '1';
+                $test->save();
+            } elseif ($total_nilai > 100) {
+                return redirect()->route('test.detail', [$plt_kode, $test_id])->with('error', 'Total nilai melebihi 100');
+            } else {
+                return redirect()->route('test.detail', [$plt_kode, $test_id])->with('error', 'Total nilai belum mencapai 100');
+            }
+            
+            return redirect()->route('test.detail', [$plt_kode, $test_id])->with('success', 'Data test berhasil dipublish');
+        } catch (\Exception $e) {
+            return redirect()->route('test.detail', [$plt_kode, $test_id])->with('error', 'Terjadi kesalahan saat mempublish test');
+        }
+    }
+
+    public function unpublishTest($plt_kode, $test_id)
+    {
+        try {
+            $test = Test::where('plt_kode', $plt_kode)->where('id', $test_id)->first();
+
+            // Ubah nilai published menjadi '1'
+            $test->published = '0';
+
+            $test->save();
+            return redirect()->route('test.detail', [$plt_kode, $test_id])->with('success', 'Data test berhasil di-unpublish');
+        } catch (\Exception $e) {
+            return redirect()->route('test.detail', [$plt_kode, $test_id])->with('error', 'Terjadi kesalahan saat meng-unpublish test');
+        }
+    }
 }

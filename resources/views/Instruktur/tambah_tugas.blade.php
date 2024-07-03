@@ -94,8 +94,8 @@
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @error('start_date')
                                 <div class="invalid-feedback mt-2 text-sm text-red-800 dark:text-red-400">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
+                                </div>
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">

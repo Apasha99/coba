@@ -18,7 +18,8 @@ class Test extends Model
         'start_date',
         'end_date',
         'durasi',
-        'kkm'
+        'kkm',
+        'published'
     ];
 
     public function soal_test()

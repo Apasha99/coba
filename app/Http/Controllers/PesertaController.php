@@ -359,6 +359,7 @@ class PesertaController extends Controller
                 ->where('peserta.user_id', Auth::user()->id)
                 ->select('peserta.nama', 'peserta.id', 'users.username','peserta_pelatihan.plt_kode')
                 ->first();
+                
         $doneTest = 0;
         foreach ($test as $tes) {
             $nilaiPeserta = Attempt::where('test_id', $tes->id)
@@ -503,7 +504,7 @@ class PesertaController extends Controller
         }
     
         $completed = false;
-        if ($doneTugas == count($tugas) && $doneTest == count($test)) {
+        if ($doneTugas == count($tugas) && $doneTest == count($test) && $pelatihan->status == 'Completed') {
             $completed = true;
         }
     

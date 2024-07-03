@@ -117,7 +117,7 @@
             </div>
         <div></div>
     </div>
-    @if ($test->tampil_hasil == 1)
+    @if ($test->tampil_hasil == 'true')
         <div class="mb-4 col-span-full xl:mb-2">
             <h1 class="text-2xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Review Test</h1>
         </div>
